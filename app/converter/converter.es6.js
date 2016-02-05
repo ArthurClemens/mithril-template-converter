@@ -72,7 +72,7 @@ TemplateBuilder.prototype = {
 
         each(Object.keys(el.attrs).sort(), function(attrName) {
             if (attrName === "style") return
-            if (el.attrs[attrName]===undefined) return
+            if (el.attrs[attrName] === undefined) return
             virtual += "[" + attrName + "='"
             virtual += el.attrs[attrName].replace(/'/g, "\\'") + "']"
         })
@@ -129,7 +129,7 @@ const converter = {
         }.bind(this)
     },
     view: function(ctrl) {
-        return m("div", [
+        return m('div', [
             m.component(textfield, {
                 class: 'source',
                 autofocus: true,
@@ -137,7 +137,9 @@ const converter = {
                 getState: (state) => {
                     const needsConvert = !!(ctrl.source() || state.value);
                     ctrl.source(state.value);
-                    if (needsConvert) {
+                    if (state.value === '') {
+                        ctrl.output('');
+                    } else if (needsConvert) {
                         ctrl.convert();
                     }
                 },
@@ -153,7 +155,7 @@ const converter = {
                 rows: 8,
                 value: () => (ctrl.output())
             })
-        ])
+        ]);
     }
 };
 
