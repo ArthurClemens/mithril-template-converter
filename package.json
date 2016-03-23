@@ -1,7 +1,7 @@
 {
   "name": "mithril-template-converter",
-  "version": "0.0.2",
-  "description": "Mithril template converter",
+  "version": "0.0.3",
+  "description": "Mithril HTML to JavaScript converter",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -14,15 +14,18 @@
     "babel-preset-es2015": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^11.2.0",
+    "chai": "^3.5.0",
+    "jsdom": "^8.1.0",
+    "mocha": "^2.4.5",
     "transpile-watch": "0.0.3",
     "uglifyify": "^3.0.1"
   },
   "dependencies": {
     "mithril": "0.2.0",
-    "polythene": "0.2.5"
+    "polythene": "0.2.19"
   },
   "scripts": {
     "watch": "node scripts/transpile.js watch ./app node_modules",
-    "build": "node scripts/build.js"
+    "build": "node scripts/transpile.js once ./app node_modules && node scripts/build.js"
   }
 }
