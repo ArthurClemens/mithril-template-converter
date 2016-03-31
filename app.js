@@ -26,49 +26,53 @@ function _interopRequireDefault(e) {
 
 },{"app/converter/template-builder":2,"mithril":5,"polythene/textfield/textfield":14}],2:[function(require,module,exports){
 "use strict";
-function each(e, r) {
-  for (var t = 0; t < e.length; t++) {
-    r(e[t], t);
+function each(t, a) {
+  for (var e = 0; e < t.length; e++) {
+    a(t[e], e);
   }
-}function createFragment(t) {
-  if (t.indexOf("<!doctype") >= 0) return [new DOMParser().parseFromString(t, "text/html").childNodes[1]];var e = document.createElement("div");return e.insertAdjacentHTML("beforeend", t), e.childNodes;
-}function createVirtual(e) {
-  var t = [];return each(e, function (e) {
-    3 === e.nodeType ? t.push(e.nodeValue) : 1 === e.nodeType && !function () {
-      var r = {};each(e.attributes, function (t) {
-        r[t.name] = t.value;
-      }), t.push({ tag: e.nodeName.toLowerCase(), attrs: r, children: createVirtual(e.childNodes) });
+}function createFragment(e) {
+  if (e.indexOf("<!doctype") >= 0) return [new DOMParser().parseFromString(e, "text/html").childNodes[1]];var t = document.createElement("div");return t.insertAdjacentHTML("beforeend", e), t.childNodes;
+}function createVirtual(t) {
+  var e = [];return each(t, function (t) {
+    3 === t.nodeType ? e.push(t.nodeValue) : 1 === t.nodeType && !function () {
+      var i = {};each(t.attributes, function (e) {
+        i[e.name] = e.value;
+      });var a = t.nodeName.toLowerCase(),
+          r = svgCaseSensitiveTagNamesMap[a] ? svgCaseSensitiveTagNamesMap[a] : a;e.push({ tag: r, attrs: i, children: createVirtual(t.childNodes) });
     }();
-  }), t;
-}function TemplateBuilder(t, e) {
-  this.virtual = t, this.level = e, this.virtuals = [];
-}TemplateBuilder.prototype = { addVirtualString: function addVirtualString(t) {
-    this.virtuals.push('"' + t.replace(/(["\r\n])/g, "\\$1") + '"');
-  }, addVirtualAttrs: function addVirtualAttrs(t) {
-    var e = "div" === t.tag ? "" : t.tag;if (t.attrs.class && (e += "." + t.attrs.class.replace(/\s+/g, "."), t.attrs.class = void 0), each(Object.keys(t.attrs).sort(), function (i) {
-      if ("style" !== i && void 0 !== t.attrs[i]) {
-        e += "[" + i + "='";var r = t.attrs[i];r = r.replace(/[\n\r\t]/g, " "), r = r.replace(/\s+/g, " "), e += r.replace(/'/g, "\\'") + "']";
+  }), e;
+}function TemplateBuilder(e, t) {
+  this.virtual = e, this.level = t, this.virtuals = [];
+}var svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"],
+    svgCaseSensitiveTagNamesMap = {};svgCaseSensitiveTagNames.forEach(function (e) {
+  svgCaseSensitiveTagNamesMap[e.toLowerCase()] = e;
+}), TemplateBuilder.prototype = { addVirtualString: function addVirtualString(e) {
+    this.virtuals.push('"' + e.replace(/(["\r\n])/g, "\\$1") + '"');
+  }, addVirtualAttrs: function addVirtualAttrs(e) {
+    var t = "div" === e.tag ? "" : e.tag;if (e.attrs.class && (t += "." + e.attrs.class.replace(/\s+/g, "."), e.attrs.class = void 0), each(Object.keys(e.attrs).sort(), function (i) {
+      if ("style" !== i && void 0 !== e.attrs[i]) {
+        t += "[" + i + "='";var a = e.attrs[i];a = a.replace(/[\n\r\t]/g, " "), a = a.replace(/\s+/g, " "), t += a.replace(/'/g, "\\'") + "']";
       }
-    }), "" === e && (e = "div"), e = '"' + e + '"', t.attrs.style) {
-      var r = t.attrs.style.replace(/(^.*);\s*$/, "$1"),
-          i = r.replace(/[\n\r]/g, ""),
-          a = i.split(/\s*;\s*/),
-          n = a.map(function (t) {
-        return t.split(/\s*:\s*/).map(function (t) {
-          return '"' + t + '"';
+    }), "" === t && (t = "div"), t = '"' + t + '"', e.attrs.style) {
+      var a = e.attrs.style.replace(/(^.*);\s*$/, "$1"),
+          i = a.replace(/[\n\r]/g, ""),
+          r = i.split(/\s*;\s*/),
+          n = r.map(function (e) {
+        return e.split(/\s*:\s*/).map(function (e) {
+          return '"' + e + '"';
         }).join(": ");
       }),
-          l = n.join(", "),
-          s = "{" + l + "}";e += ", {style: " + s + "}";
-    }if (0 !== t.children.length) {
-      var u = new TemplateBuilder(t.children, this.level + 1);e += ", " + u.complete();
-    }this.virtuals.push("m(" + e + ")");
+          s = n.join(", "),
+          l = "{" + s + "}";t += ", {style: " + l + "}";
+    }if (0 !== e.children.length) {
+      var o = new TemplateBuilder(e.children, this.level + 1);t += ", " + o.complete();
+    }this.virtuals.push("m(" + t + ")");
   }, complete: function complete() {
-    if (each(this.virtual, function (t) {
-      "string" == typeof t ? !/^\s*$/.test(t) && t.charCodeAt() >= 32 && this.addVirtualString(t) : this.addVirtualAttrs(t);
-    }.bind(this)), 1 === this.virtuals.length && '"' === this.virtuals[0][0]) return this.virtuals.join(", ");var t = this.virtuals.join(",");return "[" + t + "]";
-  } };var templateBuilder = function templateBuilder(t) {
-  var e = createVirtual(createFragment(t));return new TemplateBuilder(e, 1).complete();
+    if (each(this.virtual, function (e) {
+      "string" == typeof e ? !/^\s*$/.test(e) && e.charCodeAt() >= 32 && this.addVirtualString(e) : this.addVirtualAttrs(e);
+    }.bind(this)), 1 === this.virtuals.length && '"' === this.virtuals[0][0]) return this.virtuals.join(", ");var e = this.virtuals.join(",");return "[" + e + "]";
+  } };var templateBuilder = function templateBuilder(e) {
+  var t = createVirtual(createFragment(e));return new TemplateBuilder(t, 1).complete();
 };"undefined" != typeof module && null !== module && module.exports ? module.exports = templateBuilder : "function" == typeof define && define.amd && define(function () {
   return templateBuilder;
 });
