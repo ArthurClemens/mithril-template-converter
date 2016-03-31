@@ -6,6 +6,13 @@ const input = "<hr/>"
 const output = templateBuilder(input)
 */
 
+const svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"];
+
+const svgCaseSensitiveTagNamesMap = {};
+svgCaseSensitiveTagNames.forEach((term) => {
+    svgCaseSensitiveTagNamesMap[term.toLowerCase()] = term;
+});
+
 function each(list, f) {
     for (let i = 0; i < list.length; i++) {
         f(list[i], i)
@@ -21,32 +28,33 @@ function createFragment(markup) {
         ]
     }
 
-    let container = document.createElement("div")
+    const container = document.createElement("div")
     container.insertAdjacentHTML("beforeend", markup)
     return container.childNodes
 }
 
 function createVirtual(fragment) {
-    let list = []
+    const list = []
 
     each(fragment, function(el) {
         if (el.nodeType === 3) {
             list.push(el.nodeValue)
         } else if (el.nodeType === 1) {
-            let attrs = {}
-
+            const attrs = {}
             each(el.attributes, function(attr) {
                 attrs[attr.name] = attr.value
             })
 
+            const tag = el.nodeName.toLowerCase()
+            const caseTag = svgCaseSensitiveTagNamesMap[tag] ? svgCaseSensitiveTagNamesMap[tag] : tag
+
             list.push({
-                tag: el.nodeName.toLowerCase(),
-                attrs: attrs,
+                tag: caseTag,
+                attrs,
                 children: createVirtual(el.childNodes)
             })
         }
     })
-
     return list
 }
 

@@ -100,6 +100,17 @@ describe("Template Builder", function() {
             expect(output).to.equal('[m("svg[id=\'Layer_1\'][version=\'1.1\'][viewBox=\'0 0 24 24\'][x=\'0px\'][xml:space=\'preserve\'][xmlns=\'http://www.w3.org/2000/svg\'][xmlns:xlink=\'http://www.w3.org/1999/xlink\'][y=\'0px\']", {style: {"enable-background": "new 0 0 24 24"}}, [m("path[d=\'M12,2c1.1,0,2,0.9,2,2s-0.9,2-2,2s-2-0.9-2-2S10.9,2,12,2z M21,9h-6v13h-2v-6h-2v6H9V9H3V7h18V9z\']")])]');
         });
 
+        it("Case-sensitive SVG", function() {
+            var input = '<svg version="1.1" x="0" y="0" width="360" height="420">\
+  <path id="guideTextPath" d="M180,312 A132,132 0 0 0 272.34,272.34" fill="none"></path>\
+  <text font-size="14pt">\
+    <textPath href="#guideTextPath" startoffset="50%" alignment-baseline="central">GUIDE</textPath>\
+  </text>\
+</svg>';
+            var output = templateBuilder(input);
+            expect(output).to.equal('[m("svg[height=\'420\'][version=\'1.1\'][width=\'360\'][x=\'0\'][y=\'0\']", [m("path[d=\'M180,312 A132,132 0 0 0 272.34,272.34\'][fill=\'none\'][id=\'guideTextPath\']"),m("text[font-size=\'14pt\']", [m("textPath[alignment-baseline=\'central\'][href=\'#guideTextPath\'][startOffset=\'50%\']", "GUIDE")])])]');
+        });
+
         it("Complex svg", function() {
             var input = '<?xml version="1.0" encoding="UTF-8" standalone="no"?> \
 <svg \
