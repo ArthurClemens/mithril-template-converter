@@ -30,8 +30,8 @@ function _interopRequireDefault(e) {
       rendered = eval(output);
     } catch (e) {
       rendered = "Could not render Mithril code - please check the output for any errors.";
-    }return (0, _mithril2.default)("div", [(0, _mithril2.default)(".group", [(0, _mithril2.default)("div.layout.justified.horizontal", [(0, _mithril2.default)("h2", "Paste source HTML"), (0, _mithril2.default)("a", { href: "#", onclick: function onclick() {
-        return ctrl.showExample();
+    }return (0, _mithril2.default)("div", [(0, _mithril2.default)(".group", [(0, _mithril2.default)("div.layout.justified.horizontal", [(0, _mithril2.default)("h2", "Paste source HTML"), (0, _mithril2.default)("a", { href: "#", onclick: function onclick(e) {
+        return e.preventDefault(), ctrl.showExample();
       } }, "Insert random example")]), _mithril2.default.component(_textfield2.default, { class: "source", autofocus: !0, getState: function getState(e) {
         var t = !(!ctrl.source() && !e.value);ctrl.source(e.value), "" === e.value ? ctrl.output("") : t && ctrl.convert();
       }, multiline: !0, rows: 8, value: function value() {
@@ -199,11 +199,13 @@ var app = {};
 app.view = function () {
     return (0, _mithril2.default)(".converter", [(0, _mithril2.default)("h1", "Mithril HTML to JavaScript converter"), _mithril2.default.component(_converter2.default), (0, _mithril2.default)("div", {
         class: "footer"
-    }, [(0, _mithril2.default)("span", "Built with "), (0, _mithril2.default)("a", {
-        href: "https://github.com/ArthurClemens/Polythene"
-    }, "Polythene"), (0, _mithril2.default)("span", " for "), (0, _mithril2.default)("a", {
+    }, [(0, _mithril2.default)("a", {
+        href: "https://github.com/ArthurClemens/mithril-template-converter"
+    }, "Code on Github"), (0, _mithril2.default)("span", ". "), (0, _mithril2.default)("span", "Built for "), (0, _mithril2.default)("a", {
         href: "https://github.com/lhorie/mithril.js"
-    }, "Mithril"), (0, _mithril2.default)("span", ".")])]);
+    }, "Mithril"), (0, _mithril2.default)("span", " with "), (0, _mithril2.default)("a", {
+        href: "https://github.com/ArthurClemens/Polythene"
+    }, "Polythene"), (0, _mithril2.default)("span", ".")])]);
 };
 
 _mithril2.default.mount(document.body, app);
