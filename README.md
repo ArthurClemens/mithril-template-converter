@@ -14,6 +14,18 @@ const output = templateBuilder(input)
 ~~~
 
 
+## Updating code
+
+Requires babel and uglifyjs.
+
+es6 modules are transpiled to es5 using either:
+
+* `npm run transpile`
+* `npm run watch`
+
+
 ## Tests
 
-Run `tests/testrunner.html` in a browser
+Run `tests/testrunner.html` in a browser.
+
+Update test code, transpile (see above), run test. 

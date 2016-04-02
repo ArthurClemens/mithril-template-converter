@@ -5,7 +5,7 @@ var babelify = require("babelify");
 function bundle(entries, outfile) {
     browserify({
         entries: entries,
-        extensions: [".es6.js"],
+        extensions: [".es6"],
         paths: ["."]
     })
     .transform(babelify, {presets: ["es2015"]})
@@ -17,5 +17,5 @@ function bundle(entries, outfile) {
 };
 
 bundle([
-    "app/index/index.es6.js"
+    "app/index/index.es6"
 ], "app.js");

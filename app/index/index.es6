@@ -4,7 +4,7 @@ import "polythene/theme/theme";
 
 const app = {};
 app.view = function() {
-    return m("div", [
+    return m(".converter", [
         m("h1", "Mithril HTML to JavaScript converter"),
         m.component(converter),
         m("div", {
