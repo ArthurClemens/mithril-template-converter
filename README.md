@@ -9,8 +9,10 @@ Version of Mithril's [template-converter](http://mithril.js.org/tools/template-c
 
 ~~~javascript
 import templateBuilder from "app/converter/template-builder"
-const input = "<hr/>"
-const output = templateBuilder(input)
+const source = "<hr/>"
+const output = templateBuilder({
+	source
+})
 ~~~
 
 

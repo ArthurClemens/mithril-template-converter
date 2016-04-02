@@ -53,7 +53,7 @@ const converter = {
                     m("h2", "Paste source HTML"),
                     m("a", {
                         href: "#",
-                        onclick: () => (ctrl.showExample())
+                        onclick: (e) => (e.preventDefault(), ctrl.showExample())
                     }, "Insert random example")
                 ]),
                 m.component(textfield, {

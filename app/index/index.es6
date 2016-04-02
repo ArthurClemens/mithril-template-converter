@@ -10,14 +10,18 @@ app.view = function() {
         m("div", {
             class: "footer"
         }, [
-            m("span", "Built with "),
             m("a", {
-                href: "https://github.com/ArthurClemens/Polythene"
-            }, "Polythene"),
-            m("span", " for "),
+                href: "https://github.com/ArthurClemens/mithril-template-converter"
+            }, "Code on Github"),
+            m("span", ". "),
+            m("span", "Built for "),
             m("a", {
                 href: "https://github.com/lhorie/mithril.js"
             }, "Mithril"),
+            m("span", " with "),
+            m("a", {
+                href: "https://github.com/ArthurClemens/Polythene"
+            }, "Polythene"),
             m("span", ".")
         ])
     ])
