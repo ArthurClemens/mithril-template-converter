@@ -1,0 +1,16 @@
+{
+  "presets": [
+    ["env", { "modules": false }],
+    "minify"
+  ],
+  "plugins": [
+  ],
+  "env": {
+      "test": {
+        "presets": [
+          "env"
+        ],
+        "plugins": ["transform-runtime"]
+      }
+    }
+}

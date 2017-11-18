@@ -1,3 +1,4 @@
+/* global describe, it, expect, templateBuilder */
 
 describe("Template Builder", function() {
     describe("Single tags", function() {
@@ -53,7 +54,7 @@ describe("Template Builder", function() {
             var output = templateBuilder({source: input, indent: "4"})
             expect(output).to.equal(
 `m("h1", 
-    "  Title  "
+    "Title"
 )`
             )
         });
@@ -198,7 +199,7 @@ describe("Template Builder", function() {
             m("tr",
                 [
                     m("th", 
-                        "  weekday  "
+                        "weekday"
                     ),
                     m("th", 
                         "date"
