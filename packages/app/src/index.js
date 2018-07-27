@@ -6,8 +6,6 @@ import "polythene-css/dist/polythene-layout-styles.css"; // Help classes
 import "polythene-css/dist/polythene-typography.css";    // Default Material Design styles including Roboto font
 import "./index.css"; 
 
-addFastClick();
-
 const App = {
   view: () =>
     m(".converter", [
