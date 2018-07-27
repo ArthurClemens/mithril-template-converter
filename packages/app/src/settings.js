@@ -85,6 +85,8 @@ const Settings = {
         })
       }),
       m(Button, {
+        dropdown: true,
+        contained: true,
         id: "indent-selections",
         label: "Indent: " + menuOptions[menu.selectedIndex].title,
         events: {

@@ -1,5 +1,4 @@
 import m from "mithril";
-import { addFastClick } from "polythene-fastclick"; // optional
 import Form from "./form";
 
 import "polythene-css/dist/polythene.css";               // Component CSS
