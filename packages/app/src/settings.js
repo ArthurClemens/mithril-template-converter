@@ -67,8 +67,8 @@ const Settings = {
         show: menu.isVisible,
         hideDelay: .140,
         didHide: () => menu.isVisible = false,
-        size: 5,
-        offset: 0,
+        width: 5,
+        offsetH: 0,
         content: m(List, {
           tiles: menuOptions.map((setting, index) =>
             m(ListTile, {
