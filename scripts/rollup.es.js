@@ -16,4 +16,3 @@ const targetConfig = Object.assign({}, baseConfig, {
 });
 
 export default targetConfig;
-

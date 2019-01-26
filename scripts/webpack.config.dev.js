@@ -1,9 +1,13 @@
-/* global __dirname */
+/* global process */
 const path = require("path");
 const config = require("./webpack.config.js");
 
+const baseDir = process.cwd();
+
+config.mode = "development";
+
 config.devServer = {
-  contentBase: path.resolve(__dirname, "../dist")
+  contentBase: path.resolve(baseDir, "./dist")
 };
 
 config.watchOptions = {

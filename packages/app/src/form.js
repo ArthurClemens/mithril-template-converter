@@ -2,7 +2,7 @@ import m from "mithril";
 import Stream from "mithril/stream";
 window.m = m; // for eval
 import { TextField } from "polythene-mithril";
-import templateBuilder from "mithril-template-builder";
+import { templateBuilder } from "mithril-template-builder";
 import Settings from "./settings";
 import examples from "./examples";
 
@@ -27,7 +27,7 @@ const Form = {
       convert();
     };
 
-    vnode.state = {
+    Object.assign(vnode.state, {
       convert,
       source,
       output,
@@ -36,7 +36,7 @@ const Form = {
         convert();
       },
       showExample
-    };
+    });
   },
   view: vnode => {
     const output = vnode.state.output();
