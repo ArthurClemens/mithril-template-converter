@@ -1,7 +1,7 @@
 {
   "name": "mithril-template-builder",
   "description": "Builder for Mithril HTML to JavaScript converter",
-  "main": "dist/mithril-template-builder.js",
+  "main": "dist/mithril-template-builder",
   "module": "dist/mithril-template-builder.mjs",
   "version": "1.0.1",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "dist",
     "README.md"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "mithril": "^1.1.6"
   },
   "devDependencies": {
