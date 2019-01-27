@@ -595,18 +595,58 @@ module.exports = g;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "templateBuilder", function() { return templateBuilder; });
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  }
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+} // @ts-check
+
+/**
+ * @typedef {{tag: string, attrs: object, children: Array<Vnode>}} Vnode
+ */
+
+/**
+ * @type {RegExp} ENTITY_REGEX
+ */
+
+
 var ENTITY_REGEX = /(&#?\w+;)/;
 var svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"];
 var svgCaseSensitiveTagNamesMap = {};
 svgCaseSensitiveTagNames.forEach(function (term) {
   svgCaseSensitiveTagNamesMap[term.toLowerCase()] = term;
 });
+/**
+ * @param {Array} list 
+ * @param {function} f 
+ */
 
 function each(list, f) {
   for (var i = 0; i < list.length; i++) {
     f(list[i], i);
   }
 }
+/**
+ * @param {string} markup 
+ * @returns {Array<ChildNode>}
+ */
+
 
 function createFragment(markup) {
   // escape HTML entities, to be resolved in addVirtualString
@@ -618,8 +658,13 @@ function createFragment(markup) {
 
   var container = document.createElement("div");
   container.insertAdjacentHTML("beforeend", markup);
-  return container.childNodes;
+  return _toConsumableArray(container.childNodes);
 }
+/**
+ * @param {Array<Node>|Array<ChildNode>} fragment 
+ * @returns {Array<Vnode>}
+ */
+
 
 function createVirtual(fragment) {
   var list = [];
@@ -642,6 +687,11 @@ function createVirtual(fragment) {
   });
   return list;
 }
+/**
+ * 
+ * @param {Array<Vnode>} virtual 
+ */
+
 
 function TemplateBuilder(virtual) {
   this.virtual = virtual;
@@ -674,19 +724,23 @@ TemplateBuilder.prototype = {
       });
     }
   },
-  addVirtualAttrs: function addVirtualAttrs(el) {
-    var virtual = el.tag === "div" ? "" : el.tag;
 
-    if (el.attrs.class) {
-      var attrs = el.attrs.class.replace(/\s+/g, ".");
+  /**
+   * @param {object} vnode 
+   */
+  addVirtualAttrs: function addVirtualAttrs(vnode) {
+    var virtual = vnode.tag === "div" ? "" : vnode.tag;
+
+    if (vnode.attrs.class) {
+      var attrs = vnode.attrs.class.replace(/\s+/g, ".");
       virtual += ".".concat(attrs);
-      el.attrs.class = undefined;
+      vnode.attrs.class = undefined;
     }
 
-    each(Object.keys(el.attrs).sort(), function (attrName) {
+    each(Object.keys(vnode.attrs).sort(), function (attrName) {
       if (attrName === "style") return;
-      if (el.attrs[attrName] === undefined) return;
-      var attrs = el.attrs[attrName];
+      if (vnode.attrs[attrName] === undefined) return;
+      var attrs = vnode.attrs[attrName];
       attrs = attrs.replace(/[\n\r\t]/g, " ");
       attrs = attrs.replace(/\s+/g, " "); // clean up redundant spaces we just created
 
@@ -697,8 +751,8 @@ TemplateBuilder.prototype = {
     if (virtual === "") virtual = "div";
     virtual = "\"".concat(virtual, "\""); // add quotes
 
-    if (el.attrs.style) {
-      var _attrs = el.attrs.style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
+    if (vnode.attrs.style) {
+      var _attrs = vnode.attrs.style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
 
 
       _attrs = _attrs.replace(/[\n\r]/g, ""); // remove newlines
@@ -715,17 +769,17 @@ TemplateBuilder.prototype = {
       virtual += ", {style: {".concat(_attrs, "}}");
     }
 
-    var children = el.children.length !== 0 ? new TemplateBuilder(el.children).complete() : null;
+    var children = vnode.children.length !== 0 ? new TemplateBuilder(vnode.children).complete() : null;
     this.children.push({
       node: virtual,
       children: children
     });
   },
   complete: function complete() {
-    each(this.virtual, function (el) {
-      if (typeof el === "string") {
-        var trimmed = el.trim();
-        var charCode = trimmed.charCodeAt(); // dimiss:
+    each(this.virtual, function (vnode) {
+      if (typeof vnode === "string") {
+        var trimmed = vnode.trim();
+        var charCode = trimmed.charCodeAt(0); // dimiss:
         // - empty strings
         // - single escaped quotes
         // - single newlines
@@ -735,12 +789,17 @@ TemplateBuilder.prototype = {
           this.addVirtualString(trimmed);
         }
       } else {
-        this.addVirtualAttrs(el);
+        this.addVirtualAttrs(vnode);
       }
     }.bind(this));
     return this.children;
   }
 };
+/**
+ * @param {number} level 
+ * @param {string} indent 
+ * @returns {string}
+ */
 
 var whitespace = function whitespace(level, indent) {
   if (level < 0) return "";
@@ -752,30 +811,76 @@ var whitespace = function whitespace(level, indent) {
 
   return whitespace;
 };
+/**
+ * @param {string} content 
+ * @returns {string}
+ */
+
 
 var wrapperTemplate = function wrapperTemplate(content) {
   return "[".concat(content, "\n]");
 };
+/**
+ * @param {string} content 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
+
 
 var contentTemplate = function contentTemplate(content, whitespace) {
   return "\n".concat(whitespace).concat(content);
 };
+/**
+ * @param {string} mithrilNode 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
 
-var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, children, whitespace) {
+
+var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, whitespace) {
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ")");
 };
+/**
+ * @param {string} mithrilNode 
+ * @param {string} children 
+ * @param {string} whitespace 
+ * @param {string} indent 
+ * @returns {string}
+ */
+
 
 var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent) {
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n").concat(whitespace).concat(indent, "[").concat(children, "\n").concat(whitespace).concat(indent, "]\n").concat(whitespace, ")");
 };
+/**
+ * @param {string} mithrilNode 
+ * @param {string} child 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
+
 
 var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mithrilNode, child, whitespace) {
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(child, "\n").concat(whitespace, ")");
 };
+/**
+ * @param {string} mithrilNode 
+ * @param {string} children 
+ * @param {string} whitespace 
+ * @param {string} indent 
+ * @returns {string}
+ */
+
 
 var template = function template(mithrilNode, children, whitespace, indent) {
-  return children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace, indent) : singleMithrilNodeTemplate(mithrilNode, children, whitespace, indent);
+  return children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) : singleMithrilNodeTemplate(mithrilNode, whitespace);
 };
+/**
+ * @param {Array} data 
+ * @param {number} level 
+ * @param {string} indent 
+ */
+
 
 var formatCode = function formatCode(data, level, indent) {
   if (!data) {
@@ -801,15 +906,16 @@ var indentCharsMap = {
   "4": "    ",
   "tab": "\t"
 };
-/*
-opts: {
-  source: string containing HTML markup
-  indent: either "2", "4" or "tab"
-}
-*/
+/**
+ * @param {object} opts 
+ * @param {string} opts.source - String containing HTML markup
+ * @param {"2" | "4" | "tab"} opts.indent
+ * @returns {string}
+ */
 
 var templateBuilder = function templateBuilder(opts) {
-  var source = createVirtual(createFragment(opts.source));
+  var fragment = createFragment(opts.source);
+  var source = createVirtual(fragment);
   var parsed = new TemplateBuilder(source).complete();
   var indentLevel = parsed.length > 1 ? 1 : 0;
   var indentChars = indentCharsMap[opts.indent || "4"];
@@ -12777,7 +12883,8 @@ var Timer = function Timer() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var examples = [// 2 divs
+var examples = [// h2
+"<!-- Ruler -->\n<hr />", // 2 divs
 "<!-- 2 divs -->\n<div><p><span>text</span></p></div> <div><p><span>text</span></p></div>", // Bootstrap dialog
 "<!-- Bootstrap dialog -->\n<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\">\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n        <h4 class=\"modal-title\">Modal title</h4>\n      </div>\n      <div class=\"modal-body\">\n        <p>One fine body&hellip;</p>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n        <button type=\"button\" class=\"btn btn-primary\">Save changes</button>\n      </div>\n    </div><!-- /.modal-content -->\n  </div><!-- /.modal-dialog -->\n</div><!-- /.modal -->", // Bootstrap button
 "<!-- Bootstrap button -->\n<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>", // Table
@@ -12809,120 +12916,6 @@ var shuffle = function shuffle(array) {
 
 /***/ }),
 
-/***/ "./form.js":
-/*!*****************!*\
-  !*** ./form.js ***!
-  \*****************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var mithril__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mithril */ "../node_modules/mithril/mithril.js");
-/* harmony import */ var mithril__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mithril__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var mithril_stream__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mithril/stream */ "../node_modules/mithril/stream/stream.js");
-/* harmony import */ var mithril_stream__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(mithril_stream__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var polythene_mithril__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-mithril */ "../node_modules/polythene-mithril/dist/polythene-mithril.mjs");
-/* harmony import */ var mithril_template_builder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! mithril-template-builder */ "../../mithril-template-builder/dist/mithril-template-builder.mjs");
-/* harmony import */ var _settings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./settings */ "./settings.js");
-/* harmony import */ var _examples__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./examples */ "./examples.js");
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-
-
-window.m = mithril__WEBPACK_IMPORTED_MODULE_0___default.a; // for eval
-
-
-
-
-
-var Form = {
-  oninit: function oninit(vnode) {
-    var source = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()("");
-    var output = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()("");
-
-    var _indentId = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()();
-
-    var exampleIndex = 0;
-
-    var convert = function convert() {
-      var built = Object(mithril_template_builder__WEBPACK_IMPORTED_MODULE_3__["templateBuilder"])({
-        source: source(),
-        indent: _indentId()
-      });
-      output(built);
-    };
-
-    var showExample = function showExample() {
-      var index = exampleIndex++ % _examples__WEBPACK_IMPORTED_MODULE_5__["default"].length;
-      source(_examples__WEBPACK_IMPORTED_MODULE_5__["default"][index]);
-      convert();
-    };
-
-    _extends(vnode.state, {
-      convert: convert,
-      source: source,
-      output: output,
-      indentId: function indentId(index) {
-        _indentId(index);
-
-        convert();
-      },
-      showExample: showExample
-    });
-  },
-  view: function view(vnode) {
-    var output = vnode.state.output();
-    var rendered;
-
-    try {
-      rendered = eval(output);
-    } catch (e) {
-      rendered = "Could not render Mithril code - please check the output for any errors.";
-    }
-
-    return mithril__WEBPACK_IMPORTED_MODULE_0___default()("div", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".group", [mithril__WEBPACK_IMPORTED_MODULE_0___default()("div.layout.justified.horizontal", [mithril__WEBPACK_IMPORTED_MODULE_0___default()("h2", "Paste source HTML"), mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
-      href: "#",
-      onclick: function onclick(e) {
-        return e.preventDefault(), vnode.state.showExample();
-      }
-    }, "Insert random example")]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
-      className: "source",
-      autofocus: true,
-      onChange: function onChange(_ref) {
-        var value = _ref.value;
-        var needsConvert = !!(vnode.state.source() || value);
-        vnode.state.source(value);
-
-        if (value === "") {
-          vnode.state.output("");
-        } else if (needsConvert) {
-          vnode.state.convert();
-        }
-      },
-      multiLine: true,
-      rows: 8,
-      value: vnode.state.source()
-    })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".group", [mithril__WEBPACK_IMPORTED_MODULE_0___default()("h2", "Mithril template"), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
-      className: "result",
-      multiLine: true,
-      rows: 8,
-      value: vnode.state.output(),
-      onChange: function onChange(_ref2) {
-        var value = _ref2.value;
-        return vnode.state.output(value);
-      }
-    }), mithril__WEBPACK_IMPORTED_MODULE_0___default()(_settings__WEBPACK_IMPORTED_MODULE_4__["default"], {
-      indentId: vnode.state.indentId
-    })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".group", [mithril__WEBPACK_IMPORTED_MODULE_0___default()("h2", "Rendered Mithril template"), mithril__WEBPACK_IMPORTED_MODULE_0___default()("div", {
-      class: "render"
-    }, rendered ? rendered : null)])]);
-  }
-};
-/* harmony default export */ __webpack_exports__["default"] = (Form);
-
-/***/ }),
-
 /***/ "./index.css":
 /*!*******************!*\
   !*** ./index.css ***!
@@ -12931,7 +12924,7 @@ var Form = {
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-module.exports = {"mtc":"mtc","converter":"converter","indent-selector":"indent-selector","selectable-list":"selectable-list","pe-list-tile__content":"pe-list-tile__content","pe-button":"pe-button","pe-button__content":"pe-button__content","group":"group","pe-textfield":"pe-textfield","pe-textfield__input":"pe-textfield__input","pe-textfield--focused":"pe-textfield--focused","render":"render","footer":"footer"};
+module.exports = {"form":"form","block":"block","editor":"editor","pe-textfield__input-area":"pe-textfield__input-area","pe-textfield__input":"pe-textfield__input","options":"options","selected":"selected","source":"source","result":"result","rendered":"rendered","pe-textfield":"pe-textfield","indents":"indents","viewer":"viewer"};
 
 /***/ }),
 
@@ -12946,15 +12939,26 @@ module.exports = {"mtc":"mtc","converter":"converter","indent-selector":"indent-
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mithril__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mithril */ "../node_modules/mithril/mithril.js");
 /* harmony import */ var mithril__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mithril__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./form */ "./form.js");
-/* harmony import */ var polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-css/dist/polythene.css */ "../node_modules/polythene-css/dist/polythene.css");
-/* harmony import */ var polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! polythene-css/dist/polythene-layout-styles.css */ "../node_modules/polythene-css/dist/polythene-layout-styles.css");
-/* harmony import */ var polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! polythene-css/dist/polythene-typography.css */ "../node_modules/polythene-css/dist/polythene-typography.css");
-/* harmony import */ var polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./index.css */ "./index.css");
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var mithril_stream__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mithril/stream */ "../node_modules/mithril/stream/stream.js");
+/* harmony import */ var mithril_stream__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(mithril_stream__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var polythene_mithril__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-mithril */ "../node_modules/polythene-mithril/dist/polythene-mithril.mjs");
+/* harmony import */ var mithril_template_builder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! mithril-template-builder */ "../../mithril-template-builder/dist/mithril-template-builder.mjs");
+/* harmony import */ var _examples__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./examples */ "./examples.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils */ "./utils.js");
+/* harmony import */ var polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! polythene-css/dist/polythene.css */ "../node_modules/polythene-css/dist/polythene.css");
+/* harmony import */ var polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! polythene-css/dist/polythene-layout-styles.css */ "../node_modules/polythene-css/dist/polythene-layout-styles.css");
+/* harmony import */ var polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! polythene-css/dist/polythene-typography.css */ "../node_modules/polythene-css/dist/polythene-typography.css");
+/* harmony import */ var polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./index.css */ "./index.css");
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_9__);
+
+
+window.m = mithril__WEBPACK_IMPORTED_MODULE_0___default.a; // for eval
+
+
+
 
 
  // Component CSS
@@ -12964,39 +12968,129 @@ __webpack_require__.r(__webpack_exports__);
  // Default Material Design styles including Roboto font
 
 
-var App = {
-  view: function view() {
-    return mithril__WEBPACK_IMPORTED_MODULE_0___default()(".converter", [mithril__WEBPACK_IMPORTED_MODULE_0___default()("h1", "Mithril HTML to JavaScript converter"), mithril__WEBPACK_IMPORTED_MODULE_0___default()(_form__WEBPACK_IMPORTED_MODULE_1__["default"]), mithril__WEBPACK_IMPORTED_MODULE_0___default()("div", {
-      class: "footer"
-    }, [mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
-      href: "https://github.com/ArthurClemens/mithril-template-converter"
-    }, "Code on Github"), mithril__WEBPACK_IMPORTED_MODULE_0___default()("span", ". "), mithril__WEBPACK_IMPORTED_MODULE_0___default()("span", "Built for "), mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
-      href: "https://mithril.js.org"
-    }, "Mithril"), mithril__WEBPACK_IMPORTED_MODULE_0___default()("span", " with "), mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
-      href: "https://github.com/ArthurClemens/Polythene"
-    }, "Polythene"), mithril__WEBPACK_IMPORTED_MODULE_0___default()("span", ".")])]);
-  }
+var INDENT_STORAGE_KEY = "mithril-template-converter__indent-index";
+var indentOptions = [{
+  label: "2",
+  id: "2"
+}, {
+  label: "4",
+  id: "4"
+}, {
+  label: "Tab",
+  id: "tab"
+}];
+var DEFAULT_INDENT_ID = "2";
+
+var App = function App() {
+  var convert = function convert() {
+    var built = Object(mithril_template_builder__WEBPACK_IMPORTED_MODULE_3__["templateBuilder"])({
+      source: $source(),
+      indent: $indentId()
+    });
+    $output(built);
+  };
+
+  var $source = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()("");
+  var $output = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()("");
+  var defaultIndentId = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["storageAvailable"])("localStorage") ? localStorage.getItem(INDENT_STORAGE_KEY) : DEFAULT_INDENT_ID;
+  var $indentId = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()(defaultIndentId);
+  $indentId.map(function (id) {
+    if (Object(_utils__WEBPACK_IMPORTED_MODULE_5__["storageAvailable"])("localStorage")) {
+      localStorage.setItem(INDENT_STORAGE_KEY, id);
+    }
+
+    convert();
+  });
+  var exampleIndex = 0;
+
+  var showExample = function showExample() {
+    var index = exampleIndex++ % _examples__WEBPACK_IMPORTED_MODULE_4__["default"].length;
+    $source(_examples__WEBPACK_IMPORTED_MODULE_4__["default"][index]);
+    convert();
+  };
+
+  return {
+    view: function view() {
+      var output = $output();
+      var indentId = $indentId();
+      var rendered;
+
+      try {
+        rendered = eval(output);
+      } catch (e) {
+        rendered = "Could not render Mithril code - please check the output for any errors.";
+      }
+
+      return mithril__WEBPACK_IMPORTED_MODULE_0___default()(".form.layout.justified.horizontal", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.source", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
+        href: "#",
+        onclick: function onclick(e) {
+          return e.preventDefault(), showExample();
+        }
+      }, "Insert random example")), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
+        className: "editor",
+        label: "Paste source HTML",
+        tone: "dark",
+        fullWidth: true,
+        autofocus: true,
+        onChange: function onChange(_ref) {
+          var value = _ref.value;
+          var needsConvert = !!($source() || value);
+          $source(value);
+
+          if (value === "") {
+            $output("");
+          } else if (needsConvert) {
+            convert();
+          }
+        },
+        multiLine: true,
+        value: $source()
+      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.result", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()(".indents", indentOptions.map(function (o) {
+        return mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
+          href: "#",
+          className: indentId === o.id ? "selected" : null,
+          onclick: function onclick(e) {
+            return e.preventDefault(), $indentId(o.id);
+          }
+        }, o.label);
+      }))), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
+        className: "editor",
+        label: "Mithril template",
+        multiLine: true,
+        fullWidth: true,
+        value: $output(),
+        onChange: function onChange(_ref2) {
+          var value = _ref2.value;
+          return $output(value);
+        }
+      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.rendered", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
+        href: "https://github.com/ArthurClemens/mithril-template-converter",
+        target: "_blank"
+      }, "Github")), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".editor", rendered ? mithril__WEBPACK_IMPORTED_MODULE_0___default()(".viewer", rendered) : mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
+        className: "editor",
+        label: "Rendered HTML",
+        multiLine: true,
+        fullWidth: true,
+        readonly: true
+      }))])]);
+    }
+  };
 };
+
 mithril__WEBPACK_IMPORTED_MODULE_0___default.a.mount(document.body, App);
 
 /***/ }),
 
-/***/ "./settings.js":
-/*!*********************!*\
-  !*** ./settings.js ***!
-  \*********************/
-/*! exports provided: default */
+/***/ "./utils.js":
+/*!******************!*\
+  !*** ./utils.js ***!
+  \******************/
+/*! exports provided: storageAvailable */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var mithril__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mithril */ "../node_modules/mithril/mithril.js");
-/* harmony import */ var mithril__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mithril__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var polythene_mithril__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-mithril */ "../node_modules/polythene-mithril/dist/polythene-mithril.mjs");
-
-
-var STORAGE_KEY = "mithril-template-converter__indent-index";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "storageAvailable", function() { return storageAvailable; });
 var storageAvailable = function storageAvailable(type) {
   try {
     var storage = window[type],
@@ -13008,85 +13102,6 @@ var storageAvailable = function storageAvailable(type) {
     return false;
   }
 };
-
-var menuOptions = [{
-  title: "2 Spaces",
-  id: "2"
-}, {
-  title: "4 Spaces",
-  id: "4",
-  default: true
-}, {
-  title: "Tab",
-  id: "tab"
-}];
-var defaultMenuIndex = 0;
-var Settings = {
-  oninit: function oninit(vnode) {
-    var indentId = vnode.attrs.indentId;
-    var defaultIndex = storageAvailable("localStorage") ? localStorage.getItem(STORAGE_KEY) : defaultMenuIndex;
-
-    if (defaultIndex === null) {
-      defaultIndex = defaultMenuIndex;
-    } else {
-      defaultIndex = Math.max(0, Math.min(defaultMenuIndex, defaultIndex));
-    }
-
-    var setSelectedIndex = function setSelectedIndex(index) {
-      vnode.state.menu.selectedIndex = index;
-      localStorage.setItem(STORAGE_KEY, index);
-      indentId(menuOptions[index].id);
-    };
-
-    vnode.state.menu = {
-      isVisible: false,
-      selectedIndex: defaultIndex,
-      setSelectedIndex: setSelectedIndex
-    };
-    setSelectedIndex(defaultMenuIndex);
-  },
-  view: function view(vnode) {
-    var menu = vnode.state.menu;
-    return mithril__WEBPACK_IMPORTED_MODULE_0___default()(".indent-selector", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__["Menu"], {
-      target: "#indent-selections",
-      reposition: true,
-      show: menu.isVisible,
-      hideDelay: .140,
-      didHide: function didHide() {
-        return menu.isVisible = false;
-      },
-      width: 5,
-      offsetH: 0,
-      content: mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__["List"], {
-        tiles: menuOptions.map(function (setting, index) {
-          return mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__["ListTile"], {
-            className: index === menu.selectedIndex ? "selected" : "",
-            hoverable: true,
-            title: setting.title,
-            selected: index === menu.selectedIndex,
-            ink: true,
-            events: {
-              onclick: function onclick() {
-                return menu.setSelectedIndex(index);
-              }
-            }
-          });
-        })
-      })
-    }), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-      dropdown: true,
-      contained: true,
-      id: "indent-selections",
-      label: "Indent: " + menuOptions[menu.selectedIndex].title,
-      events: {
-        onclick: function onclick() {
-          return menu.isVisible = true;
-        }
-      }
-    })]);
-  }
-};
-/* harmony default export */ __webpack_exports__["default"] = (Settings);
 
 /***/ })
 

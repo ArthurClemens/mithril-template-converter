@@ -444,94 +444,180 @@ b,strong {
   font-weight: 500
 }
 /*# sourceMappingURL=polythene-typography.css.map */
-body.mtc {
-  padding: 20px;
-  background: #f5f5f5;
-}
-
-.converter {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.indent-selector {
-  position: relative;
-}
-
-.mtc .indent-selector>.selectable-list .pe-list-tile__content {
-  padding: 0 !important;
-}
-
-.mtc .indent-selector .pe-button {
+body, html {
+  padding: 0;
   margin: 0;
 }
 
-.mtc .indent-selector .pe-button .pe-button__content {
-  background-color: #ddd;
+body {
+  background: #f0f0f0;
 }
 
-.mtc .group {
-  margin: 0 0 30px 0;
+.form {
+  height: 100vh;
+  overflow: hidden;
 }
 
-.mtc a:link,
-.mtc a:visited {
-  text-decoration: none;
-  color: #2196f3;
-}
-
-.mtc h1 {
-  font-size: 26px;
-  color: #333;
-  margin: 0;
-  margin: 10px 0 40px 0;
-}
-
-.mtc h2 {
-  font-size: 18px;
-  line-height: 20px;
-  color: #525252;
-  margin: 0;
-}
-
-.mtc .pe-textfield {
-  width: 100%;
-}
-
-.mtc textarea.pe-textfield__input {
-  background: #fff;
-  font-family: 'Roboto Mono', monospace;
+.form .block {
+  font-family: 'Roboto', sans-serif;
   font-size: 14px;
+  display: flex;
+  flex-direction: column;
 }
 
-.mtc .pe-textfield--focused textarea {
-  background-color: #fff;
+.form .editor {
+  margin: 0;
+  width: 100%;
+  flex-grow: 1;
 }
 
-.mtc textarea.pe-textfield__input,
-.mtc .render {
-  min-height: 160px;
+.form .editor textarea {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 13px;
 }
 
-.mtc .render {
-  margin: 20px 0 0 0;
-  background-color: #ddd;
+.form .pe-textfield__input-area,
+.form .pe-textfield__input {
+  height: 100%;
 }
 
-.mtc .render,
-.mtc .render p {
+.form .pe-textfield__input-area .pe-textfield__input {
+  margin: 0;
+}
+
+.form .options {
+  padding: 0 20px;
+  height: 42px;
+  min-height: 42px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
   font-size: 16px;
-  line-height: 20px;
 }
 
-.mtc .footer {
-  margin: 30px 0 10px 0;
+.form .options > * {
+  display: inline-block;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.mtc .footer a:link,
-.mtc .footer a:visited {
-  color: #2196f3;
+.form .options a {
   text-decoration: none;
+  color: #2196f3;
+}
+.form .options a.selected {
+  color: #333;
+}
+
+.form .source {
+  background: #333;
+  color: #aaa;
+}
+
+.form .options {
+  border-style: none none solid none;
+  border-width: 1px;
+}
+
+.form .source .options {
+  border-color: #444;
+}
+
+.form .result .options,
+.form .rendered .options {
+  border-color: rgba(170, 170, 170, .25);
+}
+
+.form .rendered .options {
+  align-items: flex-end;
+  background: #f0f0f0;
+}
+
+.form .block.result {
+  background: #fff;
+}
+
+.form .pe-textfield .pe-textfield__input-area:after {
+  display: none;
+}
+
+.form .indents {
+  margin: 0 -8px;
+}
+.form .indents a {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.form .viewer {
+  padding: 18px 20px;
+  opacity: .4;
+  overflow-y: auto;
+}
+
+@media (max-width: 460px) {
+  .form {
+    flex-wrap: wrap;
+  }
+  .form .block {
+    width: 100vw;
+    height: calc(100vh / 3);
+    flex-direction: column-reverse;
+  }
+  .form .block.rendered,
+  .form .block.rendered .viewer {
+    width: 100vw;
+    height: calc(100vh / 3);
+  }
+  .form .rendered .options {
+    border-style: solid none none none;
+  }
+  .form .editor textarea,
+  .form .block.rendered .editor {
+    height: calc((100vh / 3) - 42px);
+  }
+}
+
+@media (min-width: 461px) and (max-width: 800px) {
+  .form {
+    flex-wrap: wrap;
+  }
+  .form .block {
+    width: calc(100% / 2);
+    height: 70vh;
+  }
+  .form .block.rendered {
+    width: 100vw;
+    height: 30vh;
+    flex-direction: column-reverse;
+  }
+  .form .rendered .options {
+    border-style: solid none none none;
+  }
+  .form .editor textarea {
+    height: calc(70vh - 42px);
+  }
+  .form .block.rendered .editor {
+    height: calc(30vh - 42px);
+  }
+}
+
+@media (min-width: 801px) {
+  .form .block {
+    width: calc(100% / 3);
+    height: 100vh;
+  }
+  .form .editor {
+    height: 100%;
+    max-height: 100%;
+  }
+  .form .editor textarea {
+    height: calc(100vh - 42px);
+  }
+  .form .block.rendered {
+    border-left: 1px solid #eee;
+  }
 }
 
 /*# sourceMappingURL=app.css.map*/

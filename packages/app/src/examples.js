@@ -1,5 +1,9 @@
 
 const examples = [
+  // h2
+  `<!-- Ruler -->
+<hr />`,
+
   // 2 divs
   `<!-- 2 divs -->
 <div><p><span>text</span></p></div> <div><p><span>text</span></p></div>`,
