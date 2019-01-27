@@ -1,4 +1,12 @@
+// @ts-check
 
+/**
+ * @typedef {{tag: string, attrs: object, children: Array<Vnode>}} Vnode
+ */
+
+/**
+ * @type {RegExp} ENTITY_REGEX
+ */
 const ENTITY_REGEX = /(&#?\w+;)/;
 
 const svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"];
@@ -8,12 +16,20 @@ svgCaseSensitiveTagNames.forEach((term) => {
   svgCaseSensitiveTagNamesMap[term.toLowerCase()] = term;
 });
 
+/**
+ * @param {Array} list 
+ * @param {function} f 
+ */
 function each(list, f) {
   for (let i = 0; i < list.length; i++) {
     f(list[i], i);
   }
 }
 
+/**
+ * @param {string} markup 
+ * @returns {Array<ChildNode>}
+ */
 function createFragment(markup) {
   // escape HTML entities, to be resolved in addVirtualString
   markup = markup.replace(/&/g, "&amp;");
@@ -26,9 +42,13 @@ function createFragment(markup) {
   }
   const container = document.createElement("div");
   container.insertAdjacentHTML("beforeend", markup);
-  return container.childNodes;
+  return [...container.childNodes];
 }
 
+/**
+ * @param {Array<Node>|Array<ChildNode>} fragment 
+ * @returns {Array<Vnode>}
+ */
 function createVirtual(fragment) {
   const list = [];
 
@@ -54,6 +74,10 @@ function createVirtual(fragment) {
   return list;
 }
 
+/**
+ * 
+ * @param {Array<Vnode>} virtual 
+ */
 function TemplateBuilder(virtual) {
   this.virtual = virtual;
   this.children = []; // each child is an object with attributes: node, children, content
@@ -83,19 +107,22 @@ TemplateBuilder.prototype = {
     }
   },
 
-  addVirtualAttrs: function(el) {
-    let virtual = el.tag === "div" ? "" : el.tag;
+  /**
+   * @param {object} vnode 
+   */
+  addVirtualAttrs: function(vnode) {
+    let virtual = vnode.tag === "div" ? "" : vnode.tag;
 
-    if (el.attrs.class) {
-      let attrs = el.attrs.class.replace(/\s+/g, ".");
+    if (vnode.attrs.class) {
+      let attrs = vnode.attrs.class.replace(/\s+/g, ".");
       virtual += `.${attrs}`;
-      el.attrs.class = undefined;
+      vnode.attrs.class = undefined;
     }
 
-    each(Object.keys(el.attrs).sort(), function(attrName) {
+    each(Object.keys(vnode.attrs).sort(), function(attrName) {
       if (attrName === "style") return;
-      if (el.attrs[attrName] === undefined) return;
-      let attrs = el.attrs[attrName];
+      if (vnode.attrs[attrName] === undefined) return;
+      let attrs = vnode.attrs[attrName];
       attrs = attrs.replace(/[\n\r\t]/g, " ");
       attrs = attrs.replace(/\s+/g, " "); // clean up redundant spaces we just created
       attrs = attrs.replace(/'/g, "\\'"); // escape quotes
@@ -105,8 +132,8 @@ TemplateBuilder.prototype = {
     if (virtual === "") virtual = "div";
     virtual = `"${virtual}"`; // add quotes
 
-    if (el.attrs.style) {
-      let attrs = el.attrs.style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
+    if (vnode.attrs.style) {
+      let attrs = vnode.attrs.style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
       attrs = attrs.replace(/[\n\r]/g, ""); // remove newlines
       attrs = attrs.split(/\s*;\s*/); // ["color:#f00", "border: 1px solid red"]
       attrs = attrs.map((propValue) => {
@@ -119,8 +146,8 @@ TemplateBuilder.prototype = {
       virtual += `, {style: {${attrs}}}`;
     }
 
-    const children = (el.children.length !== 0) ?
-      new TemplateBuilder(el.children).complete() :
+    const children = (vnode.children.length !== 0) ?
+      new TemplateBuilder(vnode.children).complete() :
       null;
 
     this.children.push({
@@ -130,10 +157,10 @@ TemplateBuilder.prototype = {
   },
 
   complete: function() {
-    each(this.virtual, function(el) {
-      if (typeof el === "string") {
-        const trimmed = el.trim();
-        const charCode = trimmed.charCodeAt();
+    each(this.virtual, function(vnode) {
+      if (typeof vnode === "string") {
+        const trimmed = vnode.trim();
+        const charCode = trimmed.charCodeAt(0);
         // dimiss:
         // - empty strings
         // - single escaped quotes
@@ -148,13 +175,18 @@ TemplateBuilder.prototype = {
           this.addVirtualString(trimmed);
         }
       } else {
-        this.addVirtualAttrs(el);
+        this.addVirtualAttrs(vnode);
       }
     }.bind(this));
     return this.children;
   }
 };
 
+/**
+ * @param {number} level 
+ * @param {string} indent 
+ * @returns {string}
+ */
 const whitespace = (level, indent) => {
   if (level < 0) return "";
   let whitespace = "";
@@ -164,18 +196,39 @@ const whitespace = (level, indent) => {
   return whitespace;
 };
 
+/**
+ * @param {string} content 
+ * @returns {string}
+ */
 const wrapperTemplate = content => (
   `[${content}\n]`
 );
 
+/**
+ * @param {string} content 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
 const contentTemplate = (content, whitespace) => (
   `\n${whitespace}${content}`
 );
 
-const singleMithrilNodeTemplate = (mithrilNode, children, whitespace) => (
+/**
+ * @param {string} mithrilNode 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
+const singleMithrilNodeTemplate = (mithrilNode, whitespace) => (
   `\n${whitespace}m(${mithrilNode})`
 );
 
+/**
+ * @param {string} mithrilNode 
+ * @param {string} children 
+ * @param {string} whitespace 
+ * @param {string} indent 
+ * @returns {string}
+ */
 const mithrilNodeMultipleChildrenTemplate = (mithrilNode, children, whitespace, indent) => (
   `\n${whitespace}m(${mithrilNode},
 ${whitespace}${indent}[${children}
@@ -183,19 +236,37 @@ ${whitespace}${indent}]
 ${whitespace})`
 );
 
+/**
+ * @param {string} mithrilNode 
+ * @param {string} child 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
 const mithrilNodeSingleChildTemplate = (mithrilNode, child, whitespace) => (
   `\n${whitespace}m(${mithrilNode}, ${child}
 ${whitespace})`
 );
 
+/**
+ * @param {string} mithrilNode 
+ * @param {string} children 
+ * @param {string} whitespace 
+ * @param {string} indent 
+ * @returns {string}
+ */
 const template = (mithrilNode, children, whitespace, indent) => (
   children
     ? children.length > 1
       ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent)
-      : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace, indent)
-    : singleMithrilNodeTemplate(mithrilNode, children, whitespace, indent)
+      : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace)
+    : singleMithrilNodeTemplate(mithrilNode, whitespace)
 );
 
+/**
+ * @param {Array} data 
+ * @param {number} level 
+ * @param {string} indent 
+ */
 const formatCode = (data, level, indent) => {
   if (!data) {
     return "";
@@ -218,14 +289,15 @@ const indentCharsMap = {
   "tab": "\t"
 };
 
-/*
-opts: {
-  source: string containing HTML markup
-  indent: either "2", "4" or "tab"
-}
-*/
+/**
+ * @param {object} opts 
+ * @param {string} opts.source - String containing HTML markup
+ * @param {"2" | "4" | "tab"} opts.indent
+ * @returns {string}
+ */
 export const templateBuilder = opts => {
-  const source = createVirtual(createFragment(opts.source));
+  const fragment = createFragment(opts.source);
+  const source = createVirtual(fragment);
   const parsed = new TemplateBuilder(source).complete();
   const indentLevel = parsed.length > 1 ?
     1 :

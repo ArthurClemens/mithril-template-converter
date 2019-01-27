@@ -1,15 +1,53 @@
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+// @ts-check
+
+/**
+ * @typedef {{tag: string, attrs: object, children: Array<Vnode>}} Vnode
+ */
+
+/**
+ * @type {RegExp} ENTITY_REGEX
+ */
 var ENTITY_REGEX = /(&#?\w+;)/;
 var svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"];
 var svgCaseSensitiveTagNamesMap = {};
 svgCaseSensitiveTagNames.forEach(function (term) {
   svgCaseSensitiveTagNamesMap[term.toLowerCase()] = term;
 });
+/**
+ * @param {Array} list 
+ * @param {function} f 
+ */
 
 function each(list, f) {
   for (var i = 0; i < list.length; i++) {
     f(list[i], i);
   }
 }
+/**
+ * @param {string} markup 
+ * @returns {Array<ChildNode>}
+ */
+
 
 function createFragment(markup) {
   // escape HTML entities, to be resolved in addVirtualString
@@ -21,8 +59,13 @@ function createFragment(markup) {
 
   var container = document.createElement("div");
   container.insertAdjacentHTML("beforeend", markup);
-  return container.childNodes;
+  return _toConsumableArray(container.childNodes);
 }
+/**
+ * @param {Array<Node>|Array<ChildNode>} fragment 
+ * @returns {Array<Vnode>}
+ */
+
 
 function createVirtual(fragment) {
   var list = [];
@@ -45,6 +88,11 @@ function createVirtual(fragment) {
   });
   return list;
 }
+/**
+ * 
+ * @param {Array<Vnode>} virtual 
+ */
+
 
 function TemplateBuilder(virtual) {
   this.virtual = virtual;
@@ -77,19 +125,23 @@ TemplateBuilder.prototype = {
       });
     }
   },
-  addVirtualAttrs: function addVirtualAttrs(el) {
-    var virtual = el.tag === "div" ? "" : el.tag;
 
-    if (el.attrs.class) {
-      var attrs = el.attrs.class.replace(/\s+/g, ".");
+  /**
+   * @param {object} vnode 
+   */
+  addVirtualAttrs: function addVirtualAttrs(vnode) {
+    var virtual = vnode.tag === "div" ? "" : vnode.tag;
+
+    if (vnode.attrs.class) {
+      var attrs = vnode.attrs.class.replace(/\s+/g, ".");
       virtual += ".".concat(attrs);
-      el.attrs.class = undefined;
+      vnode.attrs.class = undefined;
     }
 
-    each(Object.keys(el.attrs).sort(), function (attrName) {
+    each(Object.keys(vnode.attrs).sort(), function (attrName) {
       if (attrName === "style") return;
-      if (el.attrs[attrName] === undefined) return;
-      var attrs = el.attrs[attrName];
+      if (vnode.attrs[attrName] === undefined) return;
+      var attrs = vnode.attrs[attrName];
       attrs = attrs.replace(/[\n\r\t]/g, " ");
       attrs = attrs.replace(/\s+/g, " "); // clean up redundant spaces we just created
 
@@ -100,8 +152,8 @@ TemplateBuilder.prototype = {
     if (virtual === "") virtual = "div";
     virtual = "\"".concat(virtual, "\""); // add quotes
 
-    if (el.attrs.style) {
-      var _attrs = el.attrs.style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
+    if (vnode.attrs.style) {
+      var _attrs = vnode.attrs.style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
 
 
       _attrs = _attrs.replace(/[\n\r]/g, ""); // remove newlines
@@ -118,17 +170,17 @@ TemplateBuilder.prototype = {
       virtual += ", {style: {".concat(_attrs, "}}");
     }
 
-    var children = el.children.length !== 0 ? new TemplateBuilder(el.children).complete() : null;
+    var children = vnode.children.length !== 0 ? new TemplateBuilder(vnode.children).complete() : null;
     this.children.push({
       node: virtual,
       children: children
     });
   },
   complete: function complete() {
-    each(this.virtual, function (el) {
-      if (typeof el === "string") {
-        var trimmed = el.trim();
-        var charCode = trimmed.charCodeAt(); // dimiss:
+    each(this.virtual, function (vnode) {
+      if (typeof vnode === "string") {
+        var trimmed = vnode.trim();
+        var charCode = trimmed.charCodeAt(0); // dimiss:
         // - empty strings
         // - single escaped quotes
         // - single newlines
@@ -138,12 +190,17 @@ TemplateBuilder.prototype = {
           this.addVirtualString(trimmed);
         }
       } else {
-        this.addVirtualAttrs(el);
+        this.addVirtualAttrs(vnode);
       }
     }.bind(this));
     return this.children;
   }
 };
+/**
+ * @param {number} level 
+ * @param {string} indent 
+ * @returns {string}
+ */
 
 var whitespace = function whitespace(level, indent) {
   if (level < 0) return "";
@@ -155,30 +212,76 @@ var whitespace = function whitespace(level, indent) {
 
   return whitespace;
 };
+/**
+ * @param {string} content 
+ * @returns {string}
+ */
+
 
 var wrapperTemplate = function wrapperTemplate(content) {
   return "[".concat(content, "\n]");
 };
+/**
+ * @param {string} content 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
+
 
 var contentTemplate = function contentTemplate(content, whitespace) {
   return "\n".concat(whitespace).concat(content);
 };
+/**
+ * @param {string} mithrilNode 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
 
-var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, children, whitespace) {
+
+var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, whitespace) {
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ")");
 };
+/**
+ * @param {string} mithrilNode 
+ * @param {string} children 
+ * @param {string} whitespace 
+ * @param {string} indent 
+ * @returns {string}
+ */
+
 
 var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent) {
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n").concat(whitespace).concat(indent, "[").concat(children, "\n").concat(whitespace).concat(indent, "]\n").concat(whitespace, ")");
 };
+/**
+ * @param {string} mithrilNode 
+ * @param {string} child 
+ * @param {string} whitespace 
+ * @returns {string}
+ */
+
 
 var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mithrilNode, child, whitespace) {
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(child, "\n").concat(whitespace, ")");
 };
+/**
+ * @param {string} mithrilNode 
+ * @param {string} children 
+ * @param {string} whitespace 
+ * @param {string} indent 
+ * @returns {string}
+ */
+
 
 var template = function template(mithrilNode, children, whitespace, indent) {
-  return children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace, indent) : singleMithrilNodeTemplate(mithrilNode, children, whitespace, indent);
+  return children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) : singleMithrilNodeTemplate(mithrilNode, whitespace);
 };
+/**
+ * @param {Array} data 
+ * @param {number} level 
+ * @param {string} indent 
+ */
+
 
 var formatCode = function formatCode(data, level, indent) {
   if (!data) {
@@ -204,15 +307,16 @@ var indentCharsMap = {
   "4": "    ",
   "tab": "\t"
 };
-/*
-opts: {
-  source: string containing HTML markup
-  indent: either "2", "4" or "tab"
-}
-*/
+/**
+ * @param {object} opts 
+ * @param {string} opts.source - String containing HTML markup
+ * @param {"2" | "4" | "tab"} opts.indent
+ * @returns {string}
+ */
 
 var templateBuilder = function templateBuilder(opts) {
-  var source = createVirtual(createFragment(opts.source));
+  var fragment = createFragment(opts.source);
+  var source = createVirtual(fragment);
   var parsed = new TemplateBuilder(source).complete();
   var indentLevel = parsed.length > 1 ? 1 : 0;
   var indentChars = indentCharsMap[opts.indent || "4"];
