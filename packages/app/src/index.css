@@ -30,6 +30,7 @@ body {
 .form .editor textarea {
   font-family: 'Roboto Mono', monospace;
   font-size: 13px;
+  resize: none;
 }
 
 .form .pe-textfield__input-area,
@@ -43,27 +44,25 @@ body {
 
 .form .options {
   padding: 0 20px;
-  height: 42px;
-  min-height: 42px;
+  height: 48px;
+  min-height: 48px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex-shrink: 0;
   font-size: 16px;
+  border-style: none none solid none;
+  border-width: 1px;
 }
 
-.form .options > * {
-  display: inline-block;
-  padding-top: 10px;
-  padding-bottom: 10px;
+.form .options-inner {
+  display: flex;
+  align-items: center;
 }
 
 .form .options a {
   text-decoration: none;
   color: #2196f3;
-}
-.form .options a.selected {
-  color: #333;
 }
 
 .form .source {
@@ -71,9 +70,8 @@ body {
   color: #aaa;
 }
 
-.form .options {
-  border-style: none none solid none;
-  border-width: 1px;
+.form .options-inner {
+  display: flex;
 }
 
 .form .source .options {
@@ -98,17 +96,8 @@ body {
   display: none;
 }
 
-.form .indents {
-  margin: 0 -8px;
-}
-.form .indents a {
-  padding-left: 8px;
-  padding-right: 8px;
-}
-
 .form .viewer {
   padding: 18px 20px;
-  opacity: .4;
   overflow-y: auto;
 }
 
@@ -119,6 +108,8 @@ body {
   .form .block {
     width: 100vw;
     height: calc(100vh / 3);
+  }
+  .form .block.rendered {
     flex-direction: column-reverse;
   }
   .form .block.rendered,
@@ -131,7 +122,7 @@ body {
   }
   .form .editor textarea,
   .form .block.rendered .editor {
-    height: calc((100vh / 3) - 42px);
+    height: calc((100vh / 3) - 48px);
   }
 }
 
@@ -152,10 +143,10 @@ body {
     border-style: solid none none none;
   }
   .form .editor textarea {
-    height: calc(70vh - 42px);
+    height: calc(70vh - 48px);
   }
   .form .block.rendered .editor {
-    height: calc(30vh - 42px);
+    height: calc(30vh - 48px);
   }
 }
 
@@ -169,7 +160,7 @@ body {
     max-height: 100%;
   }
   .form .editor textarea {
-    height: calc(100vh - 42px);
+    height: calc(100vh - 48px);
   }
   .form .block.rendered {
     border-left: 1px solid #eee;

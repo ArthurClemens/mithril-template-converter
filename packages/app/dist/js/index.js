@@ -589,12 +589,85 @@ module.exports = g;
 /*!************************************************************************************************************************************************!*\
   !*** /Users/arthur/code/Github Projects/mithril-template-converter/master/packages/mithril-template-builder/dist/mithril-template-builder.mjs ***!
   \************************************************************************************************************************************************/
-/*! exports provided: templateBuilder */
+/*! exports provided: default */
 /***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "templateBuilder", function() { return templateBuilder; });
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
+
 function _toConsumableArray(arr) {
   return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
 }
@@ -609,12 +682,46 @@ function _arrayWithoutHoles(arr) {
   }
 }
 
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
 function _iterableToArray(iter) {
   if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
 }
 
+function _iterableToArrayLimit(arr, i) {
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
 } // @ts-check
 
 /**
@@ -627,6 +734,7 @@ function _nonIterableSpread() {
 
 
 var ENTITY_REGEX = /(&#?\w+;)/;
+var DEFAULT_INDENT = "2";
 var svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"];
 var svgCaseSensitiveTagNamesMap = {};
 svgCaseSensitiveTagNames.forEach(function (term) {
@@ -637,18 +745,18 @@ svgCaseSensitiveTagNames.forEach(function (term) {
  * @param {function} f 
  */
 
-function each(list, f) {
+var each = function each(list, f) {
   for (var i = 0; i < list.length; i++) {
     f(list[i], i);
   }
-}
+};
 /**
  * @param {string} markup 
  * @returns {Array<ChildNode>}
  */
 
 
-function createFragment(markup) {
+var createFragment = function createFragment(markup) {
   // escape HTML entities, to be resolved in addVirtualString
   markup = markup.replace(/&/g, "&amp;");
 
@@ -659,14 +767,14 @@ function createFragment(markup) {
   var container = document.createElement("div");
   container.insertAdjacentHTML("beforeend", markup);
   return _toConsumableArray(container.childNodes);
-}
+};
 /**
  * @param {Array<Node>|Array<ChildNode>} fragment 
  * @returns {Array<Vnode>}
  */
 
 
-function createVirtual(fragment) {
+var createVirtual = function createVirtual(fragment) {
   var list = [];
   each(fragment, function (el) {
     if (el.nodeType === 3) {
@@ -686,15 +794,56 @@ function createVirtual(fragment) {
     }
   });
   return list;
-}
+};
+/**
+ * @param {string} style 
+ * @returns {Array<Array<string>>}
+ */
+
+
+var styleToList = function styleToList(style) {
+  var styleAttrs = style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
+
+  styleAttrs = styleAttrs.replace(/[\n\r]/g, ""); // remove newlines
+
+  var list = styleAttrs.split(/\s*;\s*/); // ["color:#f00", "border:1px solid red"]
+
+  var styleList = list.map(function (propValue) {
+    return propValue.split(/\s*:\s*/);
+  });
+  return styleList;
+};
+/**
+ * @param {Array<Array<string>>} styleList 
+ * @returns {object}
+ */
+
+
+var styleListToObject = function styleListToObject(styleList) {
+  var obj = styleList.reduce(function (acc, _ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        key = _ref2[0],
+        value = _ref2[1];
+
+    acc[key] = value;
+    return acc;
+  }, {});
+  return obj;
+};
 /**
  * 
  * @param {Array<Vnode>} virtual 
+ * @param {object} opts
+ * @param {boolean} [opts.attrsAsObject]
  */
 
 
 function TemplateBuilder(virtual) {
+  var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      attrsAsObject = _ref3.attrsAsObject;
+
   this.virtual = virtual;
+  this.attrsAsObject = attrsAsObject;
   this.children = []; // each child is an object with attributes: node, children, content
 }
 
@@ -729,49 +878,79 @@ TemplateBuilder.prototype = {
    * @param {object} vnode 
    */
   addVirtualAttrs: function addVirtualAttrs(vnode) {
-    var virtual = vnode.tag === "div" ? "" : vnode.tag;
+    var template = function template(_ref4) {
+      var tag = _ref4.tag,
+          className = _ref4.className,
+          attrsAsString = _ref4.attrsAsString,
+          attrsAsObject = _ref4.attrsAsObject,
+          style = _ref4.style;
+      return "\"".concat(tag).concat(className).concat(attrsAsString, "\"").concat(attrsAsObject).concat(style);
+    };
 
-    if (vnode.attrs.class) {
-      var attrs = vnode.attrs.class.replace(/\s+/g, ".");
-      virtual += ".".concat(attrs);
-      vnode.attrs.class = undefined;
+    var defaultTag = "div";
+    var data = {
+      tag: "",
+      className: "",
+      attrsAsString: "",
+      attrsAsObject: "",
+      style: ""
+    };
+
+    var _vnode$attrs = vnode.attrs,
+        _vnode$attrs$class = _vnode$attrs.class,
+        className = _vnode$attrs$class === void 0 ? "" : _vnode$attrs$class,
+        _vnode$attrs$style = _vnode$attrs.style,
+        style = _vnode$attrs$style === void 0 ? "" : _vnode$attrs$style,
+        attrs = _objectWithoutProperties(_vnode$attrs, ["class", "style"]);
+
+    var validAttrs = Object.keys(attrs).filter(function (name) {
+      return attrs[name] !== undefined;
+    }).reduce(function (obj, key) {
+      obj[key] = attrs[key];
+      return obj;
+    }, {});
+
+    if (!this.attrsAsObject) {
+      // tag
+      data.tag = vnode.tag === defaultTag ? Object.keys(validAttrs).length === 0 ? "div" : "" : vnode.tag; // className
+
+      data.className = className ? ".".concat(className.replace(/\s+/g, ".")) : ""; // attrs
+
+      data.attrsAsString = Object.keys(validAttrs).map(function (name) {
+        var value = vnode.attrs[name].replace(/[\n\r\t]/g, " ").replace(/\s+/g, " ") // clean up redundant spaces we just created
+        .replace(/'/g, "\\'"); // escape quotes
+
+        return "[".concat(name, "='").concat(value, "']");
+      }).join(""); // style
+
+      if (style) {
+        var styleList = styleToList(style);
+        var styleAttrs = styleListToObject(styleList);
+        var styleAttrsString = JSON.stringify(styleAttrs);
+        data.style = ", {\"style\":".concat(styleAttrsString, "}");
+      }
+    } else {
+      var _styleAttrs = style ? styleListToObject(styleToList(style)) : {};
+
+      var withStyleAttrs = _objectSpread({}, className.length > 0 ? {
+        class: className
+      } : {}, attrs, Object.keys(_styleAttrs).length > 0 ? {
+        style: _styleAttrs
+      } : {}); // tag
+
+
+      data.tag = vnode.tag || defaultTag;
+
+      if (Object.keys(withStyleAttrs).length > 0) {
+        data.attrsAsObject = ", ".concat(JSON.stringify(withStyleAttrs));
+      }
     }
 
-    each(Object.keys(vnode.attrs).sort(), function (attrName) {
-      if (attrName === "style") return;
-      if (vnode.attrs[attrName] === undefined) return;
-      var attrs = vnode.attrs[attrName];
-      attrs = attrs.replace(/[\n\r\t]/g, " ");
-      attrs = attrs.replace(/\s+/g, " "); // clean up redundant spaces we just created
-
-      attrs = attrs.replace(/'/g, "\\'"); // escape quotes
-
-      virtual += "[".concat(attrName, "='").concat(attrs, "']");
-    });
-    if (virtual === "") virtual = "div";
-    virtual = "\"".concat(virtual, "\""); // add quotes
-
-    if (vnode.attrs.style) {
-      var _attrs = vnode.attrs.style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
-
-
-      _attrs = _attrs.replace(/[\n\r]/g, ""); // remove newlines
-
-      _attrs = _attrs.split(/\s*;\s*/); // ["color:#f00", "border: 1px solid red"]
-
-      _attrs = _attrs.map(function (propValue) {
-        // "color:#f00"
-        return propValue.split(/\s*:\s*/).map(function (part) {
-          return "\"".concat(part, "\"");
-        }).join(": "); // "\"color\": \"#f00\""
-      });
-      _attrs = _attrs.join(", ");
-      virtual += ", {style: {".concat(_attrs, "}}");
-    }
-
-    var children = vnode.children.length !== 0 ? new TemplateBuilder(vnode.children).complete() : null;
+    var children = vnode.children.length !== 0 ? new TemplateBuilder(vnode.children, {
+      attrsAsObject: this.attrsAsObject
+    }).complete() : null;
     this.children.push({
-      node: virtual,
+      node: template(data),
       children: children
     });
   },
@@ -842,53 +1021,54 @@ var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, 
 };
 /**
  * @param {string} mithrilNode 
- * @param {string} children 
+ * @param {Array<string>} children 
  * @param {string} whitespace 
- * @param {string} indent 
+ * @param {string} indentChars
  * @returns {string}
  */
 
 
-var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent) {
-  return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n").concat(whitespace).concat(indent, "[").concat(children, "\n").concat(whitespace).concat(indent, "]\n").concat(whitespace, ")");
+var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars) {
+  return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n").concat(whitespace).concat(indentChars, "[").concat(children, "\n").concat(whitespace).concat(indentChars, "]\n").concat(whitespace, ")");
 };
 /**
  * @param {string} mithrilNode 
- * @param {string} child 
+ * @param {Array<string>} children 
  * @param {string} whitespace 
  * @returns {string}
  */
 
 
-var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mithrilNode, child, whitespace) {
-  return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(child, "\n").concat(whitespace, ")");
+var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) {
+  return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(children, "\n").concat(whitespace, ")");
 };
 /**
  * @param {string} mithrilNode 
- * @param {string} children 
+ * @param {Array<string>} children 
  * @param {string} whitespace 
- * @param {string} indent 
+ * @param {string} indentChars
  * @returns {string}
  */
 
 
-var template = function template(mithrilNode, children, whitespace, indent) {
-  return children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) : singleMithrilNodeTemplate(mithrilNode, whitespace);
+var template = function template(mithrilNode, children, whitespace, indentChars) {
+  return console.log("children", children), children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) : singleMithrilNodeTemplate(mithrilNode, whitespace);
 };
 /**
  * @param {Array} data 
  * @param {number} level 
- * @param {string} indent 
+ * @param {string} indentChars
+ * @returns {Array<string>}
  */
 
 
-var formatCode = function formatCode(data, level, indent) {
+var formatCode = function formatCode(data, level, indentChars) {
   if (!data) {
-    return "";
+    return;
   }
 
   return data.map(function (d) {
-    var space = whitespace(level, indent);
+    var space = whitespace(level, indentChars);
 
     if (d.content) {
       return contentTemplate(d.content, space);
@@ -896,8 +1076,8 @@ var formatCode = function formatCode(data, level, indent) {
 
     var node = d.node || "";
     var newLevel = level + (d.children && d.children.length > 1 ? 2 : 1);
-    var children = formatCode(d.children, newLevel, indent) || "";
-    return template(node, children, space, indent);
+    var children = formatCode(d.children, newLevel, indentChars);
+    return template(node, children, space, indentChars);
   });
 };
 
@@ -909,22 +1089,693 @@ var indentCharsMap = {
 /**
  * @param {object} opts 
  * @param {string} opts.source - String containing HTML markup
- * @param {"2" | "4" | "tab"} opts.indent
+ * @param {("2" | "4" | "tab")} [opts.indent]
+ * @param {boolean} [opts.attrsAsObject]
  * @returns {string}
  */
 
 var templateBuilder = function templateBuilder(opts) {
   var fragment = createFragment(opts.source);
   var source = createVirtual(fragment);
-  var parsed = new TemplateBuilder(source).complete();
+  var parsed = new TemplateBuilder(source, {
+    attrsAsObject: opts.attrsAsObject
+  }).complete();
   var indentLevel = parsed.length > 1 ? 1 : 0;
-  var indentChars = indentCharsMap[opts.indent || "4"];
+  var indentChars = indentCharsMap[opts.indent || DEFAULT_INDENT];
   var formatted = formatCode(parsed, indentLevel, indentChars); // only wrap output in brackets when it is a list
 
   var wrapped = formatted.length > 1 ? wrapperTemplate(formatted.join(", ")) : formatted.join("").trim();
   return wrapped;
 };
 
+/* harmony default export */ __webpack_exports__["default"] = (templateBuilder);
+
+/***/ }),
+
+/***/ "../node_modules/j2c/dist/j2c.commonjs.js":
+/*!************************************************!*\
+  !*** ../node_modules/j2c/dist/j2c.commonjs.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var emptyArray = [];
+var emptyObject = {};
+var type = emptyObject.toString;
+var ARRAY =  type.call(emptyArray);
+var OBJECT = type.call(emptyObject);
+var STRING = type.call('');
+var FUNCTION = type.call(type);
+var own =  emptyObject.hasOwnProperty;
+var freeze = Object.freeze || function(o) {return o};
+
+
+function defaults(target, source) {
+  for (var k in source) if (own.call(source, k)) {
+    if (k.indexOf('$') && !(k in target)) target[k] = source[k];
+  }
+  return target
+}
+
+function cartesian(a,b) {
+  var res = [], i, j;
+  for (j in b) if(own.call(b, j))
+    for (i in a) if(own.call(a, i))
+      res.push(a[i] + b[j]);
+  return res
+}
+
+// "Tokenizes" the selectors into parts relevant for the next function.
+// Strings and comments are matched, but ignored afterwards.
+// This is not a full tokenizers. It only recognizes comas, parentheses,
+// strings and comments.
+// regexp generated by scripts/regexps.js then trimmed by hand
+var selectorTokenizer = /[(),]|"(?:\\.|[^"\n])*"|'(?:\\.|[^'\n])*'|\/\*[\s\S]*?\*\//g;
+
+
+/**
+ * This will split a coma-separated selector list into individual selectors,
+ * ignoring comas in strings, comments and in :pseudo-selectors(parameter, lists).
+ *
+ * @param {string} selector
+ * @return {string[]}
+ */
+
+function splitSelector(selector) {
+  var indices = [], res = [], inParen = 0, o;
+  /*eslint-disable no-cond-assign*/
+  while (o = selectorTokenizer.exec(selector)) {
+  /*eslint-enable no-cond-assign*/
+    switch (o[0]) {
+    case '(': inParen++; break
+    case ')': inParen--; break
+    case ',': if (inParen) break; indices.push(o.index);
+    }
+  }
+  for (o = indices.length; o--;){
+    res.unshift(selector.slice(indices[o] + 1));
+    selector = selector.slice(0, indices[o]);
+  }
+  res.unshift(selector);
+  return res
+}
+
+// Like the `selectorTokenizer`, but for the `&` operator
+var ampersandTokenizer = /&|"(?:\\.|[^"\n])*"|'(?:\\.|[^'\n])*'|\/\*[\s\S]*?\*\//g;
+
+function ampersand (selector, parents) {
+  var indices = [], split = [], res, o;
+  /*eslint-disable no-cond-assign*/
+  while (o = ampersandTokenizer.exec(selector)) {
+  /*eslint-enable no-cond-assign*/
+    if (o[0] == '&') indices.push(o.index);
+  }
+  for (o = indices.length; o--;){
+    split.unshift(selector.slice(indices[o] + 1));
+    selector = selector.slice(0, indices[o]);
+  }
+  split.unshift(selector);
+  if (split.length === 1) split.unshift('');
+  res = [split[0]];
+  for (o = 1; o < split.length; o++) {
+    res = cartesian(res, cartesian(parents, [split[o]]));
+  }
+  return res.join(',')
+}
+
+function flatIter (f) {
+  return function iter(arg) {
+    if (type.call(arg) === ARRAY) for (var i= 0 ; i < arg.length; i ++) iter(arg[i]);
+    else f(arg);
+  }
+}
+
+function decamelize(match) {
+  return '-' + match.toLowerCase()
+}
+
+/**
+ * Handles the property:value; pairs.
+ *
+ * @param {object} state - holds the localizer- and walker-related methods
+ *                         and state
+ * @param {object} emit - the contextual emitters to the final buffer
+ * @param {string} prefix - the current property or a prefix in case of nested
+ *                          sub-properties.
+ * @param {array|object|string} o - the declarations.
+ * @param {boolean} local - are we in @local or in @global scope.
+ */
+
+function declarations(state, emit, prefix, o, local) {
+  var k, v, kk;
+  if (o==null) return
+
+  switch ( type.call(o = o.valueOf()) ) {
+  case ARRAY:
+    for (k = 0; k < o.length; k++)
+
+      declarations(state, emit, prefix, o[k], local);
+
+    break
+  case OBJECT:
+    // prefix is falsy iif it is the empty string, which means we're at the root
+    // of the declarations list.
+    prefix = (prefix && prefix + '-');
+    for (k in o) if (own.call(o, k)){
+      v = o[k];
+      if (/\$/.test(k)) {
+        for (kk in (k = k.split('$'))) if (own.call(k, kk)) {
+
+          declarations(state, emit, prefix + k[kk], v, local);
+
+        }
+      } else {
+
+        declarations(state, emit, prefix + k, v, local);
+
+      }
+    }
+    break
+  default:
+    // prefix is falsy when it is "", which means that we're
+    // at the top level.
+    // `o` is then treated as a `property:value` pair, or a
+    // semi-colon-separated list thereof.
+    // Otherwise, `prefix` is the property name, and
+    // `o` is the value.
+
+    // restore the dashes
+    k = prefix.replace(/_/g, '-').replace(/[A-Z]/g, decamelize);
+
+    if (local && (k == 'animation-name' || k == 'animation' || k == 'list-style')) {
+      // no need to tokenize here a plain `.split(',')` has all bases covered.
+      // We may 'localize' a comment, but it's not a big deal.
+      o = o.split(',').map(function (o) {
+
+        return o.replace(/^\s*(?:(var\([^)]+\))|:?global\(\s*([_A-Za-z][-\w]*)\s*\)|()(-?[_A-Za-z][-\w]*))/, state.localizeReplacer)
+
+      }).join(',');
+    }
+
+    emit.decl(k, o);
+
+  }
+}
+
+/**
+ * Handles a single at-rules
+ *
+ * @param {object} state - holds the localizer- and walker-related methods
+ *                         and state
+ * @param {object} emit - the contextual emitters to the final buffer
+ * @param {array} k - The parsed at-rule, including the parameters,
+ *                    if takes both parameters and a block.
+ *                    k == [match, fullAtRule, atRuleType, params?]
+ *                    So in `@-webkit-keyframes foo`, we have
+ *                     - match = "@-webkit-keyframes foo"
+ *                     - fullAtRule = "@-webkit-keyframes"
+ *                     - atRuleType = "keyframes"
+ *                     - params = "foo"
+ * @param {string|string[]|object|object[]} v - Either parameters for
+ *                                              block-less rules or
+ *                                              their block
+ *                                              for the others.
+ * @param {string} prefix - the current selector or the selector prefix
+ *                          in case of nested rules
+ * @param {boolean} local - are we in @local or in @global scope?
+ * @param {string} nestingDepth - are we nested in an at-rule or a selector?
+ */
+
+function atRules(state, emit, k, v, prefix, local, nestingDepth) {
+
+  // First iterate over user-provided at-rules and return if one of them corresponds to the current one
+  for (var i = 0; i < state.$atHandlers.length; i++) {
+
+    if (state.$atHandlers[i](state, emit, k, v, prefix, local, nestingDepth)) return
+
+  }
+
+  // using `/^global$/.test(k[2])` rather that 'global' == k[2] gzips
+  // slightly better thanks to the regexps tests further down.
+  // It is slightly less efficient but this isn't a critical path.
+
+  if (!k[3] && /^global$/.test(k[2])) {
+
+    rules(state, emit, prefix, v, 0, nestingDepth);
+
+
+  } else if (!k[3] && /^local$/.test(k[2])) {
+
+    rules(state, emit, prefix, v, 1, nestingDepth);
+
+
+  } else if (k[3] && /^adopt$/.test(k[2])) {
+
+    if (!local || nestingDepth) return emit.err('@adopt global or nested: ' + k[0])
+
+    if (!/^\.?[_A-Za-z][-\w]*$/.test(k[3])) return emit.err('bad adopter ' + JSON.stringify(k[3]) + ' in ' + k[0])
+
+    i = [];
+    flatIter(function(adoptee, asString) {
+
+      if(adoptee == null || !/^\.?[_A-Za-z][-\w]*(?:\s+\.?[_A-Za-z][-\w]*)*$/.test(asString = adoptee + '')) emit.err('bad adoptee '+ JSON.stringify(adoptee) + ' in ' + k[0]);
+
+      else i.push(asString.replace(/\./g, ''));
+
+    })(v);
+
+    // we may end up with duplicate classes but AFAIK it has no consequences on specificity.
+    if (i.length) {
+      state.localize(k[3] = k[3].replace(/\./g, ''));
+      state.names[k[3]] += (' ' + i.join(' '));
+    }
+
+
+  } else if (!k[3] && /^(?:namespace|import|charset)$/.test(k[2])) {
+    flatIter(function(v) {
+
+      emit.atrule(k[1], k[2], v);
+
+    })(v);
+
+
+  } else if (!k[3] && /^(?:font-face|viewport)$/.test(k[2])) {
+    flatIter(function(v) {
+
+      emit.atrule(k[1], k[2], k[3], 1);
+
+      declarations(state, emit, '', v, local);
+
+      emit._atrule();
+
+    })(v);
+
+  } else if (k[3] && /^(?:media|supports|page|keyframes)$/.test(k[2])) {
+
+    if (local && 'keyframes' == k[2]) {
+      k[3] = k[3].replace(
+        // generated by script/regexps.js
+        /(var\([^)]+\))|:?global\(\s*([_A-Za-z][-\w]*)\s*\)|()(-?[_A-Za-z][-\w]*)/,
+        state.localizeReplacer
+      );
+    }
+
+
+    emit.atrule(k[1], k[2], k[3], 1);
+
+    if ('page' == k[2]) {
+
+      declarations(state, emit, '', v, local);
+
+    } else {
+
+      rules(
+        state, emit,
+        'keyframes' == k[2] ? '' : prefix,
+        v, local, nestingDepth + 1
+      );
+
+    }
+
+    emit._atrule();
+
+  } else {
+
+    emit.err('Unsupported at-rule: ' + k[0]);
+
+  }
+}
+
+/**
+ * Add rulesets and other CSS tree to the sheet.
+ *
+ * @param {object} state - holds the localizer- and walker-related methods
+ *                         and state
+ * @param {object} emit - the contextual emitters to the final buffer
+ * @param {string} prefix - the current selector or a prefix in case of nested rules
+ * @param {array|string|object} tree - a source object or sub-object.
+ * @param {string} nestingDepth - are we nested in an at-rule?
+ * @param {boolean} local - are we in @local or in @global scope?
+ */
+function rules(state, emit, prefix, tree, local, nestingDepth) {
+  var k, v, inDeclaration, kk;
+
+  switch (type.call(tree)) {
+
+  case OBJECT:
+    for (k in tree) if (own.call(tree, k)) {
+      v = tree[k];
+
+      if (prefix.length > 0 && /^[-\w$]+$/.test(k)) {
+        if (!inDeclaration) {
+          inDeclaration = 1;
+
+          emit.rule(prefix);
+
+        }
+        if (/\$/.test(k)) {
+          for (kk in (k = k.split('$'))) if (own.call(k, kk)) {
+
+            declarations(state, emit, k[kk], v, local);
+
+          }
+        } else {
+
+          declarations(state, emit, k, v, local);
+
+        }
+
+      } else if (/^@/.test(k)) {
+        // Handle At-rules
+        inDeclaration = 0;
+
+        atRules(state, emit,
+          /^(.(?:-[\w]+-)?([_A-Za-z][-\w]*))\b\s*(.*?)\s*$/.exec(k) || [k,'@','',''],
+          v, prefix, local, nestingDepth
+        );
+
+      } else {
+        // selector or nested sub-selectors
+        inDeclaration = 0;
+
+        rules(
+          state, emit,
+          // build the selector `prefix` for the next iteration.
+          // ugly and full of redundant bits but so far the fastest/shortest.gz
+          /*0 if*/(prefix.length > 0 && (/,/.test(prefix) || /,/.test(k))) ?
+
+            /*0 then*/ (kk = splitSelector(prefix), splitSelector(
+              local ?
+
+                k.replace(
+                  /("(?:\\.|[^"\n])*"|'(?:\\.|[^'\n])*'|\/\*[\s\S]*?\*\/)|:global\(\s*(\.-?[_A-Za-z][-\w]*)\s*\)|(\.)(-?[_A-Za-z][-\w]*)/g,
+                  state.localizeReplacer
+                ) :
+
+                k
+            ).map(function (k) {
+              return /&/.test(k) ? ampersand(k, kk) : kk.map(function(kk) {
+                return kk + k
+              }).join(',')
+            }).join(',')) :
+
+            /*0 else*/ /*1 if*/ /&/.test(k) ?
+
+              /*1 then*/ ampersand(
+                local ?
+
+                  k.replace(
+                    /("(?:\\.|[^"\n])*"|'(?:\\.|[^'\n])*'|\/\*[\s\S]*?\*\/)|:global\(\s*(\.-?[_A-Za-z][-\w]*)\s*\)|(\.)(-?[_A-Za-z][-\w]*)/g,
+                    state.localizeReplacer
+                  ) :
+
+                  k,
+                [prefix]
+              ) :
+
+              /*1 else*/ prefix + (
+                local ?
+
+                  k.replace(
+                    /("(?:\\.|[^"\n])*"|'(?:\\.|[^'\n])*'|\/\*[\s\S]*?\*\/)|:global\(\s*(\.-?[_A-Za-z][-\w]*)\s*\)|(\.)(-?[_A-Za-z][-\w]*)/g,
+                    state.localizeReplacer
+                  ) :
+
+                  k
+                ),
+           v, local, nestingDepth + 1
+        );
+
+      }
+    }
+
+    break
+
+  case ARRAY:
+    for (k = 0; k < tree.length; k++){
+
+      rules(state, emit, prefix, tree[k], local, nestingDepth);
+
+    }
+    break
+
+  case STRING:
+    // CSS hacks or ouptut of `j2c.inline`.
+    if (!prefix.length) emit.err('No selector');
+    emit.rule(prefix || ' ');
+
+    declarations(state, emit, '', tree, local);
+
+  }
+}
+
+// This is the first entry in the filters array, which is
+// actually the last step of the compiler. It inserts
+// closing braces to close normal (non at-) rules (those
+// that start with a selector). Doing it earlier is
+// impossible without passing state around in unrelated code
+// or ending up with duplicated selectors when the source tree
+// contains arrays.
+// There's no `_rule` handler, because the core compiler never
+// calls it.
+function closeSelectors(next, inline) {
+  var lastSelector;
+  return inline ? next : {
+    init: function(){lastSelector = 0; next.init();},
+    done: function (raw) {
+      if (lastSelector) {next._rule(); lastSelector = 0;}
+      return next.done(raw)
+    },
+    atrule: function (rule, kind, param, takesBlock) {
+      if (lastSelector) {next._rule(); lastSelector = 0;}
+      next.atrule(rule, kind, param, takesBlock);
+    },
+    _atrule: function (rule) {
+      if (lastSelector) {next._rule(); lastSelector = 0;}
+      next._atrule(rule);
+    },
+    rule: function (selector) {
+      if (selector !== lastSelector){
+        if (lastSelector) next._rule();
+        next.rule(selector);
+        lastSelector = selector;
+      }
+    }
+  }
+}
+
+function global(x) {
+  return ':global(' + x + ')'
+}
+
+function kv (k, v, o) {
+  o = {};
+  o[k] = v;
+  return o
+}
+
+function at (rule, params, block) {
+  if (
+    arguments.length < 3
+  ) {
+    // inner curry!
+    var _at = at.bind.apply(at, [null].concat([].slice.call(arguments,0)));
+    // So that it can be used as a key in an ES6 object literal.
+    _at.toString = function(){return '@' + rule + ' ' + params};
+    return _at
+  }
+  else return kv('@' + rule +' ' + params, block)
+}
+
+function j2c() {
+
+  // the buffer that accumulates the output. Initialized in `$sink.i()`
+  var buf, err;
+
+  // the bottom of the 'codegen' stream. Mirrors the `$filter` plugin API.
+  var $sink = {
+    init: function(){buf=[], err=[];},
+    done: function (raw) {
+      if (err.length != 0) throw new Error('j2c error(s): ' + JSON.stringify(err,null,2) + 'in context:\n' + buf.join(''))
+      return raw ? buf : buf.join('')
+    },
+    err: function(msg) {
+      err.push(msg);
+      buf.push('/* +++ ERROR +++ ' + msg + ' */\n');
+    },
+    atrule: function (rule, kind, param, takesBlock) {
+      buf.push(rule, param && ' ', param, takesBlock ? ' {' : ';', _instance.endline);
+    },
+    // close atrule
+    _atrule: function () {buf.push('}', _instance.endline);},
+    rule: function (selector) {buf.push(selector, ' {', _instance.endline);},
+    // close rule
+    _rule: function () {buf.push('}', _instance.endline);},
+    decl: function (prop, value) {buf.push(prop, prop && ':', value, ';', _instance.endline);}
+  };
+
+  // holds the `$filter` and `$at` handlers
+  var $filters = [closeSelectors];
+  var $atHandlers = [];
+
+  // the public API (see the main docs)
+  var _instance = {
+    at: at,
+    global: global,
+    kv: kv,
+    names: {},
+    endline: '\n',
+    suffix: '__j2c-' +
+      // 128 bits of randomness
+      Math.floor(Math.random() * 0x100000000).toString(36) + '-' +
+      Math.floor(Math.random() * 0x100000000).toString(36) + '-' +
+      Math.floor(Math.random() * 0x100000000).toString(36) + '-' +
+      Math.floor(Math.random() * 0x100000000).toString(36),
+    $plugins: [],
+    sheet: function(tree) {
+      var emit = _createOrRetrieveStream(0);
+      emit.init();
+      rules(
+        _walkers[0],
+        emit,
+        '', // prefix
+        tree,
+        1,  // local, by default
+        0   // nesting depth
+      );
+
+      return emit.done()
+    },
+    inline: function (tree, options) {
+      var emit = _createOrRetrieveStream(1);
+      emit.init();
+      declarations(
+        _walkers[1],
+        emit,
+        '', // prefix
+        tree,
+        !(options && options.global)   // local, by default
+      );
+      return emit.done()
+    }
+  };
+
+  // The `state` (for the core functions) / `walker` (for the plugins) tables.
+  var _walkers = [
+    // for j2c.sheet
+    {
+      // helpers for locaizing class and animation names
+      localizeReplacer: _localizeReplacer, // second argument to String.prototype.replace
+      localize: _localize,                 // mangles local names
+      names: _instance.names,              // local => mangled mapping
+      $atHandlers: $atHandlers,            // extra at-rules
+      // The core walker methods, to be provided to plugins
+      atrule: atRules,
+      decl: declarations,
+      rule: rules
+    },
+    // likewise, for j2c.inline (idem with `$a`, `a` and `s` removed)
+    {
+      localizeReplacer: _localizeReplacer,
+      localize: _localize,
+      names: _instance.names,
+      decl: declarations
+    }
+  ];
+
+
+  // inner helpers
+
+  var _use = flatIter(function(plugin) {
+    // `~n` is falsy for `n === -1` and truthy otherwise.
+    // Works well to turn the  result of `a.indexOf(x)`
+    // into a value that reflects the presence of `x` in
+    // `a`.
+    if (~_instance.$plugins.indexOf(plugin)) return
+
+    _instance.$plugins.push(plugin);
+
+    if (type.call(plugin) === FUNCTION) plugin = plugin(_instance);
+
+    if (!plugin) return
+
+    flatIter(function(filter) {
+      $filters.push(filter);
+    })(plugin.$filter || emptyArray);
+
+    flatIter(function(handler) {
+      $atHandlers.push(handler);
+    })(plugin.$at || emptyArray);
+
+    defaults(_instance.names, plugin.$names || emptyObject);
+
+    _use(plugin.$plugins || emptyArray);
+
+    $sink = plugin.$sink || $sink;
+
+    defaults(_instance, plugin);
+  });
+
+
+  var _streams = [];
+  /**
+   * returns the codegen streams, creating them if necessary
+   * @param
+   */
+  function _createOrRetrieveStream(inline) {
+    // build the stream processors if needed
+    if (!_streams.length) {
+      // append the $sink as the ultimate filter
+      $filters.push(function(_, inline) {return inline ? {init:$sink.init, decl:$sink.decl, done:$sink.done, err: $sink.err} : $sink});
+      for(var i = 0; i < 2; i++){ // 0 for j2c.sheet, 1 for j2c.inline
+        for (var j = $filters.length; j--;) {
+          _streams[i] = freeze(
+            defaults(
+              $filters[j](_streams[i], !!i),
+              _streams[i]
+            )
+          );
+        }
+      }
+    }
+    return _streams[inline]
+  }
+
+  /**
+   * Returns a localized version of a given name.
+   * Registers the pair in `instnace.name` if needed.
+   *
+   * @param {string} name - the name to localize
+   * @return {string} - the localized version
+   */
+  function _localize(name) {
+    if (!_instance.names[name]) _instance.names[name] = name + _instance.suffix;
+    return _instance.names[name].match(/^\S+/)
+  }
+
+  /**
+   * Used as second argument for str.replace(localizeRegex, replacer)
+   * `ignore`, `global` and `(dot, name)` are mutually exclusive
+   *
+   * @param {string} match - the whole match (ignored)
+   * @param {string|null} ignore - a comment or a string literal
+   * @param {string|null} global - a global name
+   * @param {string|null} dot - either '.' for a local class name or the empty string otherwise
+   * @param {string|null} name - the name to localize
+   * @return {string}
+   */
+  function _localizeReplacer(match, ignore, global$$1, dot, name) {
+    return ignore || global$$1 || dot + _localize(name)
+  }
+
+  _use(emptyArray.slice.call(arguments));
+  return _instance
+}
+
+module.exports = j2c;
 
 
 /***/ }),
@@ -3466,6 +4317,1937 @@ var createProps = function createProps(vnode) {
 var checkbox = /*#__PURE__*/Object.freeze({
   createProps: createProps
 });
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs":
+/*!**********************************************************************!*\
+  !*** ../node_modules/polythene-core-css/dist/polythene-core-css.mjs ***!
+  \**********************************************************************/
+/*! exports provided: flex, mixin, styler, rgba, sel, selectorRTL, createLayout, createColor, createMarker, layoutStyles, addLayoutStyles */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "flex", function() { return flex$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mixin", function() { return mixin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "styler", function() { return styler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rgba", function() { return rgba; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sel", function() { return sel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "selectorRTL", function() { return selectorRTL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createLayout", function() { return createLayout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createColor", function() { return createColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createMarker", function() { return createMarker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layoutStyles", function() { return layoutStyles; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLayoutStyles", function() { return addLayoutStyles; });
+/* harmony import */ var j2c__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! j2c */ "../node_modules/j2c/dist/j2c.commonjs.js");
+/* harmony import */ var polythene_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-core */ "../node_modules/polythene-core/dist/polythene-core.mjs");
+
+
+
+// @ts-check
+
+/**
+ * @typedef {{[selector:string] : object}} Style
+ * @typedef {Array<Style> | Style} Styles
+ */
+
+/**
+ * @type {Styles} layout
+ */
+var layout = [{
+  "display": "-webkit-box"
+}, {
+  "display": "-moz-box"
+}, {
+  "display": "-ms-flexbox"
+}, {
+  "display": "-webkit-flex"
+}, {
+  "display": "flex"
+}];
+/**
+ * @type {Styles} layoutInline
+ */
+
+var layoutInline = [layout, {
+  "display": "-ms-inline-flexbox"
+}, {
+  "display": "-webkit-inline-flex"
+}, {
+  "display": "inline-flex"
+}];
+/**
+ * @type {Styles} layoutHorizontal
+ */
+
+var layoutHorizontal = [layout, {
+  "-ms-flex-direction": "row",
+  "-webkit-flex-direction": "row",
+  "flex-direction": "row"
+}];
+/**
+ * @type {Styles} layoutHorizontalReverse
+ */
+
+var layoutHorizontalReverse = [layout, {
+  "-ms-flex-direction": "row-reverse",
+  "-webkit-flex-direction": "row-reverse",
+  "flex-direction": "row-reverse"
+}];
+/**
+ * @type {Styles} layoutVertical
+ */
+
+var layoutVertical = [layout, {
+  "-ms-flex-direction": "column",
+  "-webkit-flex-direction": "column",
+  "flex-direction": "column"
+}];
+/**
+ * @type {Styles} layoutVerticalReverse
+ */
+
+var layoutVerticalReverse = [layout, {
+  "-ms-flex-direction": "column-reverse",
+  "-webkit-flex-direction": "column-reverse",
+  "flex-direction": "column-reverse"
+}];
+/**
+ * @type {Styles} layoutWrap
+ */
+
+var layoutWrap = [layout, {
+  "-ms-flex-wrap": "wrap",
+  "-webkit-flex-wrap": "wrap",
+  "flex-wrap": "wrap"
+}];
+/**
+ * @type {Styles} layoutWrapReverse
+ */
+
+var layoutWrapReverse = [layout, {
+  "-ms-flex-wrap": "wrap-reverse",
+  "-webkit-flex-wrap": "wrap-reverse",
+  "flex-wrap": "wrap-reverse"
+}];
+/**
+ * @type {Styles} layoutStart
+ */
+
+var layoutStart = [layout, {
+  "-ms-flex-align": "start",
+  "-webkit-align-items": "flex-start",
+  "align-items": "flex-start"
+}];
+/**
+ * @type {Styles} layoutCenter
+ */
+
+var layoutCenter = [layout, {
+  "-ms-flex-align": "center",
+  "-webkit-align-items": "center",
+  "align-items": "center"
+}];
+/**
+ * @type {Styles} layoutEnd
+ */
+
+var layoutEnd = [layout, {
+  "-ms-flex-align": "end",
+  "-webkit-align-items": "flex-end",
+  "align-items": "flex-end"
+}];
+/**
+ * @type {Styles} layoutJustified
+ */
+
+var layoutJustified = [layout, {
+  "-ms-flex-pack": "justify",
+  "-webkit-justify-content": "space-between",
+  "justify-content": "space-between"
+}];
+/**
+ * @type {Styles} layoutStartJustified
+ */
+
+var layoutStartJustified = [layout, {
+  "-ms-flex-pack": "start",
+  "-webkit-justify-content": "flex-start",
+  "justify-content": "flex-start"
+}];
+/**
+ * @type {Styles} layoutCenterJustified
+ */
+
+var layoutCenterJustified = [layout, {
+  "-ms-flex-pack": "center",
+  "-webkit-justify-content": "center",
+  "justify-content": "center"
+}];
+/**
+ * @type {Styles} layoutEndJustified
+ */
+
+var layoutEndJustified = [layout, {
+  "-ms-flex-pack": "end",
+  "-webkit-justify-content": "flex-end",
+  "justify-content": "flex-end"
+}];
+/**
+ * @type {Styles} layoutCenterCenter
+ */
+
+var layoutCenterCenter = [layoutCenterJustified, layoutCenter];
+/**
+ * @type {Styles} layoutAroundJustified
+ */
+
+var layoutAroundJustified = [layout, {
+  "-ms-flex-pack": "distribute",
+  "-webkit-justify-content": "space-around",
+  "justify-content": "space-around"
+}];
+/**
+ * @param {number} [num=1] 
+ * @returns {Styles}
+ */
+
+var flex = function flex() {
+  var num = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+  return [{
+    "-webkit-box-flex": num
+  }, {
+    "-moz-box-flex": num
+  }, {
+    "-webkit-flex": num
+  }, {
+    "-ms-flex": num
+  }, {
+    "flex": num
+  }, num === 1 ? {
+    "-webkit-flex-basis": "0.000000001px"
+  } : {}, num === 1 ? {
+    "flex-basis": "0.000000001px"
+  } : {}];
+};
+/**
+ * @type {Styles} flexAuto
+ */
+
+
+var flexAuto = {
+  "-ms-flex": "1 1 auto",
+  "-webkit-flex-basis": "auto",
+  "flex-basis": "auto"
+};
+/**
+ * @type {Styles} flexAutoVertical
+ */
+
+var flexAutoVertical = {
+  "-ms-flex": "1 1 auto",
+  "-webkit-flex-basis": "auto",
+  "flex-basis": "auto"
+};
+/**
+ * 
+ * @param {number|"none"} index 
+ * @returns {Styles}
+ */
+
+var flexIndex = function flexIndex(index) {
+  return {
+    "-ms-flex": index,
+    "-webkit-flex": index,
+    "flex": index
+  };
+};
+/**
+ * 
+ * @param {number} value 
+ * @returns {Styles}
+ */
+
+
+var flexGrow = function flexGrow(value) {
+  return {
+    "-webkit-flex-grow": value,
+    "flex-grow": value
+  };
+};
+/**
+ * 
+ * @param {number} value 
+ * @returns {Styles}
+ */
+
+
+var flexShrink = function flexShrink(value) {
+  return {
+    "-webkit-flex-shrink": value,
+    "flex-shrink": value
+  };
+};
+/**
+ * @type {Styles} selfStart
+ */
+
+
+var selfStart = {
+  "-ms-align-self": "flex-start",
+  "-webkit-align-self": "flex-start",
+  "align-self": "flex-start"
+};
+/**
+ * @type {Styles} selfCenter
+ */
+
+var selfCenter = {
+  "-ms-align-self": "center",
+  "-webkit-align-self": "center",
+  "align-self": "center"
+};
+/**
+ * @type {Styles} selfEnd
+ */
+
+var selfEnd = {
+  "-ms-align-self": "flex-end",
+  "-webkit-align-self": "flex-end",
+  "align-self": "flex-end"
+};
+/**
+ * @type {Styles} selfStretch
+ */
+
+var selfStretch = {
+  "-ms-align-self": "stretch",
+  "-webkit-align-self": "stretch",
+  "align-self": "stretch"
+};
+var flex$1 = {
+  flex: flex,
+  flexAuto: flexAuto,
+  flexAutoVertical: flexAutoVertical,
+  flexIndex: flexIndex,
+  flexGrow: flexGrow,
+  flexShrink: flexShrink,
+  layout: layout,
+  layoutAroundJustified: layoutAroundJustified,
+  layoutCenter: layoutCenter,
+  layoutCenterCenter: layoutCenterCenter,
+  layoutCenterJustified: layoutCenterJustified,
+  layoutEnd: layoutEnd,
+  layoutEndJustified: layoutEndJustified,
+  layoutHorizontal: layoutHorizontal,
+  layoutHorizontalReverse: layoutHorizontalReverse,
+  layoutInline: layoutInline,
+  layoutJustified: layoutJustified,
+  layoutStart: layoutStart,
+  layoutStartJustified: layoutStartJustified,
+  layoutVertical: layoutVertical,
+  layoutVerticalReverse: layoutVerticalReverse,
+  layoutWrap: layoutWrap,
+  layoutWrapReverse: layoutWrapReverse,
+  selfCenter: selfCenter,
+  selfEnd: selfEnd,
+  selfStart: selfStart,
+  selfStretch: selfStretch
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+// @ts-check
+
+/**
+ * @typedef {object} StyleObject 
+ */
+
+/**
+ * Centers an item absolutely within relative parent.
+ * @param {number} [offset=0] 
+ * @returns {StyleObject}
+ */
+var fit = function fit() {
+  var offset = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+  var offsetPx = offset + "px";
+  return {
+    position: "absolute",
+    top: offsetPx,
+    right: offsetPx,
+    bottom: offsetPx,
+    left: offsetPx
+  };
+};
+/**
+ * Breaks off a line with ... unless lines is "none"
+ * @param {number|"none"} lines 
+ * @param {number} lineHeight 
+ * @param {string} [unit=px]
+ * @example
+ * // max 1 line, 16px high
+ * mixin.ellipsis(1, 16)
+ * @example 
+ * // max 2 lines, 2.6em high
+ * mixin.ellipsis(2, 1.3, "em")
+ * @returns {StyleObject} 
+ */
+
+
+var ellipsis = function ellipsis(lines, lineHeight) {
+  var unit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "px";
+
+  if (lines === "none") {
+    return {
+      textOverflow: "initial",
+      overflow: "initial",
+      display: "block",
+      height: "auto",
+      maxHeight: "none",
+      whiteSpace: "normal"
+    };
+  }
+
+  return [{
+    "@supports (-webkit-line-clamp: 2)": lines !== undefined ? {
+      "-webkit-line-clamp": lines,
+      "-webkit-box-orient": "vertical",
+      display: "-webkit-box",
+      wordBreak: "break-word"
+    } : undefined
+  }, _objectSpread({
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    textRendering: "auto"
+  }, lineHeight !== undefined ? {
+    maxHeight: lines * lineHeight + unit
+  } : undefined, lineHeight === 1 ? {
+    wordWrap: "nowrap"
+  } : undefined)];
+};
+/**
+ * Clears float.
+ * @returns {StyleObject} 
+ */
+
+
+var clearfix = function clearfix() {
+  return {
+    "&:after": {
+      content: "\"\"",
+      display: "table",
+      clear: "both"
+    }
+  };
+};
+/**
+ * Creates sticky headers in a scrollable list.
+ * Does not work in IE 11, Edge < 16.
+ * @param {number} [zIndex=1] 
+ * @returns {StyleObject} 
+ */
+
+
+var sticky = function sticky() {
+  var zIndex = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+  return {
+    position: "sticky",
+    top: 0,
+    zIndex: zIndex
+  };
+};
+/**
+ * Creates a transition with presets
+ * @param {string} [properties=all]
+ * @param {string} [duration=".18s"] 
+ * @param {string} [curve=ease-out] 
+ * @example
+ * mixin.defaultTransition("opacity", vars.animation_duration)
+ * @returns {StyleObject} 
+ */
+
+
+var defaultTransition = function defaultTransition() {
+  var properties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "all";
+  var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ".18s";
+  var curve = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "ease-out";
+  return {
+    transitionDelay: "0ms",
+    transitionDuration: duration,
+    transitionTimingFunction: curve,
+    transitionProperty: properties
+  };
+};
+
+var mixin = {
+  clearfix: clearfix,
+  defaultTransition: defaultTransition,
+  ellipsis: ellipsis,
+  fit: fit,
+  sticky: sticky
+};
+
+function unwrapExports (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x.default : x;
+}
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var j2cPluginPrefixBrowser_commonjs = createCommonjsModule(function (module, exports) {
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+// Derived from Lea Verou's PrefixFree
+
+var allStyles;
+var styleAttr;
+var styleElement;
+var supportedProperty;
+var supportedDecl;
+
+function init() {
+  allStyles = getComputedStyle(document.documentElement, null);
+  styleAttr = document.createElement('div').style;
+  styleElement = document.documentElement.appendChild(document.createElement('style'));
+  supportedDecl = _supportedDecl;
+  supportedProperty = _supportedProperty;
+  if ('zIndex' in styleAttr && !('z-index' in styleAttr)) {
+    // Some browsers like it dash-cased, some camelCased, most like both.
+    supportedDecl = function(property, value) {return _supportedDecl(camelCase(property), value)};
+    supportedProperty = function(property) {return _supportedProperty(camelCase(property))};
+  }
+}
+function finalize() {
+  if (typeof document !== 'undefined') document.documentElement.removeChild(styleElement);
+  // `styleAttr` is used at run time via `supportedProperty()`
+  // `allStyles` and `styleElement` can be displosed of after initialization.
+  allStyles = styleElement = null;
+}
+
+
+// Helpers, in alphabetic order
+
+function camelCase(str) {
+  return str.replace(/-([a-z])/g, function($0, $1) { return $1.toUpperCase() }).replace('-','')
+}
+function deCamelCase(str) {
+  return str.replace(/[A-Z]/g, function($0) { return '-' + $0.toLowerCase() })
+}
+function _supportedDecl(property, value) {
+  styleAttr[property] = '';
+  styleAttr[property] = value;
+  return !!styleAttr[property]
+}
+function supportedMedia(property, value) {
+  styleElement.textContent = '@media (' + property + ':' + value +'){}';
+  // The !!~indexOf trick. False for -1, true otherwise.
+  return !!~styleElement.sheet.cssRules[0].cssText.indexOf(value)
+}
+function _supportedProperty(property) {
+  return property in styleAttr
+}
+function supportedRule(selector) {
+  styleElement.textContent = selector + '{}';
+  return !!styleElement.sheet.cssRules.length
+}
+
+// Derived from Lea Verou's PrefixFree
+
+// TODO: http://caniuse.com/#feat=css-media-resolution
+
+function detectAtrules(fixers) {
+  if (fixers.prefix === '') return
+  var atrules = {
+    'keyframes': 'name',
+    'viewport': null,
+    'document': 'regexp(".")'
+  };
+
+  // build a map of {'@ruleX': '@-prefix-ruleX'}
+  for(var atrule in atrules) {
+    var test = atrule + ' ' + (atrules[atrule] || '');
+    for (var i = fixers.prefixes.length; i--;) {
+      if (!supportedRule('@' + test) && supportedRule('@' + fixers.prefixes[i] + test)) {
+
+        fixers.hasAtrules = true;
+        fixers.atrules['@' + atrule] = '@' + fixers.prefixes[i] + atrule;
+      }
+    }
+  }
+
+  // Standard
+  fixers.hasDppx = supportedMedia('resolution', '1dppx');
+  // Webkit
+  fixers.hasPixelRatio = supportedMedia(fixers.prefix + 'device-pixel-ratio', '1');
+  // Opera
+  fixers.hasPixelRatioFraction = supportedMedia(fixers.prefix + 'device-pixel-ratio', '1/1');
+
+  if (fixers.hasPixelRatio || fixers.hasPixelRatioFraction) {
+    fixers.properties['resolution'] = fixers.prefix + 'device-pixel-ratio';
+    fixers.properties['min-resolution'] = fixers.prefix + 'min-device-pixel-ratio';
+    fixers.properties['max-resolution'] = fixers.prefix + 'max-device-pixel-ratio';
+    if (supportedMedia('min-' + fixers.prefix + 'device-pixel-ratio', '1')) {
+      // Mozilla/Firefox tunred a vendor prefix into a vendor infix
+      fixers.properties['min-resolution'] = 'min-' + fixers.prefix + 'device-pixel-ratio';
+      fixers.properties['max-resolution'] = 'max-' + fixers.prefix + 'device-pixel-ratio';
+    }
+  }
+}
+
+// Derived from Lea Verou's PrefixFree
+
+function detectFunctions(fixers) {
+  // Values that might need prefixing
+  if (fixers.prefix === '') return
+  var functions = {
+    'linear-gradient': {
+      property: 'background-image',
+      params: 'red, teal'
+    },
+    'calc': {
+      property: 'width',
+      params: '1px + 5%'
+    },
+    'element': {
+      property: 'background-image',
+      params: '#foo'
+    },
+    'cross-fade': {
+      property: 'backgroundImage',
+      params: 'url(a.png), url(b.png), 50%'
+    }
+  };
+  functions['repeating-linear-gradient'] =
+  functions['repeating-radial-gradient'] =
+  functions['radial-gradient'] =
+  functions['linear-gradient'];
+
+  // build an array of prefixable functions
+  for (var func in functions) {
+    var test = functions[func],
+      property = test.property,
+      value = func + '(' + test.params + ')';
+
+    if (!supportedDecl(property, value) && supportedDecl(property, fixers.prefix + value)) {
+      // It's only supported with a prefix
+      fixers.functions.push(func);
+    }
+  }
+}
+
+// Derived from Lea Verou's PrefixFree and Robin Frischmann's Inline Style Prefixer
+
+// TODO: http://caniuse.com/#feat=css-writing-mode
+
+// db of prop/value pairs whose values may need treatment.
+
+var keywords = [
+
+  // `initial` applies to all properties and is thus handled separately.
+  {
+    props: ['cursor'],
+    values: [ 'grab', 'grabbing', 'zoom-in', 'zoom-out']
+  },
+  {
+    props: ['display'],
+    values:['box', 'inline-box', 'flexbox', 'inline-flexbox', 'flex', 'inline-flex', 'grid', 'inline-grid']
+  },
+  {
+    props: ['position'],
+    values: [ 'sticky' ]
+  },
+  {
+    props: ['width', 'column-width', 'height', 'max-height', 'max-width', 'min-height', 'min-width'],
+    values: ['contain-floats', 'fill-available', 'fit-content', 'max-content', 'min-content']
+  }
+];
+// The flexbox zoo
+//
+// ## Specs:
+// - box     (2009/old):  https://www.w3.org/TR/2009/WD-css3-flexbox-20090723/
+// - flexbox (2012/ie10): https://www.w3.org/TR/2012/WD-css3-flexbox-20120322/
+// - flex    (final):     https://www.w3.org/TR/css-flexbox-1/
+var flex2009Props = {
+  // ?align-content =>
+  // ?align-self =>
+  'align-items': 'box-align',
+  'flex': 'box-flex', // https://css-tricks.com/snippets/css/a-guide-to-flexbox/#comment-371025,
+  // ?flex-basis =>
+  // !!flex-direction => box-direction + box-orient, covered in `plugin.js`
+  'box-direction' : 'box-direction', // we prepopulate the cache for the above case.
+  'box-orient': 'box-orient',
+  // !!flex-flow => flex-direction and/or flex-wrap, covered in `plugin.js`
+  'flex-grow': 'box-flex', // https://compat.spec.whatwg.org/#propdef--webkit-box-flex
+  // ?flex-shrink =>
+  'flex-wrap': 'box-lines',
+  'justify-content': 'box-pack',
+  'order': 'box-ordinal-group' // https://css-tricks.com/snippets/css/a-guide-to-flexbox/#comment-371025
+};
+var flex2009Values = {
+  // flex => box || only for display? handled in the code
+  'flex-end': 'end',
+  'flex-start': 'start',
+  // inline-flex => inline-box || see flex
+  'nowrap': 'single',
+  'space-around': 'justify',
+  'space-between': 'justify',
+  'wrap': 'multiple',
+  'wrap-reverse': 'multiple'
+};
+var flex2012Props = {
+  'align-content': '-ms-flex-line-pack',
+  'align-items': '-ms-flex-align',
+  'align-self': '-ms-flex-item-align',
+  // flex => -ms-flex
+  'flex-basis': '-ms-preferred-size',
+  // flex-direction => -ms-flex-direction
+  // flex-flow => -ms-flex-flow
+  'flex-grow': '-ms-flex-positive',
+  'flex-shrink': '-ms-flex-negative',
+  // flex-wrap => -ms-flex-wrap
+  'justify-content': '-ms-flex-pack',
+  'order': '-ms-flex-order'
+};
+var flex2012Values = {
+  // flex => flexbox || only for display? handled in the code
+  'flex-end': 'end',
+  'flex-start': 'start',
+  // inline-flex => inline-flexbox || see 'flex'
+  // nowrap => nowrap
+  'space-around': 'distribute',
+  'space-between': 'justify'
+  // wrap => wrap
+  // wrap-reverse => wrap-reverse
+};
+
+function detectKeywords(fixers) {
+  if (fixers.prefixes.length === 0) return
+
+  // build a map of {propertyI: {keywordJ: previxedKeywordJ, ...}, ...}
+  for (var i = 0; i < keywords.length; i++) {
+    var map = {}, property = keywords[i].props[0];
+    // eslint-disable-next-line
+    for (var j = 0, keyword; keyword = keywords[i].values[j]; j++) {
+      for (var k = fixers.prefixes.length; k--;) {
+        if (
+          !supportedDecl(property, keyword) &&
+          supportedDecl(property, fixers.prefixes[k] + keyword)
+        ) {
+          fixers.hasKeywords = true;
+          map[keyword] = fixers.prefixes[k] + keyword;
+        }
+      }
+    }
+    // eslint-disable-next-line
+    for (j = 0; property = keywords[i].props[j]; j++) {
+      fixers.keywords[property] = map;
+    }
+  }
+  if (fixers.keywords.display && fixers.keywords.display.flexbox && !supportedDecl('display', 'flex')) {
+    // IE 10, Flexbox 2012
+    fixers.keywords.display.flex = fixers.keywords.display.flexbox;
+    fixers.keywords.display['inline-flex'] = fixers.keywords.display['inline-flexbox'];
+    fixers.flexbox2012 = true;
+    for (k in flex2012Props) {
+      fixers.properties[k] = flex2012Props[k];
+      fixers.keywords[k] = flex2012Values;
+    }
+  } else if (
+    fixers.keywords.display &&
+    fixers.keywords.display.box &&
+    !supportedDecl('display', 'flex') &&
+    !supportedDecl('display', fixers.prefix + 'flex')
+  ) {
+    // old flexbox spec
+    fixers.keywords.display.flex = fixers.keywords.display.box;
+    fixers.keywords.display['inline-flex'] = fixers.keywords.display['inline-box'];
+    fixers.flexbox2009 = true;
+    for (k in flex2009Props) {
+      fixers.properties[k] = fixers.prefix + flex2009Props[k];
+      fixers.keywords[k] = flex2009Values;
+    }
+  } else if (
+    fixers.keywords.display &&
+    !fixers.keywords.display.box &&
+    !fixers.keywords.display.flex &&
+    !fixers.keywords.display.flexbox &&
+    !supportedDecl('display', 'flex')
+  ) {
+    fixers.jsFlex = true;
+  }
+  if (
+    !supportedDecl('color', 'initial') &&
+    supportedDecl('color', fixers.prefix + 'initial')
+  ) {
+    // `initial` does not use the `hasKeywords` branch, no need to set it to true.
+    fixers.initial = fixers.prefix + 'initial';
+  }
+}
+
+// Derived from Lea Verou's PrefixFree
+
+function detectPrefix(fixers) {
+  var prefixCounters = {};
+  // Why are we doing this instead of iterating over properties in a .style object? Because Webkit.
+  // 1. Older Webkit won't iterate over those.
+  // 2. Recent Webkit will, but the 'Webkit'-prefixed properties are not enumerable. The 'webkit'
+  //    (lower case 'w') ones are, but they don't `deCamelCase()` into a prefix that we can detect.
+
+  function iteration(property) {
+    if(property.charAt(0) === '-') {
+      var prefix = property.split('-')[1];
+
+      // Count prefix uses
+      prefixCounters[prefix] = ++prefixCounters[prefix] || 1;
+    }
+  }
+
+  // Some browsers have numerical indices for the properties, some don't
+  if(allStyles && allStyles.length > 0) {
+    for(var i=0; i<allStyles.length; i++) {
+      iteration(allStyles[i]);
+    }
+  } else {
+    for(var property in allStyles) {
+      iteration(deCamelCase(property));
+    }
+  }
+
+  var prefixes = [];
+  for (var p in prefixCounters) prefixes.push(p);
+  prefixes.sort(function(a,b) {return prefixCounters[b] - prefixCounters[a]});
+
+  fixers.prefixes = prefixes.map(function(p){return '-' + p + '-'});
+  fixers.prefix = fixers.prefixes[0] || '';
+  // Edge supports both `webkit` and `ms` prefixes, but `ms` isn't detected with the method above.
+  // the selector comes from http://browserstrangeness.com/css_hacks.html
+  if (supportedRule('_:-ms-lang(x), _:-webkit-full-screen')) fixers.prefixes.push('-ms-');
+  fixers.Prefix = camelCase(fixers.prefix);
+}
+
+// Derived from Lea Verou's PrefixFree
+
+function detectSelectors(fixers) {
+  var selector, prefixed;
+  function prefixSelector(selector) {
+    return selector.replace(/^::?/, function($0) { return $0 + fixers.prefix })
+  }
+
+  if (fixers.prefix === '') return
+  var selectors = {
+    ':any-link': null,
+    '::backdrop': null,
+    ':fullscreen': null, //TODO sort out what changed between specs
+    ':full-screen': ':fullscreen',
+    //sigh
+    '::placeholder': null,
+    ':placeholder': '::placeholder',
+    '::input-placeholder': '::placeholder',
+    ':input-placeholder': '::placeholder',
+    ':read-only': null,
+    ':read-write': null,
+    '::selection': null
+  };
+
+  // builds an array of selectors that need a prefix.
+  for (selector in selectors) {
+    prefixed = prefixSelector(selector);
+    if(!supportedRule(selectors[selector] || selector) && supportedRule(prefixed)) {
+      fixers.hasSelectors = true;
+      fixers.selectorList.push(selectors[selector] || selector);
+      fixers.selectorMap[selectors[selector] || selector] = prefixed;
+    }
+  }
+}
+
+function detectWebkitCompat(fixers) {
+  if (!supportedDecl('background-clip', 'text') && supportedDecl('-webkit-background-clip', 'text')) fixers.WkBCTxt = true
+  ;['background-clip', 'text-fill-color', 'text-stroke-color', 'text-stroke-width', 'text-stroke'].forEach(function(prop){
+    if(!supportedProperty(prop) && supportedProperty('-webkit-' + prop)) fixers.properties[prop] = '-webkit-' + prop;
+  });
+}
+
+function blankFixers() {
+  return {
+    atrules: {},
+    hasAtrules: false,
+    hasDppx: null,
+    hasKeywords: false,
+    hasPixelRatio: false,
+    hasPixelRatioFraction: false,
+    hasSelectors: false,
+    hasValues: false,
+    fixAtMediaParams: null,
+    fixAtSupportsParams: null,
+    fixProperty: null,
+    fixSelector: null,
+    fixValue: null,
+    flexbox2009: false,
+    flexbox2012: false,
+    functions: [],
+    initial: null,
+    jsFlex: false,
+    keywords: {},
+    placeholder: null,
+    prefix: '',
+    prefixes: [],
+    Prefix: '',
+    properties: {},
+    selectorList: [],
+    selectorMap: {},
+    valueProperties: {
+      'transition': 1,
+      'transition-property': 1,
+      'will-change': 1
+    },
+    WkBCTxt: false // -webkit-background-clip: text
+  }
+}
+
+
+function browserDetector(fixers) {
+  // add the required data to the fixers object.
+  init();
+  detectPrefix(fixers);
+  detectSelectors(fixers);
+  detectAtrules(fixers);
+  detectKeywords(fixers);
+  detectFunctions(fixers);
+  detectWebkitCompat(fixers);
+  finalize();
+}
+
+var emptySet = {};
+
+var valueTokenizer = /[(),]|\/\*[\s\S]*?\*\//g;
+
+/**
+ * For properties whose values are also properties, this will split a coma-separated
+ * value list into individual values, ignoring comas in comments and in
+ * functions(parameter, lists).
+ *
+ * @param {string} selector
+ * @return {string[]}
+ */
+
+function splitValue(value) {
+  var indices = [], res = [], inParen = 0, o;
+  /*eslint-disable no-cond-assign*/
+  while (o = valueTokenizer.exec(value)) {
+  /*eslint-enable no-cond-assign*/
+    switch (o[0]) {
+    case '(': inParen++; break
+    case ')': inParen--; break
+    case ',': if (inParen) break; indices.push(o.index);
+    }
+  }
+  for (o = indices.length; o--;){
+    res.unshift(value.slice(indices[o] + 1));
+    value = value.slice(0, indices[o]);
+  }
+  res.unshift(value);
+  return res
+}
+
+function makeDetector (before, targets, after) {
+  return new RegExp(before + '(?:' + targets.join('|') + ')' + after)
+}
+
+function makeLexer (before, targets, after) {
+  return new RegExp(
+        "\"(?:\\\\[\\S\\s]|[^\"])*\"|'(?:\\\\[\\S\\s]|[^'])*'|\\/\\*[\\S\\s]*?\\*\\/|" +
+            before + '((?:' +
+            targets.join('|') +
+            '))' + after,
+        'gi'
+    )
+}
+
+// declarations
+// ------------
+// function trim(s) {
+//   return s.replace(/^\s*(.*?)\s*$/, '$1')
+// }
+
+function fixDecl(fixers, emit, property, value) {
+  if (typeof property !== 'string' || property.charAt(0) === '-') return emit(property, value)
+
+  if (!(typeof value === 'string' || typeof value === 'number')){
+    return emit(fixers.properties[property] || fixers.fixProperty(property), value)
+  }
+
+  value = value + '';
+  if (fixers.jsFlex) {
+    if (property === 'display' && (value === 'flex' || value === 'inline-flex')) {
+      emit('-js-display', value);
+      return
+    }
+  } else if (fixers.flexbox2009) {
+      // TODO: flex only takes one value in the 2009 spec
+    // if (property === 'flex') {
+    //   value = trim(value)
+    //   if (value === 'none' || value === 'initial') emit(property, '0')
+    //   else if (value === 'auto') emit(property, '1')
+    //   else emit(property, value.replace(/^(\d+)(?=\W|$).*/, '$1'))
+    //   return
+    // } else
+    if (property === 'flex-flow') {
+      value.split(/\s+/).forEach(function(v){
+        // recurse! The lack of `next.` is intentional.
+        if (v.indexOf('wrap') > -1) fixDecl(fixers, emit, 'flex-wrap', v);
+        else if(v !== '') fixDecl(fixers, emit, 'flex-direction', v);
+      });
+      return
+    } else if (property === 'flex-direction') {
+      emit(fixers.properties['box-orient'], value.indexOf('column') > -1 ? 'block-axis' : 'inline-axis');
+      emit(fixers.properties['box-direction'], value.indexOf('-reverse') > -1 ? 'reverse' : 'normal');
+      return
+    }
+  }
+  // else if (fixers.flexbox2012) {
+  //   // if (property === 'flex' && value.indexOf('calc(') !== -1) {
+  //   //   var parsed =
+  //   // }
+  // }
+  if(fixers.WkBCTxt && property === 'background-clip' && value === 'text') {
+    emit('-webkit-background-clip', value);
+  } else {
+    emit(
+      fixers.properties[property] || fixers.fixProperty(property),
+      fixers.fixValue(value, property)
+    );
+  }
+}
+
+
+function finalizeFixers(fixers) {
+  var prefix = fixers.prefix;
+
+
+  // properties
+  // ----------
+
+  fixers.fixProperty = fixers.fixProperty || function(prop) {
+    var prefixed;
+    return fixers.properties[prop] = (
+      supportedProperty(prop) ||
+      !supportedProperty(prefixed = prefix + prop)
+    ) ? prop : prefixed
+  };
+
+
+  // selectors
+  // ----------
+
+  var selectorDetector = makeDetector('', fixers.selectorList, '(?:\\b|$|[^-])');
+  var selectorMatcher = makeLexer('', fixers.selectorList, '(?:\\b|$|[^-])');
+  var selectorReplacer = function(match, selector) {
+    return selector != null ? fixers.selectorMap[selector] : match
+  };
+  fixers.fixSelector = function(selector) {
+    return selectorDetector.test(selector) ? selector.replace(selectorMatcher, selectorReplacer) : selector
+  };
+
+
+  // values
+  // ------
+
+  // When gradients are supported with a prefix, convert angles to legacy
+  // (from clockwise to trigonometric)
+  var hasGradients = fixers.functions.indexOf('linear-gradient') > -1;
+  var gradientDetector = /\blinear-gradient\(/;
+  var gradientMatcher = /(^|\s|,|\()((?:repeating-)?linear-gradient\()\s*(-?\d*\.?\d*)deg/ig;
+  var gradientReplacer = function (match, delim, gradient, deg) {
+    return delim + gradient + (90-deg) + 'deg'
+  };
+
+  // functions
+  var hasFunctions = !!fixers.functions.length;
+  var functionsDetector = makeDetector('(?:^|\\s|,|\\()', fixers.functions, '\\s*\\(');
+  var functionsMatcher = makeLexer('(^|\\s|,|\\()', fixers.functions, '(?=\\s*\\()');
+  function functionReplacer (match, $1, $2) {
+    return $1 + prefix + $2
+  }
+
+  // properties as values (for transition, ...)
+  // No need to look for strings in these properties. We may insert prefixes in comments. Oh the humanity.
+  var valuePropertiesMatcher = /^\s*([-\w]+)/gi;
+  var valuePropertiesReplacer = function(match, prop){
+    return fixers.properties[prop] || fixers.fixProperty(prop)
+  };
+
+  fixers.fixValue = function (value, property) {
+    var res;
+    if (fixers.initial != null && value === 'initial') return fixers.initial
+
+    if (fixers.hasKeywords && (res = (fixers.keywords[property] || emptySet)[value])) return res
+
+    res = value;
+
+    if (fixers.valueProperties.hasOwnProperty(property)) {
+      res = (value.indexOf(',') === -1) ?
+        value.replace(valuePropertiesMatcher, valuePropertiesReplacer) :
+        splitValue(value).map(function(v) {
+          return v.replace(valuePropertiesMatcher, valuePropertiesReplacer)
+        }).join(',');
+    }
+
+    if (hasFunctions && functionsDetector.test(value)) {
+      if (hasGradients && gradientDetector.test(value)) {
+        res = res.replace(gradientMatcher, gradientReplacer);
+      }
+      res = res.replace(functionsMatcher, functionReplacer);
+    }
+    return res
+  };
+
+  // @media (resolution:...) {
+  // -------------------------
+
+  var resolutionMatcher = /((?:min-|max-)?resolution)\s*:\s*((?:\d*\.)?\d+)dppx/g;
+  var resolutionReplacer = (
+    fixers.hasPixelRatio ? function(_, prop, param){return fixers.properties[prop] + ':' + param} :
+    fixers.hasPixelRatioFraction ? function(_, prop, param){return fixers.properties[prop] + ':' + Math.round(param*10) + '/10'} :
+    function(_, prop, param){return prop + ':' + Math.round(param * 96) +'dpi'}
+  );
+
+  fixers.fixAtMediaParams = fixers.hasDppx !== false /*it may be null*/ ?
+    function(p) {return p} :
+    function (params) {
+      return (params.indexOf('reso') !== -1) ?
+        params.replace(resolutionMatcher, resolutionReplacer) :
+        params
+    };
+
+
+  // @supports ... {
+  // ---------------
+
+  var supportsProp, supportsValue;
+  var atSupportsParamsFixer = function (property, value) {
+    supportsProp = property;
+    supportsValue = value;
+  };
+  // regexp built by scripts/regexps.js
+  var atSupportsParamsMatcher =  /\(\s*([-\w]+)\s*:\s*((?:'(?:\\[\S\s]|[^'])*'|"(?:\\[\S\s]|[^"])*"|\/\*[\S\s]*?\*\/|\((?:'(?:\\[\S\s]|[^'])*'|"(?:\\[\S\s]|[^"])*"|\/\*[\S\s]*?\*\/|\((?:'(?:\\[\S\s]|[^'])*'|"(?:\\[\S\s]|[^"])*"|\/\*[\S\s]*?\*\/|\((?:'(?:\\[\S\s]|[^'])*'|"(?:\\[\S\s]|[^"])*"|\/\*[\S\s]*?\*\/|\((?:'(?:\\[\S\s]|[^'])*'|"(?:\\[\S\s]|[^"])*"|\/\*[\S\s]*?\*\/|\((?:'(?:\\[\S\s]|[^'])*'|"(?:\\[\S\s]|[^"])*"|\/\*[\S\s]*?\*\/|\((?:'(?:\\[\S\s]|[^'])*'|"(?:\\[\S\s]|[^"])*"|\/\*[\S\s]*?\*\/|[^\)])*\)|[^\)])*\)|[^\)])*\)|[^\)])*\)|[^\)])*\)|[^\)])*\)|[^\)])*)/g;
+  function atSupportsParamsReplacer(match, prop, value) {
+    fixDecl(fixers, atSupportsParamsFixer, prop, value);
+    return '(' + supportsProp + ':' + supportsValue
+  }
+  fixers.fixAtSupportsParams = function(params) {
+    return params.replace(atSupportsParamsMatcher, atSupportsParamsReplacer)
+  };
+}
+
+var commonFixers;
+
+function initBrowser() { // exported for the test suite
+  commonFixers = blankFixers();
+  if (typeof getComputedStyle === 'function') browserDetector(commonFixers);
+  finalizeFixers(commonFixers);
+}
+initBrowser();
+
+function prefixPlugin(){
+  var fixers = commonFixers;
+  var cache = [];
+  return {
+    set: {
+      setPrefixDb: function(f) {
+        if (cache.indexOf(f) === -1) {
+          finalizeFixers(f);
+          cache.push(f);
+        }
+        fixers = f;
+        return prefixPlugin
+      }
+    },
+    filter: function(next) {
+      return {
+        atrule: function(rule, kind, params, hasBlock) {
+          next.atrule(
+            fixers.hasAtrules && fixers.atrules[rule] || rule,
+            kind,
+            (
+              rule === '@media'    ? fixers.fixAtMediaParams(params) :
+              rule === '@supports' ? fixers.fixAtSupportsParams(params) :
+              params
+            ),
+            hasBlock
+          );
+        },
+        decl: function(property, value) {
+          fixDecl(fixers, next.decl, property, value);
+        },
+        rule: function(selector) {
+          next.rule(
+            fixers.hasSelectors ? fixers.fixSelector(selector) : selector
+          );
+        }
+      }
+    }
+  }
+}
+
+exports.prefixPlugin = prefixPlugin;
+});
+
+unwrapExports(j2cPluginPrefixBrowser_commonjs);
+var j2cPluginPrefixBrowser_commonjs_1 = j2cPluginPrefixBrowser_commonjs.prefixPlugin;
+
+// @ts-ignore
+var j2c = new j2c__WEBPACK_IMPORTED_MODULE_0__(j2cPluginPrefixBrowser_commonjs_1);
+
+var ID_REGEX = /[^a-z0-9\\-]/g;
+/**
+ * @typedef {object} StyleObject 
+ * @typedef {(selector: string|Array<string>, vars: object, customVars?: object) => Array<object>} StyleFn
+ */
+
+/**
+ * Adds styles to head.
+ * @param {string} id - Identifier, used as HTMLElement id for the attached <style></style> element.
+ * @param {...Array<StyleObject>} styles - List of style Objects
+ * @returns {void}
+ */
+
+var add = function add(id) {
+  for (var _len = arguments.length, styles = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    styles[_key - 1] = arguments[_key];
+  }
+
+  return addToDocument.apply(void 0, [{
+    id: id
+  }].concat(styles));
+};
+/**
+ * Removes a style from head.
+ * @param {string} id - Identifier, used as HTMLElement id for the attached <style></style> element.
+ * @returns {void}
+ */
+
+
+var remove = function remove(id) {
+  if (polythene_core__WEBPACK_IMPORTED_MODULE_1__["isServer"]) return;
+
+  if (id) {
+    var old = document.getElementById(id);
+
+    if (old && old.parentNode) {
+      old.parentNode.removeChild(old);
+    }
+  }
+};
+/**
+ * Adds styles to the head.
+ * @param {object} params
+ * @param {string} params.id - Identifier, used as HTMLElement id for the attached <style></style> element.
+ * @param {object} [params.document] - Document reference.
+ * @param {...Array<StyleObject>} styles - List of style Objects.
+ * @returns {void}
+ */
+
+
+var addToDocument = function addToDocument(_ref) {
+  var id = _ref.id,
+      document = _ref.document;
+  if (polythene_core__WEBPACK_IMPORTED_MODULE_1__["isServer"]) return;
+  var safeId = id.replace(ID_REGEX, "_");
+  remove(safeId);
+  var documentRef = document || window.document;
+  var styleEl = documentRef.createElement("style");
+
+  if (safeId) {
+    styleEl.setAttribute("id", safeId);
+  }
+
+  for (var _len2 = arguments.length, styles = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    styles[_key2 - 1] = arguments[_key2];
+  }
+
+  styles.forEach(function (styles) {
+    // each style returns a list
+    if (Object.keys(styles).length) {
+      styles.forEach(function (style) {
+        var scoped = {
+          "@global": style
+        };
+        var sheet = j2c.sheet(scoped);
+        styleEl.appendChild(documentRef.createTextNode(sheet));
+      });
+    }
+  });
+  documentRef.head.appendChild(styleEl);
+};
+/**
+ * 
+ * @param {object} params
+ * @param {StyleObject|Array<StyleObject>} params.styles
+ * @param {string} [params.scope]
+ * @returns {Array<StyleObject>}
+ */
+
+
+var wrapInScope = function wrapInScope(_ref2) {
+  var styles = _ref2.styles,
+      scope = _ref2.scope;
+  return scope ? [_defineProperty({}, scope, styles)] : styles;
+};
+/**
+ * Adds component styles to head.
+ * @param {object} params
+ * @param {Array<string>} params.selectors
+ * @param {Array<StyleFn>} params.fns
+ * @param {object} params.vars
+ * @param {object} [params.customVars]
+ * @param {string} [params.mediaQuery]
+ * @param {string} [params.scope]
+ * @returns {void}
+ */
+
+
+var addStyle = function addStyle(_ref4) {
+  var selectors = _ref4.selectors,
+      styleFns = _ref4.fns,
+      vars = _ref4.vars,
+      customVars = _ref4.customVars,
+      mediaQuery = _ref4.mediaQuery,
+      scope = _ref4.scope;
+  var prefix = scope ? " " : "";
+  var selector = prefix + selectors.join("");
+  var styles = styleFns.map(function (fn) {
+    return fn(selector, vars, customVars);
+  }).filter(function (list) {
+    return list.length > 0;
+  });
+
+  if (styles.length === 0) {
+    return;
+  }
+
+  var id = selector.trim().replace(/^[^a-z]?(.*)/, "$1");
+  add(id, wrapInScope({
+    styles: wrapInScope({
+      styles: styles,
+      scope: scope
+    }),
+    scope: mediaQuery
+  }));
+};
+/**
+ * Returns a list of style objects for a component.
+ * @param {object} params
+ * @param {Array<string>} params.selectors
+ * @param {Array<StyleFn>} params.fns
+ * @param {object} params.vars - Style configuration variables
+ * @param {object} [params.customVars] - Style configuration variables
+ * @param {string} [params.mediaQuery] - Mediaquery string
+ * @param {string} [params.scope] - Scope selector
+ * @returns {Array<StyleObject>}
+ */
+
+
+var getStyle = function getStyle(_ref5) {
+  var selectors = _ref5.selectors,
+      styleFns = _ref5.fns,
+      vars = _ref5.vars,
+      customVars = _ref5.customVars,
+      mediaQuery = _ref5.mediaQuery,
+      scope = _ref5.scope;
+  var prefix = scope ? " " : "";
+  var selector = prefix + selectors.join("");
+  var styles = styleFns.map(function (fn) {
+    return fn(selector, vars, customVars);
+  });
+  return wrapInScope({
+    styles: wrapInScope({
+      styles: styles,
+      scope: scope
+    }),
+    scope: mediaQuery
+  });
+};
+/**
+ * Adds component styles to head.
+ * @param {string} selector 
+ * @param {Array<StyleFn>} fns 
+ * @param {object} vars - Style configuration variables
+ */
+
+
+var createAddStyle = function createAddStyle(selector, fns, vars) {
+  return (
+    /**
+     * @param {string} [customSelector=""]
+     * @param {object} customVars
+     * @param {object} [scoping={}]
+     * @param {string} [scoping.mediaQuery]
+     * @param {string} [scoping.scope]
+     * @returns {void}
+     */
+    function () {
+      var customSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+      var customVars = arguments.length > 1 ? arguments[1] : undefined;
+
+      var _ref6 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          mediaQuery = _ref6.mediaQuery,
+          scope = _ref6.scope;
+
+      return addStyle({
+        selectors: [selector, customSelector],
+        fns: fns,
+        vars: vars,
+        customVars: customVars,
+        mediaQuery: mediaQuery,
+        scope: scope
+      });
+    }
+  );
+};
+/**
+ * Returns styles for a component.
+ * @param {string} selector 
+ * @param {Array<StyleFn>} fns 
+ * @param {object} vars - Style configuration variables
+ */
+
+
+var createGetStyle = function createGetStyle(selector, fns, vars) {
+  return (
+    /**
+     * @param {string} [customSelector=""]
+     * @param {object} customVars
+     * @param {object} [scoping={}]
+     * @param {string} [scoping.mediaQuery]
+     * @param {string} [scoping.scope]
+     * @returns {Array<StyleObject>}
+     */
+    function () {
+      var customSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+      var customVars = arguments.length > 1 ? arguments[1] : undefined;
+
+      var _ref7 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          mediaQuery = _ref7.mediaQuery,
+          scope = _ref7.scope;
+
+      return [getStyle({
+        selectors: [selector, customSelector],
+        fns: fns,
+        vars: vars,
+        customVars: customVars,
+        mediaQuery: mediaQuery,
+        scope: scope
+      })];
+    }
+  );
+};
+
+var styler = {
+  add: add,
+  addStyle: addStyle,
+  addToDocument: addToDocument,
+  createAddStyle: createAddStyle,
+  createGetStyle: createGetStyle,
+  getStyle: getStyle,
+  remove: remove
+};
+
+// @ts-check
+
+/**
+ * @typedef {(selector: string, vars: object, customVars?: object) => Array<object>} StyleFn
+ * @typedef {{[s: string]: StyleFn}} StyleCollection
+ */
+
+/**
+ * Wraps an object with a selector.
+ * @param {string} selector 
+ * @param {object} o 
+ * @returns {object}
+ */
+var sel = function sel(selector, o) {
+  return _defineProperty({}, selector, o);
+};
+/**
+ * Creates a right-to-left selector.
+ * @param {string} selector
+ * @returns {string}
+ */
+
+var selectorRTL = function selectorRTL(selector) {
+  return "*[dir=rtl] ".concat(selector, ", .pe-rtl ").concat(selector);
+};
+/**
+ * Creates a rgba CSS color string.
+ * @param {string} colorStr 
+ * @param {number} opacity 
+ * @returns {string}
+ */
+
+var rgba = function rgba(colorStr) {
+  var opacity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  return "rgba(".concat(colorStr, ", ").concat(opacity, ")");
+};
+/**
+ * @param {object} params
+ * @param {string} [params.selector]
+ * @param {string} [params.scopedSelector]
+ * @param {StyleCollection} [params.varFns]
+ * @param {StyleCollection} [params.customVarFns]
+ * @param {StyleFn} [params.superStyle]
+ * @param {(_:any) => StyleCollection} [params.varMixin]
+ * @param {StyleCollection} [params.componentVars]
+ * @param {StyleCollection} [params.customVars]
+ * @returns {Array<object>}
+ */
+
+var createStyle = function createStyle(_ref2) {
+  var varFns = _ref2.varFns,
+      customVarFns = _ref2.customVarFns,
+      superStyle = _ref2.superStyle,
+      varMixin = _ref2.varMixin,
+      selector = _ref2.selector,
+      scopedSelector = _ref2.scopedSelector,
+      _ref2$componentVars = _ref2.componentVars,
+      componentVars = _ref2$componentVars === void 0 ? {} : _ref2$componentVars,
+      customVars = _ref2.customVars;
+
+  var allVars = _objectSpread({}, componentVars, customVars);
+
+  var currentVars = customVars ? customVars : allVars;
+
+  var general_styles = componentVars.general_styles,
+      otherVars = _objectWithoutProperties(componentVars, ["general_styles"]);
+
+  var baseLayout = superStyle !== undefined ? customVars !== undefined ? superStyle(selector, componentVars, customVars) : superStyle(selector, otherVars) : [];
+
+  var fns = _objectSpread({}, customVars ? customVarFns : {}, varFns);
+
+  return baseLayout.concat(Object.keys(varMixin(currentVars)).map(function (v) {
+    return fns && fns[v] !== undefined ? fns[v](scopedSelector, allVars) : null;
+  }).filter(function (s) {
+    return s;
+  }));
+};
+/**
+ * 
+ * @param {object} params
+ * @param {StyleCollection} [params.varFns]
+ * @param {StyleCollection} [params.customVarFns]
+ * @param {StyleFn} [params.superLayout]
+ * @param {(_:any) => StyleCollection} [params.varMixin]
+ * @returns {StyleFn}
+ */
+
+
+var createLayout = function createLayout(_ref3) {
+  var varFns = _ref3.varFns,
+      customVarFns = _ref3.customVarFns,
+      superLayout = _ref3.superLayout,
+      _ref3$varMixin = _ref3.varMixin,
+      varMixin = _ref3$varMixin === void 0 ? function (o) {
+    return o;
+  } : _ref3$varMixin;
+  return (
+    /**
+     * @param {string} selector
+     * @param {object} componentVars
+     * @param {object} [customVars]
+     * @returns {Array<object>}
+     */
+    function (selector, componentVars, customVars) {
+      return createStyle({
+        varFns: varFns,
+        customVarFns: customVarFns,
+        superStyle: superLayout,
+        varMixin: varMixin,
+        selector: selector,
+        scopedSelector: selector,
+        componentVars: componentVars,
+        customVars: customVars
+      });
+    }
+  );
+};
+/**
+ * 
+ * @param {object} params
+ * @param {string} [params.selector]
+ * @param {string} [params.scopedSelector]
+ * @param {object} [params.componentVars]
+ * @param {object} [params.customVars]  
+ * @param {StyleFn} [params.superColor]
+ * @param {StyleCollection} [params.varFns]
+ * @param {(_:any) => StyleCollection} [params.varMixin]
+ * @returns {Array<object>}
+ */
+
+var createColorStyle = function createColorStyle(_ref4) {
+  var selector = _ref4.selector,
+      scopedSelector = _ref4.scopedSelector,
+      componentVars = _ref4.componentVars,
+      customVars = _ref4.customVars,
+      varFns = _ref4.varFns,
+      superColor = _ref4.superColor,
+      varMixin = _ref4.varMixin;
+  return createStyle({
+    varFns: varFns,
+    superStyle: superColor,
+    varMixin: varMixin,
+    selector: selector,
+    scopedSelector: scopedSelector,
+    componentVars: componentVars,
+    customVars: customVars
+  });
+};
+/**
+ * 
+ * @param {object} params 
+ * @param {Array<string>} params.scopes
+ * @param {string} params.selector
+ * @param {boolean} params.isNoTouch
+* @returns {string}
+ */
+
+var appendPseudoClass = function appendPseudoClass(_ref5) {
+  var scopes = _ref5.scopes,
+      selector = _ref5.selector,
+      isNoTouch = _ref5.isNoTouch;
+  return isNoTouch ? scopes.map(function (s) {
+    return s + selector + ":hover";
+  }).join(",") : scopes.map(function (s) {
+    return s + selector;
+  }).join(",");
+};
+/**
+ * 
+ * @param {object} params 
+ * @param {Array<string>} params.scopes
+ * @param {string} params.selector
+ * @param {boolean} [params.isNoTouch]
+ * @returns {string}
+ */
+
+
+var createScopedSelector = function createScopedSelector(_ref6) {
+  var scopes = _ref6.scopes,
+      selector = _ref6.selector,
+      _ref6$isNoTouch = _ref6.isNoTouch,
+      isNoTouch = _ref6$isNoTouch === void 0 ? false : _ref6$isNoTouch;
+  return selector.split(/\s*,\s*/).map(function (s) {
+    return appendPseudoClass({
+      scopes: scopes,
+      selector: s,
+      isNoTouch: isNoTouch
+    });
+  }).join("");
+};
+/**
+ * @typedef {object} ColorScopeObject
+ * @property {Array<string>} scopes
+ * @property {string} varFnName
+ * @property {boolean} isNoTouch
+ */
+
+/**
+ * @type {Array<ColorScopeObject>} colorScopes
+ */
+
+
+var colorScopes = [{
+  // has/inside dark tone
+  scopes: [".pe-dark-tone", ".pe-dark-tone "],
+  varFnName: "darkTintFns",
+  isNoTouch: false
+}, {
+  // normal, has/inside light tone
+  scopes: ["", ".pe-light-tone", ".pe-light-tone "],
+  varFnName: "lightTintFns",
+  isNoTouch: false
+}, {
+  // has/inside dark tone
+  scopes: [".pe-no-touch .pe-dark-tone "],
+  varFnName: "darkTintHoverFns",
+  isNoTouch: true
+}, {
+  // normal, has/inside light tone
+  scopes: [".pe-no-touch ", ".pe-no-touch .pe-light-tone "],
+  varFnName: "lightTintHoverFns",
+  isNoTouch: true
+}];
+/**
+ * 
+ * @param {object} params
+ * @param {object} [params.varFns]
+ * @param {StyleFn} [params.superColor]
+ * @param {(_:any) => StyleCollection} [params.varMixin]
+ * @returns {StyleFn}
+ */
+
+var createColor = function createColor(_ref7) {
+  var _ref7$varFns = _ref7.varFns,
+      varFns = _ref7$varFns === void 0 ? {} : _ref7$varFns,
+      superColor = _ref7.superColor,
+      _ref7$varMixin = _ref7.varMixin,
+      varMixin = _ref7$varMixin === void 0 ? function (o) {
+    return o;
+  } : _ref7$varMixin;
+  return (
+    /**
+     * @param {string} selector
+     * @param {object} componentVars
+     * @param {object} [customVars]
+     * @returns {Array<object>}
+     */
+    function (selector, componentVars, customVars) {
+      return colorScopes.map(function (_ref8) {
+        var scopes = _ref8.scopes,
+            varFnName = _ref8.varFnName,
+            isNoTouch = _ref8.isNoTouch;
+        return createColorStyle({
+          selector: selector,
+          scopedSelector: createScopedSelector({
+            scopes: scopes,
+            selector: selector,
+            isNoTouch: isNoTouch
+          }),
+          componentVars: componentVars,
+          customVars: customVars,
+          varFns: varFns[varFnName],
+          superColor: superColor,
+          varMixin: varMixin
+        });
+      });
+    }
+  );
+};
+/**
+ * @param {object} vars 
+ * @param {object} behaviorVars
+ * @returns {string|undefined} 
+ */
+
+var createMarkerValue = function createMarkerValue(vars, behaviorVars) {
+  var marker = Object.keys(behaviorVars).filter(function (bvar) {
+    return vars[bvar] === true;
+  }).join(".");
+  return marker ? "\"".concat(marker, "\"") : undefined;
+};
+/**
+ * Creates a CSS style from which the key can be read from the `content` property.
+ * @param {object} vars 
+ * @param {object} behaviorVars 
+ * @returns {object}
+ */
+
+
+var createMarker = function createMarker(vars, behaviorVars) {
+  if (!vars) {
+    console.error("createMarker requires param `vars`"); // eslint-disable-line no-console
+  }
+
+  var value = createMarkerValue(vars, behaviorVars);
+  return value ? {
+    ":before": {
+      content: value,
+      display: "none"
+    }
+  } : undefined;
+};
+
+// @ts-check
+/**
+ * @typedef {{[selector:string] : Style | any}} Style
+ */
+
+/**
+ * @type {Array<Style>} classes
+ */
+
+var classes = [{
+  ".layout, .layout.horizontal": flex$1.layout,
+  ".layout.horizontal.inline, .layout.vertical.inline": flex$1.layoutInline,
+  ".layout.horizontal": flex$1.layoutHorizontal,
+  ".layout.horizontal.reverse": flex$1.layoutHorizontalReverse,
+  ".layout.vertical": flex$1.layoutVertical,
+  ".layout.vertical.reverse": flex$1.layoutVerticalReverse,
+  ".layout.wrap": flex$1.layoutWrap,
+  ".layout.wrap.reverse": flex$1.layoutWrapReverse,
+  ".flex": flex$1.flex(1),
+  ".span.flex": {
+    "display": "block"
+  },
+  // for IE 10
+  ".flex.auto-vertical": flex$1.flexAutoVertical,
+  ".flex.auto": flex$1.flexAuto,
+  ".flex.none": flex$1.flexIndex("none"),
+  ".flex.one": flex$1.flexIndex(1),
+  ".flex.two": flex$1.flexIndex(2),
+  ".flex.three": flex$1.flexIndex(3),
+  ".flex.four": flex$1.flexIndex(4),
+  ".flex.five": flex$1.flexIndex(5),
+  ".flex.six": flex$1.flexIndex(6),
+  ".flex.seven": flex$1.flexIndex(7),
+  ".flex.eight": flex$1.flexIndex(8),
+  ".flex.nine": flex$1.flexIndex(9),
+  ".flex.ten": flex$1.flexIndex(10),
+  ".flex.eleven": flex$1.flexIndex(11),
+  ".flex.twelve": flex$1.flexIndex(12),
+  // alignment in cross axis
+  ".layout.start": flex$1.layoutStart,
+  ".layout.center, .layout.center-center": flex$1.layoutCenter,
+  ".layout.end": flex$1.layoutEnd,
+  // alignment in main axis
+  ".layout.start-justified": flex$1.layoutStartJustified,
+  ".layout.center-justified, .layout.center-center": flex$1.layoutCenterJustified,
+  ".layout.end-justified": flex$1.layoutEndJustified,
+  ".layout.around-justified": flex$1.layoutAroundJustified,
+  ".layout.justified": flex$1.layoutJustified,
+  // self alignment
+  ".self-start": flex$1.selfStart,
+  ".self-center": flex$1.selfCenter,
+  ".self-end": flex$1.selfEnd,
+  ".self-stretch": flex$1.selfStretch
+}];
+
+// @ts-check
+
+/**
+ * @typedef {{[selector:string] : object}} Style
+ * @type {Array<Style>} classes
+ */
+var classes$1 = [{
+  ".pe-block": {
+    display: "block"
+  },
+  ".pe-inline-block": {
+    display: "inline-block"
+  },
+  // ie support for hidden
+  ".pe-hidden": {
+    display: "none !important"
+  },
+  ".pe-relative": {
+    position: "relative"
+  },
+  ".pe-absolute": {
+    position: "absolute"
+  },
+  ".pe-fit": {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0
+  },
+  ".pe-fullbleed": {
+    margin: 0,
+    height: "100vh"
+  },
+  ".pe-rtl": {
+    direction: "rtl"
+  },
+  // flip directional icon if needed
+  "*[dir=rtl], .pe-rtl ": {
+    " .pe-rtl--flip": {
+      transform: "scaleX(-1)"
+    }
+  }
+}];
+
+// @ts-check
+/**
+ * @typedef {{[selector:string] : object}} Style
+ * 
+
+/**
+ * @type {Array<Style>} layoutStyles
+ */
+
+var layoutStyles = [classes, classes$1];
+/**
+ * @returns {void}
+ */
+
+var addLayoutStyles = function addLayoutStyles() {
+  return styler.add("pe-layout", classes, classes$1);
+};
+
+// @ts-check
 
 
 
@@ -9425,6 +12207,11907 @@ var transitionComponent = function transitionComponent(_ref) {
 
 /***/ }),
 
+/***/ "../node_modules/polythene-css-base-spinner/dist/polythene-css-base-spinner.mjs":
+/*!**************************************************************************************!*\
+  !*** ../node_modules/polythene-css-base-spinner/dist/polythene-css-base-spinner.mjs ***!
+  \**************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return baseSpinnerVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-spinner",
+  // elements
+  animation: "pe-spinner__animation",
+  placeholder: "pe-spinner__placeholder",
+  // states
+  animated: "pe-spinner--animated",
+  fab: "pe-spinner--fab",
+  large: "pe-spinner--large",
+  medium: "pe-spinner--medium",
+  permanent: "pe-spinner--permanent",
+  raised: "pe-spinner--raised",
+  regular: "pe-spinner--regular",
+  singleColor: "pe-spinner--single-color",
+  small: "pe-spinner--small",
+  visible: "pe-spinner--visible"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [];
+  } // eslint-disable-line no-unused-vars
+
+};
+
+var tintFns = function tintFns(tint) {
+  return _defineProperty({}, "color_" + tint + "_raised_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-spinner--raised": {
+        backgroundColor: vars$$1["color_" + tint + "_raised_background"]
+      }
+    })];
+  });
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var sizes = function sizes(size) {
+  return {
+    width: size + "px",
+    height: size + "px"
+  };
+};
+
+var raisedSize = function raisedSize(size) {
+  var padding = Math.round(size * 0.25); // only use rounded number to prevent sub-pixel alignment issues
+
+  var paddedSize = size + padding * 2;
+  return {
+    width: paddedSize + "px",
+    height: paddedSize + "px",
+    padding: padding + "px"
+  };
+};
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      transitionProperty: "all",
+      ".pe-spinner--raised": {
+        position: "relative",
+        borderRadius: "50%"
+      }
+    })];
+  },
+  animation_show_css: function animation_show_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-spinner--visible, &.pe-spinner--permanent": [vars$$1.animation_show_css]
+    })];
+  },
+  animation_hide_css: function animation_hide_css(selector, vars$$1) {
+    return _defineProperty({}, selector, vars$$1.animation_hide_css);
+  },
+  animation_delay: function animation_delay(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      transitionDelay: vars$$1.animation_delay
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      transitionDuration: vars$$1.animation_duration
+    })];
+  },
+  animation_timing_function: function animation_timing_function(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      transitionTimingFunction: vars$$1.animation_timing_function
+    })];
+  },
+  size_small: function size_small(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-spinner--small": sizes(vars$$1.size_small),
+      ".pe-spinner--raised": {
+        ".pe-spinner--small": raisedSize(vars$$1.size_small)
+      }
+    })];
+  },
+  size_regular: function size_regular(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-spinner--regular": sizes(vars$$1.size_regular),
+      ".pe-spinner--raised": {
+        ".pe-spinner--regular": raisedSize(vars$$1.size_regular)
+      }
+    })];
+  },
+  size_medium: function size_medium(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-spinner--medium": sizes(vars$$1.size_medium),
+      ".pe-spinner--raised": {
+        ".pe-spinner--medium": raisedSize(vars$$1.size_medium)
+      }
+    })];
+  },
+  size_large: function size_large(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-spinner--large": sizes(vars$$1.size_large),
+      ".pe-spinner--raised": {
+        ".pe-spinner--large": raisedSize(vars$$1.size_large)
+      }
+    })];
+  },
+  size_fab: function size_fab(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-spinner--fab": sizes(vars$$1.size_fab),
+      ".pe-spinner--raised": {
+        ".pe-spinner--fab": raisedSize(vars$$1.size_fab)
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+/**
+ * @type {BaseSpinnerVars} baseSpinnerVars
+ */
+
+var baseSpinnerVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_delay: "0s",
+  animation_duration: ".220s",
+  animation_hide_css: "opacity: 0;",
+  animation_show_css: "opacity: 1;",
+  animation_timing_function: "ease-in-out",
+  size_fab: 7 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  size_large: 6 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  size_medium: 5 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  size_regular: 4 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  size_small: 3 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  color_light_raised_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background),
+  color_dark_raised_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background) // also use light background with dark tone
+
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, baseSpinnerVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, baseSpinnerVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: baseSpinnerVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-button-group/dist/polythene-css-button-group.mjs":
+/*!**************************************************************************************!*\
+  !*** ../node_modules/polythene-css-button-group/dist/polythene-css-button-group.mjs ***!
+  \**************************************************************************************/
+/*! exports provided: addStyle, getStyle, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return buttonGroupVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+
+
+var classes = {
+  component: "pe-button-group"
+};
+
+// @ts-check
+var varFns = {
+  /**
+   * @param {string} selector
+   */
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      display: "flex"
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+
+/**
+ * @typedef {import("../index").ButtonGroupVars} ButtonGroupVars
+ */
+
+/**
+ * @type {ButtonGroupVars} buttonGroupVars
+ */
+var buttonGroupVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true
+};
+
+// @ts-check
+var fns = [layout];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, buttonGroupVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, buttonGroupVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: buttonGroupVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-button/dist/polythene-css-button.mjs":
+/*!**************************************************************************!*\
+  !*** ../node_modules/polythene-css-button/dist/polythene-css-button.mjs ***!
+  \**************************************************************************/
+/*! exports provided: addStyle, getStyle, containedButtonVars, containedButtonColor, containedButtonLayout, textButtonColor, textButtonLayout, textButtonVars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle$2; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle$2; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "containedButtonVars", function() { return containedButtonVars$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "containedButtonColor", function() { return containedButtonColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "containedButtonLayout", function() { return containedButtonLayout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textButtonColor", function() { return textButtonColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textButtonLayout", function() { return textButtonLayout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textButtonVars", function() { return textButtonVars$1; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_css_shadow__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-css-shadow */ "../node_modules/polythene-css-shadow/dist/polythene-css-shadow.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+
+var classes = {
+  component: "pe-text-button",
+  super: "pe-button",
+  row: "pe-button-row",
+  // elements      
+  content: "pe-button__content",
+  label: "pe-button__label",
+  textLabel: "pe-button__text-label",
+  wash: "pe-button__wash",
+  dropdown: "pe-button__dropdown",
+  // states      
+  border: "pe-button--border",
+  contained: "pe-button--contained",
+  disabled: "pe-button--disabled",
+  dropdownClosed: "pe-button--dropdown-closed",
+  dropdownOpen: "pe-button--dropdown-open",
+  extraWide: "pe-button--extra-wide",
+  hasDropdown: "pe-button--dropdown",
+  highLabel: "pe-button--high-label",
+  inactive: "pe-button--inactive",
+  raised: "pe-button--raised",
+  selected: "pe-button--selected",
+  separatorAtStart: "pe-button--separator-start"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      userSelect: "none",
+      "-moz-user-select": "none",
+      outline: "none",
+      padding: 0,
+      textDecoration: "none",
+      textAlign: "center",
+      cursor: "pointer",
+      ".pe-button--selected, &.pe-button--disabled, &.pe-button--inactive": {
+        cursor: "default",
+        pointerEvents: "none"
+      },
+      " .pe-button__content": {
+        position: "relative",
+        borderRadius: "inherit"
+      },
+      " .pe-button__label": {
+        position: "relative",
+        display: "block",
+        borderRadius: "inherit",
+        pointerEvents: "none"
+      },
+      " .pe-button__wash": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+        zIndex: 0,
+        borderRadius: "inherit",
+        pointerEvents: "none"
+      }]
+    }), {
+      ".pe-button-row": {
+        // prevent inline block style to add extra space:
+        fontSize: 0,
+        lineHeight: 0
+      }
+    }];
+  },
+  row_margin_h: function row_margin_h(selector, vars$$1) {
+    return [{
+      ".pe-button-row": _defineProperty({
+        margin: "0 -".concat(vars$$1.row_margin_h, "px")
+      }, " ".concat(selector), {
+        margin: "0 ".concat(vars$$1.row_margin_h, "px")
+      })
+    }];
+  }
+};
+var superLayout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+var _border = function border(selector, vars$$1, tint) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ":not(.pe-button--disabled)": {
+      " .pe-button__content": {
+        borderColor: vars$$1["color_" + tint + "_border"]
+      }
+    }
+  });
+};
+
+var generalFns = {
+  general_styles: function general_styles() {
+    return [];
+  }
+};
+/**
+ * @param {tint} tint 
+ */
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--disabled)": {
+        "&, &:link, &:visited": {
+          color: vars$$1["color_" + tint + "_text"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--disabled": {
+        color: vars$$1["color_" + tint + "_disabled_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--disabled):not(.pe-button--selected)": {
+        " .pe-button__content": {
+          backgroundColor: vars$$1["color_" + tint + "_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_active_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--disabled)": {
+        ".pe-button--selected": {
+          " .pe-button__content": {
+            backgroundColor: vars$$1["color_" + tint + "_active_background"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--disabled": {
+        " .pe-button__content": {
+          backgroundColor: vars$$1["color_" + tint + "_disabled_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_border", function (selector, vars$$1) {
+    return [_border("".concat(selector, ".pe-button--border"), vars$$1, tint)];
+  }), _defineProperty(_ref, "border", function border(selector, vars$$1) {
+    return [_border(selector, vars$$1, tint)];
+  }), _defineProperty(_ref, "color_" + tint + "_active_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--border.pe-button--selected": {
+        " .pe-button__content": {
+          borderColor: vars$$1["color_" + tint + "_active_border"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--border.pe-button--disabled": {
+        " .pe-button__content": {
+          borderColor: vars$$1["color_" + tint + "_disabled_border"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_icon", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__dropdown": {
+        color: vars$$1["color_" + tint + "_icon"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_separator", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--separator-start": {
+        " .pe-button__content": {
+          borderColor: vars$$1["color_" + tint + "_separator"]
+        }
+      }
+    })];
+  }), _ref;
+};
+/**
+ * @param {tint} tint 
+ */
+
+
+var hoverTintFns = function hoverTintFns(tint) {
+  var _ref2;
+
+  return _ref2 = {}, _defineProperty(_ref2, "color_" + tint + "_hover", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--disabled):not(.pe-button--selected)": {
+        color: vars$$1["color_" + tint + "_hover"]
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_hover_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--disabled):not(.pe-button--selected)": {
+        " .pe-button__content": {
+          borderColor: vars$$1["color_" + tint + "_hover_border"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_wash_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--disabled):not(.pe-button--selected)": {
+        " .pe-button__wash": {
+          backgroundColor: vars$$1["color_" + tint + "_wash_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_hover_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--disabled):not(.pe-button--selected)": {
+        " .pe-button__content": {
+          backgroundColor: vars$$1["color_" + tint + "_hover_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_hover_icon", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__dropdown": {
+        color: vars$$1["color_" + tint + "_hover_icon"]
+      }
+    })];
+  }), _ref2;
+};
+
+var lightTintFns = _objectSpread({}, generalFns, tintFns("light"));
+
+var darkTintFns = _objectSpread({}, generalFns, tintFns("dark"));
+
+var lightTintHoverFns = hoverTintFns("light");
+var darkTintHoverFns = hoverTintFns("dark");
+var superColor = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns,
+    lightTintHoverFns: lightTintHoverFns,
+    darkTintHoverFns: darkTintHoverFns
+  }
+});
+
+/** 
+ * @param {boolean} isRTL 
+ */
+
+var alignSide = function alignSide(isRTL) {
+  return function () {
+    return {
+      ".pe-button--separator-start .pe-button__content": {
+        borderStyle: isRTL ? "none solid none none" : "none none none solid"
+      }
+    };
+  };
+};
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var line_height_label_padding_v = function line_height_label_padding_v(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-button__dropdown": {
+      minHeight: "calc((1em * ".concat(vars$$1.line_height, ") + 2 * ").concat(vars$$1.label_padding_v, "px)")
+    }
+  });
+};
+
+var outer_padding_v_label_padding_v = function outer_padding_v_label_padding_v(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-button--high-label": {
+      padding: 0,
+      " .pe-button__label": {
+        padding: vars$$1.outer_padding_v + vars$$1.label_padding_v + "px 0"
+      }
+    }
+  });
+};
+
+var line_height_outer_padding_v_label_padding_v = function line_height_outer_padding_v_label_padding_v(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-button--high-label": {
+      " .pe-button__label, .pe-button__dropdown": {
+        minHeight: "calc((1em * ".concat(vars$$1.line_height, ") + 2 * ").concat(vars$$1.outer_padding_v + vars$$1.label_padding_v, "px)")
+      }
+    }
+  });
+};
+
+var border_radius_button_group = function border_radius_button_group(selector, vars$$1, isRTL) {
+  var _peButton__content, _peButton__content2;
+
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-button__content": {
+      borderRadius: vars$$1.border_radius + "px"
+    },
+    ":not(:first-child)": {
+      " .pe-button__content": (_peButton__content = {}, _defineProperty(_peButton__content, isRTL ? "borderTopRightRadius" : "borderTopLeftRadius", 0), _defineProperty(_peButton__content, isRTL ? "borderBottomRightRadius" : "borderBottomLeftRadius", 0), _peButton__content)
+    },
+    ":not(:last-child)": {
+      " .pe-button__content": (_peButton__content2 = {}, _defineProperty(_peButton__content2, isRTL ? "borderTopLeftRadius" : "borderTopRightRadius", 0), _defineProperty(_peButton__content2, isRTL ? "borderBottomLeftRadius" : "borderBottomRightRadius", 0), _peButton__content2)
+    }
+  });
+};
+
+var _border$1 = function border(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-button__wash, .pe-ripple": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(-1),
+    " .pe-button__content": {
+      borderStyle: "solid",
+      paddingLeft: vars$$1.padding_h_border + "px",
+      paddingRight: vars$$1.padding_h_border + "px"
+    }
+  });
+};
+
+var _border_width = function border_width(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-button__content": {
+      borderWidth: vars$$1.border_width + "px"
+    },
+    " .pe-button-group & + &": {
+      marginLeft: -vars$$1.border_width + "px"
+    }
+  });
+};
+
+var _contained = function contained(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-button__content": {
+      paddingLeft: vars$$1.padding_h + "px",
+      paddingRight: vars$$1.padding_h + "px"
+    },
+    " .pe-button__wash": {
+      display: "none"
+    }
+  });
+};
+
+var varFns$1 = _objectSpread({
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(), {
+      display: "inline-block",
+      background: "transparent",
+      border: "none",
+      " .pe-button__content": {
+        position: "relative",
+        borderWidth: "1px",
+        // default
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      },
+      ".pe-button--border": _border$1(selector, vars$$1),
+      " .pe-button__label, .pe-button__dropdown": {
+        whiteSpace: "pre",
+        userSelect: "none",
+        "-moz-user-select": "none"
+      },
+      " .pe-button__text-label": {
+        display: "inline-block",
+        lineHeight: 1
+      },
+      ".pe-button--dropdown": {
+        minWidth: "0",
+        // IE 11 does not recognize "initial" here
+        " .pe-button__dropdown": {
+          position: "relative"
+        },
+        " .pe-svg": {
+          position: "absolute",
+          left: 0,
+          top: "50%"
+        },
+        " .pe-button__label + .pe-button__dropdown": {
+          marginLeft: "6px",
+          minWidth: 0
+        }
+      },
+      " .pe-button-group &": {
+        minWidth: 0
+      },
+      " .pe-button__dropdown .pe-svg": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("transform"),
+      ".pe-button--dropdown-open": {
+        " .pe-button__dropdown .pe-svg": {
+          transform: "rotate(-180deg)"
+        }
+      }
+    }]), [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), alignRight())]];
+  },
+  border_radius: function border_radius(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        borderRadius: vars$$1.border_radius + "px"
+      }
+    }), border_radius_button_group(".pe-button-group ".concat(selector), vars$$1, false), border_radius_button_group(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(".pe-button-group ".concat(selector)), vars$$1, true)];
+  },
+  border_width: function border_width(selector, vars$$1) {
+    return [_border_width(selector, vars$$1)];
+  },
+  min_width: function min_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      minWidth: vars$$1.min_width + "px"
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content, .pe-button__wash": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("all", vars$$1.animation_duration)]
+    })];
+  },
+  padding_h: function padding_h(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        padding: "0 " + vars$$1.padding_h + "px",
+        " .pe-button__dropdown": {
+          minWidth: "calc(36px - 2 * ".concat(vars$$1.padding_h, "px)")
+        },
+        ".pe-button--dropdown": {
+          " .pe-button__label + .pe-button__dropdown": {
+            marginRight: "calc(7px - ".concat(vars$$1.padding_h, "px)")
+          }
+        }
+      }
+    })];
+  },
+  padding_h_extra_wide: function padding_h_extra_wide(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--extra-wide .pe-button__content": {
+        padding: "0 " + vars$$1.padding_h_extra_wide + "px"
+      }
+    })];
+  },
+  label_padding_v: function label_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__label": {
+        padding: vars$$1.label_padding_v + "px 0"
+      },
+      ".pe-button--border": {
+        " .pe-button__label": {
+          padding: vars$$1.label_padding_v - 1 + "px 0"
+        }
+      }
+    }), line_height_label_padding_v(selector, vars$$1), outer_padding_v_label_padding_v(selector, vars$$1), line_height_outer_padding_v_label_padding_v(selector, vars$$1)];
+  },
+  font_weight: function font_weight(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__label": {
+        fontWeight: vars$$1.font_weight
+      }
+    })];
+  },
+  text_transform: function text_transform(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__label": {
+        textTransform: vars$$1.text_transform
+      }
+    })];
+  },
+  font_size: function font_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__label, .pe-button__dropdown": {
+        fontSize: vars$$1.font_size + "px"
+      }
+    })];
+  },
+  line_height: function line_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__label, .pe-button__dropdown": {
+        lineHeight: vars$$1.line_height
+      }
+    }), line_height_label_padding_v(selector, vars$$1), line_height_outer_padding_v_label_padding_v(selector, vars$$1)];
+  },
+  dropdown_icon_size: function dropdown_icon_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--dropdown": {
+        " .pe-button__dropdown": {
+          width: vars$$1.dropdown_icon_size + "px"
+        },
+        " .pe-svg": {
+          width: vars$$1.dropdown_icon_size + "px",
+          height: vars$$1.dropdown_icon_size + "px",
+          marginTop: -vars$$1.dropdown_icon_size / 2 + "px"
+        }
+      }
+    })];
+  },
+  outer_padding_v: function outer_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      padding: vars$$1.outer_padding_v + "px 0",
+      ".pe-button--high-label": {
+        padding: 0
+      }
+    }), outer_padding_v_label_padding_v(selector, vars$$1), line_height_outer_padding_v_label_padding_v(selector, vars$$1)];
+  },
+  separator_width: function separator_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--separator-start": {
+        " .pe-button__content": {
+          borderWidth: vars$$1.separator_width + "px"
+        }
+      }
+    })];
+  },
+  letter_spacing: function letter_spacing(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      letterSpacing: vars$$1.letter_spacing + "px"
+    })];
+  },
+  // Theme vars
+  border: function border(selector, vars$$1) {
+    return vars$$1.border && _border$1(selector, vars$$1);
+  },
+  contained: function contained(selector, vars$$1) {
+    return vars$$1.contained && _contained(selector, vars$$1);
+  }
+}, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_1__["sharedVarFns"]);
+
+var superLayout$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns$1
+});
+
+var themeVars = _objectSpread({
+  border: false,
+  contained: true
+}, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_1__["sharedVars"]);
+/**
+ * @type {ContainedButtonVars} containedButtonVars
+ */
+
+var containedButtonVars = _objectSpread({
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  padding_h: 4 * polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].grid_unit,
+  // 16
+  color_light_background: "#fff",
+  color_light_disabled_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_background_disabled),
+  color_light_wash_background: "transparent",
+  color_dark_active_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary_dark),
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary),
+  color_dark_disabled_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_background_disabled),
+  color_dark_wash_background: "transparent"
+}, themeVars);
+
+var touch_height = polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].unit_touch_height; // 48
+
+var height = 36;
+var border_width = 1;
+
+var themeVars$1 = _extends({}, {
+  border: false,
+  contained: false
+}, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_1__["sharedVars"]);
+
+var borderVars = {
+  border_width: border_width,
+  padding_h_border: containedButtonVars.padding_h,
+  color_light_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_border_medium),
+  // only specify this variable to get all 4 states
+  // color_light_hover_border:             "transparent",
+  // color_light_active_border:            "transparent",
+  color_light_disabled_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_text_disabled),
+  //
+  color_dark_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_border_medium),
+  // only specify this variable to get all 4 states
+  // color_dark_hover_border:              "transparent",
+  // color_dark_active_border:             "transparent",
+  color_dark_disabled_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_text_disabled)
+};
+/**
+ * @type {TextButtonVars} textButtonVars
+ */
+
+var textButtonVars = _objectSpread({
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_duration: polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].animation_duration,
+  border_radius: polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].unit_item_border_radius,
+  dropdown_icon_size: 24,
+  font_size: 14,
+  font_weight: 500,
+  label_padding_v: 11,
+  letter_spacing: 0.75,
+  line_height: 1,
+  min_width: 8 * polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].grid_unit_component,
+  outer_padding_v: (touch_height - height) / 2,
+  // (48 - 36) / 2 = 6
+  padding_h: 2 * polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].grid_unit,
+  // 8
+  padding_h_extra_wide: 6 * polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].grid_unit,
+  // 24
+  row_margin_h: polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].grid_unit,
+  separator_width: border_width,
+  text_transform: "uppercase",
+  color_light_background: "transparent",
+  color_light_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_text_primary),
+  color_light_wash_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_background_hover),
+  color_light_active_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_background_active),
+  color_light_disabled_background: "transparent",
+  color_light_disabled_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_text_disabled),
+  color_light_icon: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_text_secondary),
+  color_light_separator: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_border_light),
+  color_dark_background: "transparent",
+  color_dark_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_text_primary),
+  color_dark_wash_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_background_hover),
+  color_dark_active_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_background_active),
+  color_dark_disabled_background: "transparent",
+  color_dark_disabled_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_text_disabled),
+  color_dark_icon: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_text_secondary),
+  color_dark_separator: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_border_light)
+}, borderVars, themeVars$1);
+
+// @ts-check
+var fns = [superLayout$1, superColor];
+var superFns = [superLayout];
+var superSelector = ".".concat(classes.super);
+var selector = ".".concat(classes.component);
+/**
+ * @param {string} customSelector 
+ * @param {object} [customVars]
+ * @param {object} [scoping]
+ * @param {string} [scoping.mediaQuery]
+ * @param {string} [scoping.scope]
+ */
+
+var addStyle = function addStyle(customSelector, customVars) {
+  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref$mediaQuery = _ref.mediaQuery,
+      mediaQuery = _ref$mediaQuery === void 0 ? "" : _ref$mediaQuery,
+      _ref$scope = _ref.scope,
+      scope = _ref$scope === void 0 ? "" : _ref$scope;
+
+  var finalVars = customVars && customVars.contained ? containedButtonVars : textButtonVars;
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [superSelector, customSelector],
+    fns: superFns,
+    vars: finalVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [selector, customSelector],
+    fns: fns,
+    vars: finalVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+};
+/**
+ * @param {string} [customSelector]
+ * @param {object} [customVars]
+ * @param {object} [scoping]
+ * @param {string} [scoping.mediaQuery]
+ * @param {string} [scoping.scope]
+ */
+
+
+var getStyle = function getStyle() {
+  var customSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var customVars = arguments.length > 1 ? arguments[1] : undefined;
+
+  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref2$mediaQuery = _ref2.mediaQuery,
+      mediaQuery = _ref2$mediaQuery === void 0 ? "" : _ref2$mediaQuery,
+      _ref2$scope = _ref2.scope,
+      scope = _ref2$scope === void 0 ? "" : _ref2$scope;
+
+  var finalVars = customVars && customVars.contained ? containedButtonVars : textButtonVars;
+  return polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [superSelector, customSelector],
+    fns: superFns,
+    vars: finalVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }).concat(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [selector, customSelector],
+    fns: fns,
+    vars: finalVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }));
+};
+
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [superSelector],
+  fns: superFns,
+  vars: textButtonVars
+});
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: textButtonVars
+});
+
+// @ts-check
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  superColor: superColor
+});
+
+// @ts-check
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  superLayout: superLayout$1
+});
+
+// @ts-check
+var fns$1 = [layout, color];
+var selectors = [classes.component, classes.contained].join(" ");
+var selector$1 = ".".concat(selectors.split(/\s/).join("."));
+var addStyle$1 = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector$1, fns$1, containedButtonVars);
+var getStyle$1 = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector$1, fns$1, containedButtonVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector$1],
+  fns: fns$1,
+  vars: containedButtonVars
+});
+
+// @ts-check
+/**
+ * @param {string} customSelector 
+ * @param {object} [customVars]
+ * @param {object} [scoping]
+ * @param {string} [scoping.mediaQuery]
+ * @param {string} [scoping.scope]
+ */
+
+var addStyle$2 = function addStyle$$1(customSelector, customVars) {
+  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref$mediaQuery = _ref.mediaQuery,
+      mediaQuery = _ref$mediaQuery === void 0 ? "" : _ref$mediaQuery,
+      _ref$scope = _ref.scope,
+      scope = _ref$scope === void 0 ? "" : _ref$scope;
+
+  addStyle(customSelector, customVars, {
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+};
+/**
+ * @param {string} [customSelector]
+ * @param {object} [customVars]
+ * @param {object} [scoping]
+ * @param {string} [scoping.mediaQuery]
+ * @param {string} [scoping.scope]
+ */
+
+
+var getStyle$2 = function getStyle$$1() {
+  var customSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var customVars = arguments.length > 1 ? arguments[1] : undefined;
+
+  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref2$mediaQuery = _ref2.mediaQuery,
+      mediaQuery = _ref2$mediaQuery === void 0 ? "" : _ref2$mediaQuery,
+      _ref2$scope = _ref2.scope,
+      scope = _ref2$scope === void 0 ? "" : _ref2$scope;
+
+  return getStyle(customSelector, customVars, {
+    mediaQuery: mediaQuery,
+    scope: scope
+  }).concat(getStyle$1(customSelector, customVars, {
+    mediaQuery: mediaQuery,
+    scope: scope
+  }));
+};
+
+var textButtonVars$1 = textButtonVars;
+var textButtonColor = superColor;
+var textButtonLayout = superLayout$1;
+var containedButtonVars$1 = containedButtonVars;
+var containedButtonColor = color;
+var containedButtonLayout = layout;
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-card/dist/polythene-css-card.mjs":
+/*!**********************************************************************!*\
+  !*** ../node_modules/polythene-css-card/dist/polythene-css-card.mjs ***!
+  \**********************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return cardVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-card",
+  // elements
+  actions: "pe-card__actions",
+  any: "pe-card__any",
+  content: "pe-card__content",
+  header: "pe-card__header",
+  headerTitle: "pe-card__header-title",
+  media: "pe-card__media",
+  mediaDimmer: "pe-card__media__dimmer",
+  overlay: "pe-card__overlay",
+  overlayContent: "pe-card__overlay__content",
+  primary: "pe-card__primary",
+  primaryMedia: "pe-card__primary-media",
+  subtitle: "pe-card__subtitle",
+  text: "pe-card__text",
+  title: "pe-card__title",
+  // states
+  actionsBorder: "pe-card__actions--border",
+  actionsHorizontal: "pe-card__actions--horizontal",
+  actionsJustified: "pe-card__actions--justified",
+  actionsTight: "pe-card__actions--tight",
+  actionsVertical: "pe-card__actions--vertical",
+  mediaCropX: "pe-card__media--crop-x",
+  mediaCropY: "pe-card__media--crop-y",
+  mediaOriginStart: "pe-card__media--origin-start",
+  mediaOriginCenter: "pe-card__media--origin-center",
+  mediaOriginEnd: "pe-card__media--origin-end",
+  mediaLarge: "pe-card__media--large",
+  mediaMedium: "pe-card__media--medium",
+  mediaRatioLandscape: "pe-card__media--landscape",
+  mediaRatioSquare: "pe-card__media--square",
+  mediaRegular: "pe-card__media--regular",
+  mediaSmall: "pe-card__media--small",
+  overlaySheet: "pe-card__overlay--sheet",
+  primaryHasMedia: "pe-card__primary--media",
+  primaryTight: "pe-card__primary--tight",
+  textTight: "pe-card__text--tight"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [];
+  } // eslint-disable-line no-unused-vars
+
+};
+
+var tintFns = function tintFns(tint) {
+  return _defineProperty({}, "color_" + tint + "_main_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      backgroundColor: vars$$1["color_" + tint + "_main_background"]
+    })];
+  });
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var generalFns$1 = {
+  general_styles: function general_styles(selector) {
+    return [];
+  } // eslint-disable-line no-unused-vars
+
+};
+
+var tintFns$1 = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_title_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__title": {
+        color: vars$$1["color_" + tint + "_title_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_subtitle_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__subtitle": {
+        color: vars$$1["color_" + tint + "_subtitle_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__text": {
+        color: vars$$1["color_" + tint + "_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_actions_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__actions--border": {
+        borderTop: "1px solid " + vars$$1["color_" + tint + "_actions_border"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns$1 = _extends({}, generalFns$1, tintFns$1("light"));
+
+var darkTintFns$1 = _extends({}, generalFns$1, tintFns$1("dark"));
+
+var contentColor = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns$1,
+    darkTintFns: darkTintFns$1
+  }
+});
+
+/** 
+ * @param {boolean} isRTL 
+ */
+
+var alignSide = function alignSide(isRTL) {
+  return (// eslint-disable-line no-unused-vars
+
+    /**
+     * @param {string} [selector]
+     * @param {object} [vars]
+     */
+    function (selector, vars$$1) {
+      return {};
+    }
+  );
+}; // eslint-disable-line no-unused-vars
+
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var tight_title_padding_bottom_subtitle_line_height_padding_bottom = function tight_title_padding_bottom_subtitle_line_height_padding_bottom(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-card__primary": {
+      ".pe-card__primary--tight": {
+        " .pe-card__title": {
+          paddingBottom: vars$$1.tight_title_padding_bottom - vars$$1.subtitle_line_height_padding_bottom + "px"
+        }
+      }
+    }
+  });
+};
+
+var title_padding_v_title_padding_h_subtitle_line_height_padding_bottom = function title_padding_v_title_padding_h_subtitle_line_height_padding_bottom(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-card__title": {
+      padding: [vars$$1.title_padding_v, vars$$1.title_padding_h, vars$$1.title_padding_v - vars$$1.subtitle_line_height_padding_bottom, vars$$1.title_padding_h].map(function (v) {
+        return v + "px";
+      }).join(" ")
+    }
+  });
+};
+
+var text_padding_v_text_line_height_padding_top = function text_padding_v_text_line_height_padding_top(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-card__text": {
+      paddingTop: vars$$1.text_padding_v - vars$$1.text_line_height_padding_top + "px"
+    }
+  });
+};
+
+var text_padding_bottom_text_line_height_padding_bottom = function text_padding_bottom_text_line_height_padding_bottom(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-card__text": {
+      "&:last-child": {
+        paddingBottom: vars$$1.text_padding_bottom - vars$$1.text_line_height_padding_bottom + "px"
+      }
+    }
+  });
+};
+
+var tight_text_padding_bottom_text_line_height_padding_bottom = function tight_text_padding_bottom_text_line_height_padding_bottom(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-card__text": {
+      paddingBottom: vars$$1.tight_text_padding_bottom - vars$$1.text_line_height_padding_bottom + "px",
+      ".pe-card__text--tight, &.pe-card__text--tight:last-child": {
+        paddingBottom: vars$$1.tight_text_padding_bottom - vars$$1.text_line_height_padding_bottom + "px"
+      }
+    }
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(vars$$1), {
+      display: "block",
+      position: "relative",
+      "&, a:link, a:visited": {
+        textDecoration: "none"
+      },
+      // Content
+      " .pe-card__content": {
+        position: "relative",
+        borderRadius: "inherit",
+        overflow: "hidden",
+        width: "inherit",
+        height: "inherit"
+      },
+      // Media
+      " .pe-card__media": {
+        position: "relative",
+        overflow: "hidden",
+        borderTopLeftRadius: "inherit",
+        borderTopRightRadius: "inherit",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        ".pe-card__media--landscape": {
+          paddingBottom: 100 / 16 * 9 + "%"
+        },
+        ".pe-card__media--square": {
+          paddingBottom: "100%"
+        },
+        ".pe-card__media--crop-x": {
+          width: "100%",
+          height: "auto",
+          display: "block",
+          ".pe-card__media--origin-start": {
+            backgroundPositionY: "top"
+          },
+          ".pe-card__media--origin-end": {
+            backgroundPositionY: "bottom"
+          }
+        },
+        ".pe-card__media--crop-y": {
+          height: "100%",
+          width: "auto",
+          display: "block",
+          ".pe-card__media--origin-start": {
+            backgroundPositionX: "left"
+          },
+          ".pe-card__media--origin-end": {
+            backgroundPositionX: "right"
+          }
+        },
+        " img, iframe": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+          width: "100%",
+          height: "100%",
+          maxWidth: "none"
+        }],
+        " img": {
+          opacity: 0
+          /* allows right-click on image */
+
+        },
+        " .pe-card__header + .pe-card__media": {
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0
+        }
+      },
+      " .pe-card__primary-media": {
+        margin: "16px"
+      },
+      // Overlay
+      " .pe-card__overlay": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(),
+      // Dimmer
+      " .pe-card__media__dimmer": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+        zIndex: 1,
+        pointerEvents: "all"
+      }],
+      " .pe-card__overlay__content": {
+        position: "absolute",
+        bottom: 0,
+        top: "auto",
+        right: 0,
+        left: 0,
+        zIndex: 2
+      },
+      // Header
+      " .pe-card__header": {
+        " .pe-list-tile__title": {
+          fontSize: "14px",
+          fontWeight: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].font_weight_normal,
+          lineHeight: "20px",
+          marginTop: "2px"
+        },
+        " .pe-list-tile__subtitle": {
+          marginTop: "-1px"
+        }
+      },
+      // Primary 
+      " .pe-card__primary": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, {
+        position: "relative",
+        "& + .pe-card__text": {
+          marginTop: "-16px"
+        }
+      }],
+      // Title
+      " .pe-card__title": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), {
+        fontSize: "24px",
+        lineHeight: "29px"
+      }],
+      // Subtitle
+      " .pe-card__subtitle": {
+        fontSize: "14px",
+        lineHeight: "24px"
+      },
+      // Actions
+      " .pe-card__actions": {
+        ".pe-card__actions--tight": {
+          minHeight: 0,
+          paddingTop: 0,
+          paddingBottom: 0,
+          ".pe-card__actions--vertical": {
+            paddingLeft: 0,
+            paddingRight: 0
+          }
+        },
+        ".pe-card__actions--horizontal": {
+          minHeight: 36 + 2 * 8 + "px",
+          height: 36 + 2 * 8 + "px" // make align-items work on IE 11: https://github.com/philipwalton/flexbugs/issues/231
+
+        },
+        ".pe-card__actions--horizontal:not(.pe-card__actions--justified)": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenter, {
+          " .pe-button": {
+            minWidth: 0
+          }
+        }],
+        ".pe-card__actions--justified": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutJustified],
+        ".pe-card__actions--vertical": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutVertical, {
+          // nested
+          " .pe-card__actions": [{
+            minHeight: 0
+          }],
+          " .pe-button": {
+            height: "36px",
+            padding: 0
+          },
+          " .pe-list": {
+            padding: 0
+          }
+        }]
+      },
+      " .pe-card__primary.pe-card__primary--media + .pe-card__actions": {
+        marginTop: "-16px"
+      },
+      // Text
+      " .pe-card__text": {
+        fontSize: "14px",
+        lineHeight: "24px",
+        " .pe-card__actions + &": {
+          marginTop: "8px"
+        }
+      },
+      " .pe-card__text, .pe-card__primary": {
+        "& + .pe-card__actions:not(:last-child)": {
+          // Lift up so that full button area is usable
+          position: "relative",
+          zIndex: 1
+        }
+      }
+    }, {
+      // RTL
+      "*[dir=rtl], .pe-rtl ": _defineProperty({}, selector, alignRight(vars$$1))
+    }])];
+  },
+  border_radius: function border_radius(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      borderRadius: vars$$1.border_radius + "px",
+      " .pe-card__content .pe-card__media": {
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0
+      },
+      " .pe-card__content .pe-card__media:not(.pe-card__media--square):not(.pe-card__media--landscape)": {
+        ":first-child": {
+          borderTopLeftRadius: vars$$1.border_radius + "px",
+          borderTopRightRadius: vars$$1.border_radius + "px"
+        },
+        ":last-child": {
+          borderBottomLeftRadius: vars$$1.border_radius + "px",
+          borderBottomRightRadius: vars$$1.border_radius + "px"
+        }
+      }
+    })];
+  },
+  image_size_small: function image_size_small(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__primary-media": {
+        " .pe-card__media--small": {
+          width: vars$$1.image_size_small + "px",
+          height: vars$$1.image_size_small + "px"
+        }
+      }
+    })];
+  },
+  image_size_regular: function image_size_regular(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__primary-media": {
+        " .pe-card__media--regular": {
+          width: vars$$1.image_size_regular + "px"
+        }
+      }
+    })];
+  },
+  image_size_medium: function image_size_medium(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__primary-media": {
+        " .pe-card__media--medium": {
+          width: vars$$1.image_size_medium + "px"
+        }
+      }
+    })];
+  },
+  image_size_large: function image_size_large(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__primary-media": {
+        " .pe-card__media--large": {
+          width: vars$$1.image_size_large + "px"
+        }
+      }
+    })];
+  },
+  one_line_height_with_icon: function one_line_height_with_icon(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__header": {
+        height: vars$$1.one_line_height_with_icon + "px"
+      }
+    })];
+  },
+  tight_title_padding_bottom: function tight_title_padding_bottom(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), tight_title_padding_bottom_subtitle_line_height_padding_bottom(selector, vars$$1)];
+  },
+  subtitle_line_height_padding_bottom: function subtitle_line_height_padding_bottom(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), tight_title_padding_bottom_subtitle_line_height_padding_bottom(selector, vars$$1), title_padding_v_title_padding_h_subtitle_line_height_padding_bottom(selector, vars$$1)];
+  },
+  title_padding_v: function title_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), title_padding_v_title_padding_h_subtitle_line_height_padding_bottom(selector, vars$$1)];
+  },
+  title_padding_h: function title_padding_h(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), title_padding_v_title_padding_h_subtitle_line_height_padding_bottom(selector, vars$$1)];
+  },
+  actions_button_margin_h: function actions_button_margin_h(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__actions.pe-card__actions--horizontal": {
+        margin: "0 -".concat(vars$$1.actions_button_margin_h, "px"),
+        " .pe-button": {
+          margin: "0 ".concat(vars$$1.actions_button_margin_h, "px")
+        }
+      }
+    })];
+  },
+  actions_padding_v: function actions_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__actions": {
+        paddingTop: vars$$1.actions_padding_v + "px",
+        paddingBottom: vars$$1.actions_padding_v + "px"
+      }
+    })];
+  },
+  actions_padding_h: function actions_padding_h(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__actions": {
+        paddingRight: vars$$1.actions_padding_h + "px",
+        paddingLeft: vars$$1.actions_padding_h + "px"
+      }
+    })];
+  },
+  actions_button_margin_v: function actions_button_margin_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__actions": {
+        ".pe-card__actions--vertical": {
+          " .pe-button": {
+            marginTop: vars$$1.actions_button_margin_v + "px",
+            marginBottom: vars$$1.actions_button_margin_v + "px"
+          }
+        }
+      }
+    })];
+  },
+  actions_vertical_padding_v: function actions_vertical_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__actions": {
+        ".pe-card__actions--vertical": {
+          ":not(.pe-card__actions--tight)": {
+            paddingTop: vars$$1.actions_vertical_padding_v + "px",
+            paddingBottom: vars$$1.actions_vertical_padding_v + "px"
+          },
+          // nested
+          " .pe-card__actions": [{
+            "&:first-child": {
+              marginTop: -vars$$1.actions_vertical_padding_v + "px"
+            },
+            "&:last-child": {
+              marginBottom: -vars$$1.actions_vertical_padding_v + "px"
+            }
+          }]
+        }
+      }
+    })];
+  },
+  offset_small_padding_v: function offset_small_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__text, .pe-card__primary": {
+        "& + .pe-card__actions:not(:last-child)": {
+          marginTop: -(vars$$1.offset_small_padding_v + 3) + "px"
+        }
+      }
+    })];
+  },
+  text_padding_h: function text_padding_h(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__text": {
+        paddingRight: vars$$1.text_padding_h + "px",
+        paddingLeft: vars$$1.text_padding_h + "px"
+      }
+    })];
+  },
+  text_padding_v: function text_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), text_padding_v_text_line_height_padding_top(selector, vars$$1)];
+  },
+  text_line_height_padding_top: function text_line_height_padding_top(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), text_padding_v_text_line_height_padding_top(selector, vars$$1)];
+  },
+  text_padding_bottom: function text_padding_bottom(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), text_padding_bottom_text_line_height_padding_bottom(selector, vars$$1)];
+  },
+  tight_text_padding_bottom: function tight_text_padding_bottom(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), tight_text_padding_bottom_text_line_height_padding_bottom(selector, vars$$1)];
+  },
+  text_line_height_padding_bottom: function text_line_height_padding_bottom(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), text_padding_bottom_text_line_height_padding_bottom(selector, vars$$1), tight_text_padding_bottom_text_line_height_padding_bottom(selector, vars$$1)];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+var generalFns$2 = {
+  general_styles: function general_styles(selector) {
+    return [];
+  } // eslint-disable-line no-unused-vars
+
+};
+
+var tintFns$2 = function tintFns(tint) {
+  return _defineProperty({}, "color_" + tint + "_overlay_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-card__overlay__content": {
+        backgroundColor: vars$$1["color_" + tint + "_overlay_background"]
+      }
+    })];
+  });
+};
+
+var lightTintFns$2 = _extends({}, generalFns$2, tintFns$2("light"));
+
+var darkTintFns$2 = _extends({}, generalFns$2, tintFns$2("dark"));
+
+var overlayColor = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns$2,
+    darkTintFns: darkTintFns$2
+  }
+});
+
+// @ts-check
+var padding_v = 24;
+var padding_actions_v = 8;
+var actions_button_margin_v = 2;
+/**
+ * @type {CardVars} cardVars
+ */
+
+var cardVars = {
+  general_styles: true,
+  actions_button_margin_h: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit,
+  actions_button_margin_v: actions_button_margin_v,
+  actions_padding_h: 8,
+  actions_padding_v: 0,
+  actions_vertical_padding_v: padding_actions_v - actions_button_margin_v,
+  border_radius: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_block_border_radius,
+  icon_element_width: 72 - 4,
+  image_size_large: 3 * 80,
+  image_size_medium: 2 * 80,
+  image_size_regular: 1.4 * 80,
+  image_size_small: 1 * 80,
+  offset_small_padding_v: padding_v - 16,
+  one_line_height_with_icon: 72,
+  one_line_padding_v: 8,
+  padding_h: 16,
+  subtitle_line_height_padding_bottom: 7,
+  text_line_height_padding_bottom: 7,
+  text_line_height_padding_top: 6,
+  text_padding_bottom: 24,
+  text_padding_h: 16,
+  text_padding_v: 16,
+  tight_text_padding_bottom: 16,
+  tight_title_padding_bottom: 16,
+  title_padding_h: 16,
+  title_padding_v: 24,
+  color_light_main_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background),
+  color_light_title_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary),
+  color_light_subtitle_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_regular),
+  color_light_actions_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_border_light),
+  color_light_overlay_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_overlay_background),
+  color_dark_main_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_background),
+  color_dark_title_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_primary),
+  color_dark_subtitle_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_regular),
+  color_dark_actions_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_border_light),
+  color_dark_overlay_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_background, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_overlay_background)
+};
+
+// @ts-check
+var selector = ".".concat(classes.component);
+var contentSelector = ".".concat(classes.content);
+var overlaySheetSelector = ".".concat(classes.overlaySheet);
+var overlayContentSelector = ".".concat(classes.overlayContent);
+var baseFns = [layout, color];
+var overlayColorFns = [overlayColor];
+var contentColorFns = [contentColor];
+
+var addStyle = function addStyle(customSelector, customVars) {
+  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref$mediaQuery = _ref.mediaQuery,
+      mediaQuery = _ref$mediaQuery === void 0 ? "" : _ref$mediaQuery,
+      _ref$scope = _ref.scope,
+      scope = _ref$scope === void 0 ? "" : _ref$scope;
+
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, selector],
+    fns: baseFns,
+    vars: cardVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, " " + overlaySheetSelector],
+    fns: overlayColorFns,
+    vars: cardVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, " " + contentSelector],
+    fns: contentColorFns,
+    vars: cardVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, " " + overlayContentSelector],
+    fns: contentColorFns,
+    vars: cardVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+};
+
+var getStyle = function getStyle() {
+  var customSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var customVars = arguments.length > 1 ? arguments[1] : undefined;
+
+  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref2$mediaQuery = _ref2.mediaQuery,
+      mediaQuery = _ref2$mediaQuery === void 0 ? "" : _ref2$mediaQuery,
+      _ref2$scope = _ref2.scope,
+      scope = _ref2$scope === void 0 ? "" : _ref2$scope;
+
+  return polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [customSelector, selector],
+    fns: baseFns,
+    vars: cardVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }).concat(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [customSelector, customSelector ? " " : "", overlaySheetSelector],
+    fns: overlayColorFns,
+    vars: cardVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  })).concat(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [customSelector, customSelector ? " " : "", contentSelector],
+    fns: contentColorFns,
+    vars: cardVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  })).concat(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [customSelector, customSelector ? " " : "", overlayContentSelector],
+    fns: contentColorFns,
+    vars: cardVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }));
+};
+
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: baseFns,
+  vars: cardVars
+});
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [overlaySheetSelector],
+  fns: overlayColorFns,
+  vars: cardVars
+});
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [contentSelector],
+  fns: contentColorFns,
+  vars: cardVars
+});
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [overlayContentSelector],
+  fns: contentColorFns,
+  vars: cardVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-checkbox/dist/polythene-css-checkbox.mjs":
+/*!******************************************************************************!*\
+  !*** ../node_modules/polythene-css-checkbox/dist/polythene-css-checkbox.mjs ***!
+  \******************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return checkboxVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-css-selection-control */ "../node_modules/polythene-css-selection-control/dist/polythene-css-selection-control.mjs");
+
+
+
+var classes = {
+  component: "pe-checkbox-control"
+};
+
+// @ts-check
+var color$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  superColor: polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__["color"]
+});
+
+// @ts-check
+var layout$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  superLayout: polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__["layout"]
+});
+
+// @ts-check
+
+/**
+ * @typedef {import("../index").CheckboxVars} CheckboxVars
+ */
+
+/**
+ * @type {CheckboxVars} checkboxVars
+ */
+var checkboxVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true
+};
+
+// @ts-check
+var fns = [layout$1, color$1];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, checkboxVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, checkboxVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: checkboxVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-dialog-pane/dist/polythene-css-dialog-pane.mjs":
+/*!************************************************************************************!*\
+  !*** ../node_modules/polythene-css-dialog-pane/dist/polythene-css-dialog-pane.mjs ***!
+  \************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars, fullScreen */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return dialogPaneVars; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fullScreen", function() { return fullScreen; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-dialog-pane",
+  // elements
+  actions: "pe-dialog-pane__actions",
+  body: "pe-dialog-pane__body",
+  content: "pe-dialog-pane__content",
+  footer: "pe-dialog-pane__footer",
+  header: "pe-dialog-pane__header",
+  title: "pe-dialog-pane__title",
+  // states
+  withHeader: "pe-dialog-pane--header",
+  withFooter: "pe-dialog-pane--footer",
+  headerWithTitle: "pe-dialog-pane__header--title",
+  footerWithButtons: "pe-dialog-pane__footer--buttons",
+  footerHigh: "pe-dialog-pane__footer--high",
+  borderBottom: "pe-dialog-pane--border-bottom",
+  borderTop: "pe-dialog-pane--border-top",
+  fullBleed: "pe-dialog-pane--body-full-bleed"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles() {
+    return [{
+      " .pe-dialog-pane__body": {
+        borderColor: "transparent"
+      }
+    }];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      backgroundColor: vars$$1["color_" + tint + "_background"]
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_title_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog-pane__header .pe-dialog-pane__title": {
+        color: vars$$1["color_" + tint + "_title_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_body_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog-pane__body": {
+        color: vars$$1["color_" + tint + "_body_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_body_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-dialog-pane--border-top .pe-dialog-pane__body": {
+        borderTopColor: vars$$1["color_" + tint + "_body_border"]
+      },
+      ".pe-dialog-pane--border-bottom .pe-dialog-pane__body": {
+        borderBottomStyle: "solid",
+        borderBottomColor: vars$$1["color_" + tint + "_body_border"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var max_width_side_padding_mobile = function max_width_side_padding_mobile(selector, vars$$1) {
+  var _ref3;
+
+  var maxWidthBreakpointMobile = vars$$1.max_width + 2 * vars$$1.side_padding_mobile;
+  return _ref3 = {}, _defineProperty(_ref3, "@media (max-width: " + maxWidthBreakpointMobile + "px)", _defineProperty({}, selector, {
+    maxWidth: "calc(100vw - ".concat(2 * vars$$1.side_padding_mobile, "px)")
+  })), _defineProperty(_ref3, "@media (min-width: " + (maxWidthBreakpointMobile + 1) + "px)", _defineProperty({}, selector, {
+    maxWidth: vars$$1.max_width + "px"
+  })), _ref3;
+};
+
+var padding_header_bottom = function padding_header_bottom(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-dialog-pane__header--title": {
+      paddingTop: vars$$1.padding - 4 + "px",
+      paddingRight: vars$$1.padding + "px",
+      paddingBottom: vars$$1.header_bottom - 4 + "px",
+      paddingLeft: vars$$1.padding + "px"
+    }
+  });
+};
+/*
+Setting an explicit max-height is needed for IE 11
+*/
+
+
+var header_height_footer_height_margin_vertical = function header_height_footer_height_margin_vertical(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-dialog-pane__body": {
+      maxHeight: "calc(100vh - (".concat(vars$$1.header_height, "px + ").concat(vars$$1.footer_height, "px + 2 * ").concat(vars$$1.margin_vertical, "px))")
+    }
+  });
+};
+/**
+ * @param {string} selector 
+ */
+
+
+var fullScreen = function fullScreen(selector) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-dialog-pane": {
+      borderRadius: 0
+    },
+    " .pe-dialog-pane__content": {
+      borderRadius: 0,
+      maxWidth: "none",
+      height: "100vh",
+      width: "100vw",
+      " > *": {
+        flexShrink: 0
+      },
+      " > .pe-dialog-pane__body": {
+        flexShrink: 1,
+        maxHeight: "none" // IE 11 doesn't know "initial"
+
+      }
+    },
+    " .pe-dialog-pane, .pe-dialog-pane__body": {
+      height: "100vh",
+      maxHeight: "100vh",
+      border: "none",
+      maxWidth: "none" // IE 11 doesn't know "initial"
+
+    }
+  });
+};
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutVertical, {
+      position: "relative",
+      borderTopLeftRadius: "inherit",
+      borderTopRightRadius: "inherit",
+      borderBottomLeftRadius: "inherit",
+      borderBottomRightRadius: "inherit",
+      margin: 0,
+      " .pe-dialog-pane__content": {
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        borderTopLeftRadius: "inherit",
+        borderTopRightRadius: "inherit",
+        borderBottomLeftRadius: "inherit",
+        borderBottomRightRadius: "inherit"
+      },
+      " .pe-dialog-pane__title": {
+        fontSize: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].font_size_title + "px",
+        fontWeight: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].font_weight_medium,
+        "& + div": {
+          marginTop: "16px"
+        }
+      },
+      " .pe-dialog-pane__header, .pe-dialog-pane__content > .pe-toolbar": {
+        borderTopLeftRadius: "inherit",
+        borderTopRightRadius: "inherit",
+        " .pe-dialog-pane__title": {
+          width: "100%",
+          wordBreak: "break-all",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap"
+        }
+      },
+      " .pe-dialog-pane__body": [{
+        overflowY: "auto",
+        "-webkit-overflow-scrolling": "touch",
+        " p": {
+          margin: 0
+        },
+        " p + p": {
+          marginTop: "16px"
+        }
+      }],
+      ".pe-dialog-pane--body-full-bleed .pe-dialog-pane__body": {
+        padding: 0,
+        borderStyle: "none"
+      },
+      " .pe-dialog-pane__header--title + .pe-dialog-pane__body": {
+        paddingTop: 0
+      },
+      " .pe-dialog-pane__footer": {
+        "&, > .pe-toolbar": {
+          borderBottomLeftRadius: "inherit",
+          borderBottomRightRadius: "inherit"
+        },
+        ".pe-dialog-pane__footer--high": {
+          // when buttons are stacked vertically
+          paddingBottom: "8px"
+        },
+        ".pe-dialog-pane__footer--buttons": {
+          padding: "0 8px",
+          fontSize: 0 // remove inline block spacing
+
+        }
+      },
+      " .pe-dialog-pane__actions": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutEndJustified, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutWrap],
+      ".pe-dialog-pane--header.pe-dialog-pane--border-top": {
+        " .pe-dialog-pane__body": {
+          borderTopStyle: "solid"
+        }
+      },
+      ".pe-dialog-pane--footer.pe-dialog-pane--border-bottom": {
+        " .pe-dialog-pane__body": {
+          borderBottomStyle: "solid"
+        }
+      }
+    }]), {
+      " .pe-dialog__content.pe-menu__content": _defineProperty({}, " ".concat(selector), {
+        " .pe-dialog-pane__body": {
+          padding: 0,
+          border: "none"
+        }
+      })
+    }];
+  },
+  max_width: function max_width(selector, vars$$1) {
+    return [max_width_side_padding_mobile(selector, vars$$1)];
+  },
+  side_padding_mobile: function side_padding_mobile(selector, vars$$1) {
+    return [max_width_side_padding_mobile(selector, vars$$1)];
+  },
+  min_width: function min_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      minWidth: vars$$1.min_width + "px"
+    })];
+  },
+  margin_vertical: function margin_vertical(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      maxHeight: "calc(100vh - 2 * ".concat(vars$$1.margin_vertical, "px)")
+    }), header_height_footer_height_margin_vertical(selector, vars$$1)];
+  },
+  line_height_title: function line_height_title(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog-pane__title": {
+        lineHeight: vars$$1.line_height_title + "px"
+      }
+    })];
+  },
+  header_height: function header_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog-pane__header, .pe-dialog-pane__content > .pe-toolbar": {
+        minHeight: vars$$1.header_height + "px"
+      }
+    }), header_height_footer_height_margin_vertical(selector, vars$$1)];
+  },
+  footer_height: function footer_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog-pane__footer": {
+        minHeight: vars$$1.footer_height + "px"
+      }
+    }), header_height_footer_height_margin_vertical(selector, vars$$1)];
+  },
+  padding: function padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog-pane__body": {
+        padding: vars$$1.padding + "px"
+      },
+      ".pe-dialog-pane--footer": {
+        " .pe-dialog-pane__body": {
+          paddingBottom: vars$$1.padding - 10 + "px"
+        }
+      }
+    }), padding_header_bottom(selector, vars$$1)];
+  },
+  header_bottom: function header_bottom(selector, vars$$1) {
+    return [padding_header_bottom(selector, vars$$1)];
+  },
+  border_width: function border_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-dialog-pane--header": {
+        " .pe-dialog-pane__body": {
+          // borderTopStyle set in color.js
+          borderWidth: vars$$1.border_width + "px"
+        }
+      },
+      ".pe-dialog-pane--footer": {
+        " .pe-dialog-pane__body": {
+          // borderBottomStyle set in color.js
+          borderWidth: vars$$1.border_width + "px"
+        }
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+/**
+ * @type {DialogPaneVars} dialogPaneVars
+ */
+
+var dialogPaneVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  border_width: 1,
+  footer_height: 52,
+  header_bottom: 20,
+  header_height: 64,
+  line_height_title: 24,
+  max_width: 7 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_menu,
+  // 7 * 56 = 392 
+  min_width: 5 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_menu,
+  // 5 * 56 = 280
+  padding: 3 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // 3 * 8 = 24
+  side_padding_mobile: 6 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit,
+  // 6 * 4 = 48
+  max_height: 8 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  margin_vertical: 8 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  color_light_title_text: "inherit",
+  color_light_body_text: "inherit",
+  color_light_body_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_border_light),
+  color_light_background: "inherit",
+  color_dark_title_text: "inherit",
+  color_dark_body_text: "inherit",
+  color_dark_body_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_border_light),
+  color_dark_background: "inherit"
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, dialogPaneVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, dialogPaneVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: dialogPaneVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-dialog/dist/polythene-css-dialog.mjs":
+/*!**************************************************************************!*\
+  !*** ../node_modules/polythene-css-dialog/dist/polythene-css-dialog.mjs ***!
+  \**************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return dialogVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_css_dialog_pane__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-css-dialog-pane */ "../node_modules/polythene-css-dialog-pane/dist/polythene-css-dialog-pane.mjs");
+/* harmony import */ var polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-css-shadow */ "../node_modules/polythene-css-shadow/dist/polythene-css-shadow.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+
+
+var listTileClasses = {
+  component: "pe-list-tile",
+  // elements
+  content: "pe-list-tile__content",
+  highSubtitle: "pe-list-tile__high-subtitle",
+  primary: "pe-list-tile__primary",
+  secondary: "pe-list-tile__secondary",
+  subtitle: "pe-list-tile__subtitle",
+  title: "pe-list-tile__title",
+  contentFront: "pe-list-tile__content-front",
+  // states  
+  compact: "pe-list-tile--compact",
+  compactFront: "pe-list-tile--compact-front",
+  disabled: "pe-list-tile--disabled",
+  hasFront: "pe-list-tile--front",
+  hasHighSubtitle: "pe-list-tile--high-subtitle",
+  hasSubtitle: "pe-list-tile--subtitle",
+  header: "pe-list-tile--header",
+  hoverable: "pe-list-tile--hoverable",
+  insetH: "pe-list-tile--inset-h",
+  insetV: "pe-list-tile--inset-v",
+  selectable: "pe-list-tile--selectable",
+  selected: "pe-list-tile--selected",
+  rounded: "pe-list-tile--rounded",
+  highlight: "pe-list-tile--highlight",
+  sticky: "pe-list-tile--sticky",
+  navigation: "pe-list-tile--navigation"
+};
+
+var menuClasses = {
+  component: "pe-menu",
+  // elements
+  panel: "pe-menu__panel",
+  content: "pe-menu__content",
+  placeholder: "pe-menu__placeholder",
+  backdrop: "pe-menu__backdrop",
+  // states
+  floating: "pe-menu--floating",
+  origin: "pe-menu--origin",
+  permanent: "pe-menu--permanent",
+  showBackdrop: "pe-menu--backdrop",
+  visible: "pe-menu--visible",
+  width_auto: "pe-menu--width-auto",
+  width_n: "pe-menu--width-",
+  isTopMenu: "pe-menu--top-menu",
+  // lookup
+  listTile: listTileClasses.component,
+  selectedListTile: listTileClasses.selected
+};
+
+var classes = {
+  component: "pe-dialog",
+  // elements
+  placeholder: "pe-dialog__placeholder",
+  holder: "pe-dialog__holder",
+  content: "pe-dialog__content",
+  backdrop: "pe-dialog__backdrop",
+  touch: "pe-dialog__touch",
+  // states
+  fullScreen: "pe-dialog--full-screen",
+  modal: "pe-dialog--modal",
+  open: "pe-dialog--open",
+  // class set to html element
+  visible: "pe-dialog--visible",
+  // class set to dialog element
+  showBackdrop: "pe-dialog--backdrop",
+  transition: "pe-dialog--transition",
+  // lookup
+  menuContent: menuClasses.content
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [];
+  } // eslint-disable-line no-unused-vars
+
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog__content": {
+        backgroundColor: vars$$1["color_" + tint + "_background"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog__content": {
+        color: vars$$1["color_" + tint + "_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_backdrop_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog__backdrop": {
+        backgroundColor: vars$$1["color_" + tint + "_backdrop_background"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var behaviorVars = {
+  full_screen: false,
+  modal: false
+};
+
+var themeVars = _extends({}, {
+  backdrop: false,
+  z_index: polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].z_dialog
+}, behaviorVars, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__["sharedVars"]);
+/**
+ * @type {DialogVars} dialogVars
+ */
+
+
+var dialogVars = _objectSpread({
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_delay: "0s",
+  animation_duration: ".220s",
+  animation_hide_css: "opacity: 0;",
+  animation_show_css: "opacity: 1;",
+  animation_timing_function: "ease-in-out",
+  border_radius: polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].unit_block_border_radius,
+  position: "fixed",
+  // color vars
+  color_light_backdrop_background: "rgba(0, 0, 0, .4)",
+  color_dark_backdrop_background: "rgba(0, 0, 0, .5)",
+  color_light_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].color_light_background),
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].color_dark_background),
+  color_light_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].blend_light_text_regular),
+  color_dark_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].blend_dark_text_regular)
+}, themeVars);
+
+var minWidth = "320px";
+/**
+ * @param {string} selector 
+ * @param {object} vars 
+ */
+
+var _backdrop = function backdrop(selector, vars$$1) {
+  return (// eslint-disable-line no-unused-vars
+    Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-dialog--visible .pe-dialog__backdrop": {
+        display: "block",
+        opacity: 1
+      }
+    })
+  );
+};
+
+var fullScreen$1 = function fullScreen$$1(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createMarker"])(vars$$1, behaviorVars), {
+    padding: 0,
+    " .pe-dialog__content": {
+      width: "100%" // for IE 11
+
+    }
+  }, Object(polythene_css_dialog_pane__WEBPACK_IMPORTED_MODULE_1__["fullScreen"])(selector, vars$$1)]);
+};
+
+var _modal = function modal(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createMarker"])(vars$$1, behaviorVars)]);
+};
+
+var varFns = _objectSpread({
+  /**
+   * @param {string} selector
+   * @param {object} vars 
+   */
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenterCenter, {
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: vars$$1.z_index,
+      height: "100%",
+      // 100vh would make the dialog go beneath Mobile Safari toolbar        
+      transitionProperty: "opacity,background-color,transform",
+      ".pe-dialog--full-screen": fullScreen$1(selector, vars$$1),
+      ".pe-dialog--modal": _modal(selector, vars$$1),
+      " .pe-dialog__content": {
+        position: "relative",
+        transitionProperty: "all"
+      },
+      " .pe-dialog__backdrop": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("all"), // animation duration is set in component options
+      {
+        position: "absolute",
+        opacity: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        pointerEvents: "none"
+      }],
+      ".pe-dialog--backdrop": _backdrop(selector, vars$$1)
+    }]), {
+      ".pe-dialog__holder": {
+        height: "100%",
+        minWidth: minWidth
+      }
+    }];
+  },
+  animation_hide_css: function animation_hide_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [vars$$1.animation_hide_css])];
+  },
+  position: function position(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      position: vars$$1.position
+    })];
+  },
+  animation_delay: function animation_delay(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "&, .pe-dialog__content": {
+        transitionDelay: vars$$1.animation_delay
+      }
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "&, .pe-dialog__content": {
+        transitionDuration: vars$$1.animation_duration
+      }
+    })];
+  },
+  animation_timing_function: function animation_timing_function(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "&, .pe-dialog__content": {
+        transitionTimingFunction: vars$$1.animation_timing_function
+      }
+    })];
+  },
+  animation_show_css: function animation_show_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-dialog--visible": vars$$1.animation_show_css
+    })];
+  },
+  border_radius: function border_radius(selector, vars$$1) {
+    return [!vars$$1.full_screen && Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog__content": {
+        borderTopLeftRadius: vars$$1.border_radius + "px",
+        borderTopRightRadius: vars$$1.border_radius + "px",
+        borderBottomLeftRadius: vars$$1.border_radius + "px",
+        borderBottomRightRadius: vars$$1.border_radius + "px"
+      }
+    })];
+  },
+  // Theme vars
+  backdrop: function backdrop(selector, vars$$1) {
+    return vars$$1.backdrop && _backdrop(selector, vars$$1);
+  },
+  full_screen: function full_screen(selector, vars$$1) {
+    return vars$$1.full_screen && fullScreen$1(selector, vars$$1);
+  },
+  modal: function modal(selector, vars$$1) {
+    return vars$$1.modal && _modal(selector, vars$$1);
+  }
+}, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__["sharedVarFns"]);
+
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, dialogVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, dialogVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: dialogVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-drawer/dist/polythene-css-drawer.mjs":
+/*!**************************************************************************!*\
+  !*** ../node_modules/polythene-css-drawer/dist/polythene-css-drawer.mjs ***!
+  \**************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return drawerVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+/* harmony import */ var polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-css-shadow */ "../node_modules/polythene-css-shadow/dist/polythene-css-shadow.mjs");
+
+
+
+
+var classes = {
+  component: "pe-dialog pe-drawer",
+  // states
+  cover: "pe-drawer--cover",
+  push: "pe-drawer--push",
+  mini: "pe-drawer--mini",
+  permanent: "pe-drawer--permanent",
+  border: "pe-drawer--border",
+  floating: "pe-drawer--floating",
+  fixed: "pe-drawer--fixed",
+  anchorEnd: "pe-drawer--anchor-end"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+var generalFns = {
+  general_styles: function general_styles() {
+    return [{
+      " .pe-dialog__content": {
+        background: "none"
+      }
+    }];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog__content": {
+        borderColor: vars$$1["color_" + tint + "_border"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog-pane": {
+        backgroundColor: vars$$1["color_" + tint + "_background"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_backdrop_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-dialog__backdrop": {
+        backgroundColor: vars$$1["color_" + tint + "_backdrop_background"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var SHADOW_WIDTH = 15;
+
+var _border = function _border(selector, vars$$1, isRTL) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-dialog__content": {
+      borderWidth: "".concat(vars$$1.border ? 1 : 0, "px"),
+      borderStyle: isRTL ? "none none none solid" : "none solid none none"
+    }
+  });
+};
+
+var _border2 = function border(selector, vars$$1) {
+  return [_border(selector, vars$$1, false), _border(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), vars$$1, true)];
+};
+
+var alignSide = function alignSide(isRTL) {
+  return function (selector, vars$$1) {
+    var _peDrawerFixed;
+
+    return [{
+      // Fixed
+      ".pe-drawer--fixed": (_peDrawerFixed = {}, _defineProperty(_peDrawerFixed, isRTL ? "right" : "left", 0), _defineProperty(_peDrawerFixed, isRTL ? "left" : "right", "auto"), _peDrawerFixed)
+    }, _border("".concat(selector, ".pe-drawer--border"), _extends({}, vars$$1, {
+      border: true
+    }), isRTL)];
+  };
+};
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var _backdrop = function backdrop(selector) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-dialog--visible .pe-dialog__backdrop": {
+      opacity: 1
+    }
+  });
+};
+
+var selectorAnchorEnd = function selectorAnchorEnd(selector) {
+  return "".concat(selector, ".pe-drawer--anchor-end");
+}; // fn: miniSelector contains .pe-drawer--mini
+
+
+var _content_width_mini_collapsed = function content_width_mini_collapsed(miniSelector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(miniSelector, {
+    ":not(.pe-dialog--visible) .pe-dialog__content": {
+      width: "".concat(vars$$1.content_width_mini_collapsed, "px")
+    }
+  });
+}; // fn: coverSelector contains .pe-drawer--cover
+
+
+var _cover_content_max_width = function _cover_content_max_width(coverSelector, vars$$1, isRTL) {
+  var _peDialog__content, _peDialogVisible;
+
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(coverSelector, {
+    " .pe-dialog__content": (_peDialog__content = {
+      maxWidth: "".concat(vars$$1.content_max_width, "px")
+    }, _defineProperty(_peDialog__content, isRTL ? "right" : "left", "".concat(-vars$$1.content_max_width - SHADOW_WIDTH, "px")), _defineProperty(_peDialog__content, isRTL ? "left" : "right", "auto"), _peDialog__content),
+    ".pe-dialog--visible .pe-dialog__content": (_peDialogVisible = {}, _defineProperty(_peDialogVisible, isRTL ? "right" : "left", 0), _defineProperty(_peDialogVisible, isRTL ? "left" : "right", "auto"), _peDialogVisible)
+  });
+};
+
+var cover_content_max_width = function cover_content_max_width(coverSelector, vars$$1) {
+  return [_cover_content_max_width(coverSelector, vars$$1, false), _cover_content_max_width(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(coverSelector), vars$$1, true), _cover_content_max_width(selectorAnchorEnd(coverSelector), vars$$1, true), _cover_content_max_width(selectorAnchorEnd(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(coverSelector)), vars$$1, false)];
+}; // fn: selector contains .pe-drawer--permanent
+
+
+var _content_width = function content_width(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-dialog__content": {
+      width: "".concat(vars$$1.content_width, "px")
+    }
+  });
+}; // fn: pushSelector contains .pe-drawer--push
+
+
+var _push_content_width = function _push_content_width(pushSelector, vars$$1, isRTL) {
+  var _peDialog__content2, _peDialogVisible2;
+
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(pushSelector, {
+    " .pe-dialog__content": (_peDialog__content2 = {}, _defineProperty(_peDialog__content2, isRTL ? "marginRight" : "marginLeft", "".concat(-vars$$1.content_width - SHADOW_WIDTH, "px")), _defineProperty(_peDialog__content2, isRTL ? "marginLeft" : "marginRight", "auto"), _peDialog__content2),
+    ".pe-dialog--visible .pe-dialog__content": (_peDialogVisible2 = {
+      width: "".concat(vars$$1.content_width, "px")
+    }, _defineProperty(_peDialogVisible2, isRTL ? "marginRight" : "marginLeft", 0), _defineProperty(_peDialogVisible2, isRTL ? "marginLeft" : "marginRight", "auto"), _peDialogVisible2)
+  });
+};
+
+var push_content_width = function push_content_width(pushSelector, vars$$1) {
+  return [_push_content_width(pushSelector, vars$$1, false), _push_content_width(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(pushSelector), vars$$1, true), _push_content_width(selectorAnchorEnd(pushSelector), vars$$1, true), _push_content_width(selectorAnchorEnd(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(pushSelector)), vars$$1, false)];
+};
+
+var _cover = function cover(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-dialog__content": {
+      position: "absolute",
+      top: 0,
+      zIndex: vars$$1.z_index
+    },
+    ".pe-dialog--visible": {
+      " .pe-dialog__touch": {
+        display: "block"
+      }
+    }
+  });
+};
+/**
+ * @param {string} miniSelector 
+ * @param {object} [vars] 
+ */
+
+
+var _mini = function mini(miniSelector, vars$$1) {
+  return (// eslint-disable-line no-unused-vars
+    Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(miniSelector, {
+      " .pe-dialog__content": {
+        marginLeft: 0,
+        marginRight: 0
+      }
+    })
+  );
+};
+/**
+ * @param {string} permanentSelector 
+ * @param {object} [vars] 
+ */
+
+
+var _permanent = function permanent(permanentSelector, vars$$1) {
+  return (// eslint-disable-line no-unused-vars
+    Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(permanentSelector, {
+      position: "static",
+      display: "block",
+      padding: 0,
+      overflow: "initial",
+      " .pe-dialog__content": {
+        overflow: "visible",
+        maxHeight: "initial",
+        marginLeft: 0,
+        marginRight: 0
+      }
+    })
+  );
+};
+/**
+ * @param {string} pushSelector 
+ * @param {object} [vars] 
+ */
+// fn: pushSelector contains .pe-drawer--push
+
+
+var _push = function push(pushSelector, vars$$1) {
+  return (// eslint-disable-line no-unused-vars
+    Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(pushSelector, {
+      position: "static"
+    })
+  );
+};
+/**
+ * @param {string} selector 
+ * @param {object} [vars] 
+ */
+
+
+var borderRadius = function borderRadius(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-dialog__content": {
+      borderRadius: vars$$1.border_radius + "px"
+    }
+  });
+};
+/**
+ * @param {string} selector 
+ * @param {object} [vars] 
+ */
+
+
+var _floating = function floating(selector, vars$$1) {
+  return (// eslint-disable-line no-unused-vars
+    Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      height: "auto",
+      " .pe-dialog__content": {
+        height: "auto"
+      }
+    })
+  );
+};
+
+var varFns = _objectSpread({
+  /**
+   * @param {string} selector 
+   * @param {object} [vars] 
+   */
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(selector, vars$$1), {
+      justifyContent: "flex-start",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 1,
+      height: "100%",
+      minWidth: 0,
+      // IE 11 does not accept "none" or "inital" here
+      padding: 0,
+      opacity: 1,
+      flexShrink: 0,
+      transitionProperty: "all",
+      ":not(.pe-dialog--transition)": {
+        " .pe-dialog__content": {
+          transitionDuration: "0s"
+        }
+      },
+      " .pe-dialog__content": {
+        position: "relative",
+        // transitionProperty: "all",
+        height: "100%",
+        overflow: "visible",
+        minWidth: 0,
+        // IE 11 does not accept "none" or "inital" here
+        flexShrink: 0
+      },
+      " .pe-dialog-pane__content": {
+        height: "100%",
+        overflowY: "auto",
+        overflowX: "hidden"
+      },
+      " .pe-dialog-pane": {
+        height: "100%",
+        maxHeight: "none",
+        minWidth: 0 // IE 11 does not accept "none" or "inital" here
+
+      },
+      " .pe-dialog-pane__body": {
+        overflow: "visible",
+        maxHeight: "none",
+        border: "none"
+      },
+      // Fixed
+      ".pe-drawer--fixed": {
+        position: "fixed",
+        top: 0,
+        width: "100%",
+        zIndex: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].z_drawer
+      },
+      // Mini
+      ".pe-drawer--mini": _mini(selector, vars$$1),
+      // Permanent
+      ".pe-drawer--permanent": _permanent(selector, vars$$1),
+      // Floating
+      ".pe-drawer--floating": _floating(selector, vars$$1),
+      // Cover (default)
+      ".pe-drawer--cover": _cover(selector, vars$$1),
+      // Push
+      ".pe-drawer--push": _push(selector, vars$$1),
+      // Backdrop
+      " .pe-dialog__backdrop": {
+        pointerEvents: "none",
+        opacity: 0,
+        display: "block"
+      },
+      " .pe-dialog__touch": {
+        display: "none",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+      },
+      ".pe-dialog--backdrop": _backdrop(selector)
+    }]), [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), alignRight(selector, vars$$1))]];
+  },
+  animation_delay: function animation_delay(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "&, .pe-dialog__content, .pe-dialog__backdrop": {
+        transitionDelay: vars$$1.animation_delay
+      }
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "&, .pe-dialog__content, .pe-dialog__backdrop": {
+        transitionDuration: vars$$1.animation_duration
+      }
+    })];
+  },
+  animation_timing_function: function animation_timing_function(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "&, .pe-dialog__content, .pe-dialog__backdrop": {
+        transitionTimingFunction: vars$$1.animation_timing_function
+      }
+    })];
+  },
+  border_radius: function border_radius(selector, vars$$1) {
+    return [borderRadius(selector, vars$$1)];
+  },
+  content_max_width: function content_max_width(selector, vars$$1) {
+    return [cover_content_max_width("".concat(selector, ".pe-drawer--cover"), vars$$1)];
+  },
+  content_width: function content_width(selector, vars$$1) {
+    return [_content_width(selector, vars$$1), _content_width("".concat(selector, ".pe-dialog--visible"), vars$$1), _content_width("".concat(selector, ".pe-drawer--permanent"), vars$$1), push_content_width("".concat(selector, ".pe-drawer--push"), vars$$1)];
+  },
+  content_width_mini_collapsed: function content_width_mini_collapsed(selector, vars$$1) {
+    return [_content_width_mini_collapsed("".concat(selector, ".pe-drawer--mini"), vars$$1)];
+  },
+  // Theme vars
+  cover: function cover(selector, vars$$1) {
+    return vars$$1.cover && [_cover(selector, vars$$1), cover_content_max_width(selector, vars$$1)];
+  },
+  backdrop: function backdrop(selector, vars$$1) {
+    return [vars$$1.backdrop && _backdrop(selector)];
+  },
+  border: function border(selector, vars$$1) {
+    return [_border2(selector, vars$$1)];
+  },
+  mini: function mini(selector, vars$$1) {
+    return vars$$1.mini && [_mini(selector, vars$$1), _content_width_mini_collapsed(selector, vars$$1)];
+  },
+  permanent: function permanent(selector, vars$$1) {
+    return [vars$$1.permanent && _permanent(selector, vars$$1)];
+  },
+  floating: function floating(selector, vars$$1) {
+    return [vars$$1.floating && _floating(selector, vars$$1)];
+  },
+  push: function push(selector, vars$$1) {
+    return vars$$1.push && [_push(selector, vars$$1), push_content_width(selector, vars$$1)];
+  }
+}, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__["sharedVarFns"]);
+
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+var themeVars = _objectSpread({
+  backdrop: false,
+  border: undefined,
+  // set to `true` or `false`
+  cover: false,
+  floating: false,
+  mini: false,
+  permanent: false,
+  push: false,
+  z_index: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].z_drawer
+}, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__["sharedVars"]);
+/**
+ * @type {DrawerVars} drawerVars
+ */
+
+
+var drawerVars = _objectSpread({
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_delay: "0s",
+  animation_duration: ".260s",
+  animation_timing_function: "ease-in-out",
+  border_radius: 0,
+  content_max_width: 5 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].increment,
+  // 5 * 56
+  content_width: 240,
+  content_width_mini_collapsed: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].increment,
+  // 1 * 56
+  // color vars
+  color_light_backdrop_background: "rgba(0, 0, 0, .4)",
+  color_dark_backdrop_background: "rgba(0, 0, 0, .5)",
+  color_light_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background),
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_background),
+  color_light_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_border_light),
+  color_dark_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_border_light)
+}, themeVars);
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component.replace(/ /g, "."));
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, drawerVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, drawerVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: drawerVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-fab/dist/polythene-css-fab.mjs":
+/*!********************************************************************!*\
+  !*** ../node_modules/polythene-css-fab/dist/polythene-css-fab.mjs ***!
+  \********************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return drawerVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-fab",
+  // elements
+  content: "pe-fab__content",
+  // states
+  mini: "pe-fab--mini"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--focus": {
+        " .pe-button__focus": {
+          opacity: 1
+        }
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint, function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        color: vars$$1["color_" + tint]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        backgroundColor: vars$$1["color_" + tint + "_background"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--focus": {
+        " .pe-button__focus": {
+          backgroundColor: vars$$1["color_" + tint + "_focus_background"]
+        }
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+// @ts-check
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      userSelect: "none",
+      "-moz-user-select": "none",
+      display: "inline-block",
+      position: "relative",
+      outline: "none",
+      cursor: "pointer",
+      padding: 0,
+      border: "none",
+      " .pe-button__content": {
+        position: "relative",
+        borderRadius: "50%"
+      },
+      " .pe-fab__content": {
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center"
+      },
+      " .pe-button__wash, .pe-button__focus": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+        borderRadius: "inherit"
+      }],
+      " .pe-ripple": {
+        borderRadius: "inherit"
+      },
+      " .pe-button__wash": {
+        transition: "background-color " + polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].animation_duration + " ease-in-out",
+        borderRadius: "inherit",
+        pointerEvents: "none",
+        backgroundColor: "transparent"
+      }
+    })];
+  },
+  size_regular: function size_regular(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        width: vars$$1.size_regular + "px",
+        height: vars$$1.size_regular + "px"
+      }
+    })];
+  },
+  size_mini: function size_mini(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-fab--mini": {
+        " .pe-button__content": {
+          width: vars$$1.size_mini + "px",
+          height: vars$$1.size_mini + "px",
+          padding: (vars$$1.size_mini - polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size) / 2 + "px"
+        }
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+/**
+ * @type {DrawerVars} drawerVars
+ */
+
+var drawerVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  size_mini: 5 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // 5 * 8 = 40
+  size_regular: 7 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // 7 * 8 = 56
+  color_light: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary_foreground),
+  color_light_focus_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_hover),
+  color_light_focus_opacity: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_hover_medium,
+  // same as button
+  color_light_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_dark: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary_foreground),
+  color_dark_focus_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_background_hover),
+  // same as button
+  color_dark_focus_opacity: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_background_hover_medium,
+  // same as button
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary)
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, drawerVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, drawerVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: drawerVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-icon-button/dist/polythene-css-icon-button.mjs":
+/*!************************************************************************************!*\
+  !*** ../node_modules/polythene-css-icon-button/dist/polythene-css-icon-button.mjs ***!
+  \************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return iconButtonVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-button pe-icon-button",
+  // elements
+  content: "pe-icon-button__content",
+  label: "pe-icon-button__label",
+  // states
+  compact: "pe-icon-button--compact"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--focus, &.pe-button--selected": {
+        " .pe-button__focus": {
+          backgroundColor: "currentcolor"
+        }
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint, function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "&, .pe-icon-button__label": {
+        color: vars$$1["color_" + tint]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__content": {
+        backgroundColor: vars$$1["color_" + tint + "_background"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_wash_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      opacity: vars$$1["color_" + tint + "_wash_opacity"]
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--focus, &.pe-button--selected": {
+        " .pe-button__focus": {
+          opacity: vars$$1["color_" + tint + "_focus_opacity"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--disabled": {
+        " .pe-button__content, .pe-icon-button__label": {
+          color: vars$$1["color_" + tint + "_disabled"]
+        }
+      }
+    })];
+  }), _ref;
+};
+
+var hoverTintFns = function hoverTintFns(tint) {
+  var _ref2;
+
+  return _ref2 = {}, _defineProperty(_ref2, "color_" + tint + "_hover", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__content": {
+        color: vars$$1["color_" + tint + "_hover"]
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_label_hover", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__label": {
+        color: vars$$1["color_" + tint + "_label_hover"]
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_background_hover", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__content": {
+        backgroundColor: vars$$1["color_" + tint + "_background_hover"]
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_wash_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--disabled):not(.pe-button--selected)": {
+        " .pe-button__wash": {
+          backgroundColor: vars$$1["color_" + tint + "_wash_background"]
+        }
+      }
+    })];
+  }), _ref2;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var lightTintHoverFns = hoverTintFns("light");
+var darkTintHoverFns = hoverTintFns("dark");
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns,
+    lightTintHoverFns: lightTintHoverFns,
+    darkTintHoverFns: darkTintHoverFns
+  }
+});
+
+var alignSide = function alignSide(isRTL) {
+  return function (vars$$1) {
+    return {};
+  };
+}; // eslint-disable-line no-unused-vars
+
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var _label_padding_before = function label_padding_before(selector, vars$$1, isRTL) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-icon-button__label": _defineProperty({}, isRTL ? "paddingRight" : "paddingLeft", vars$$1.label_padding_before + "px")
+  });
+};
+
+var _label_padding_after = function label_padding_after(selector, vars$$1, isRTL) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-icon-button__label": _defineProperty({}, isRTL ? "paddingLeft" : "paddingRight", vars$$1.label_padding_after + "px")
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(vars$$1), {
+      // don't set button size to facilitate different icon sizes
+      display: "inline-flex",
+      alignItems: "center",
+      cursor: "pointer",
+      border: "none",
+      " .pe-button__content": {
+        display: "flex",
+        alignItems: "center",
+        fontSize: "1rem",
+        borderRadius: "50%",
+        position: "relative"
+      },
+      " .pe-icon-button__content": {
+        lineHeight: 1,
+        borderRadius: "50%",
+        pointerEvents: "none"
+      }
+    }, _defineProperty({}, "*[dir=rtl] ".concat(selector, ", .pe-rtl ").concat(selector), [alignRight(vars$$1)])])];
+  },
+  padding: function padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__content": {
+        padding: vars$$1.padding + "px"
+      }
+    })];
+  },
+  padding_compact: function padding_compact(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-icon-button--compact": {
+        " .pe-icon-button__content": {
+          padding: vars$$1.padding_compact + "px"
+        }
+      }
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content, .pe-button__wash": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("all", vars$$1.animation_duration)]
+    })];
+  },
+  label_font_size: function label_font_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__label": {
+        fontSize: vars$$1.label_font_size + "px"
+      }
+    })];
+  },
+  label_line_height: function label_line_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__label": {
+        lineHeight: vars$$1.label_line_height + "px"
+      }
+    })];
+  },
+  label_font_weight: function label_font_weight(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__label": {
+        fontWeight: vars$$1.label_font_weight
+      }
+    })];
+  },
+  label_text_transform: function label_text_transform(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon-button__label": {
+        textTransform: vars$$1.label_text_transform
+      }
+    })];
+  },
+  label_padding_after: function label_padding_after(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), _label_padding_after(selector, vars$$1, false), _label_padding_after(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), vars$$1, true)];
+  },
+  label_padding_before: function label_padding_before(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), _label_padding_before(selector, vars$$1, false), _label_padding_before(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), vars$$1, true)];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+/**
+ * @type {IconButtonVars} iconButtonVars
+ */
+
+var iconButtonVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_duration: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].animation_duration,
+  label_font_size: 16,
+  label_font_weight: 400,
+  label_line_height: 20,
+  label_padding_after: 0,
+  label_padding_before: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit * 1,
+  // 4
+  label_text_transform: "initial",
+  label_top_margin_factor: 1 / 12,
+  // align with icon
+  padding: (polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_icon_button - polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size) / 2,
+  // 12
+  padding_compact: (polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_icon_button - polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size) / 3,
+  // 8
+  color_background: "transparent",
+  // only specify this variable to get all 2 states
+  // theme specific background colors may be set in theme; disabled by default
+  // color_light_background:    "none",
+  // color_dark_background:     "none",
+  // color_light_hover:         "inherit",
+  // color_dark_hover:          "inherit",
+  // color_light_label_hover:   "inherit",
+  // color_dark_label_hover:    "inherit",
+  color_light: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_label: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_disabled: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_disabled),
+  color_light_focus_opacity: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_hover_medium,
+  color_light_wash_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_hover),
+  color_dark: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_label: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_disabled: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_disabled),
+  color_dark_focus_opacity: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_background_hover_medium,
+  color_dark_wash_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_background_hover) // hover colors may be set in theme; disabled by default
+  // color_light_background_hover:         "currentColor",
+  // color_dark_background_hover:          "currentColor",
+
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component.replace(/ /g, "."));
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, iconButtonVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, iconButtonVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: iconButtonVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-icon/dist/polythene-css-icon.mjs":
+/*!**********************************************************************!*\
+  !*** ../node_modules/polythene-css-icon/dist/polythene-css-icon.mjs ***!
+  \**********************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return iconVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-icon",
+  // states
+  avatar: "pe-icon--avatar",
+  large: "pe-icon--large",
+  medium: "pe-icon--medium",
+  regular: "pe-icon--regular",
+  small: "pe-icon--small"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: "currentColor"
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint, function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: vars$$1["color_" + tint]
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_avatar_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-icon--avatar": {
+        backgroundColor: vars$$1["color_" + tint + "_avatar_background"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var sizeDirective = function sizeDirective(size) {
+  return function (selector, vars$$1) {
+    return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, _defineProperty({}, ".pe-icon--".concat(size), {
+      width: vars$$1["size_".concat(size)] + "px",
+      height: vars$$1["size_".concat(size)] + "px"
+    }));
+  };
+};
+
+var varFns = _extends({}, {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      display: "inline-block",
+      verticalAlign: "middle",
+      backgroundRepeat: "no-repeat",
+      position: "relative",
+      fontSize: 0,
+      lineHeight: 0,
+      ".pe-icon--avatar": {
+        borderRadius: "50%"
+      },
+      ".pe-icon--avatar img": {
+        border: "none",
+        borderRadius: "50%",
+        width: "inherit",
+        height: "inherit"
+      },
+      " img": {
+        height: "inherit"
+      },
+      " .pe-svg, .pe-svg > div": {
+        /* React creates an additional div when wrapping an SVG */
+        width: "inherit",
+        height: "inherit"
+      }
+    })];
+  }
+}, ["small", "regular", "medium", "large"].reduce(function (acc, size) {
+  return acc["size_".concat(size)] = sizeDirective(size), acc;
+}, {}));
+
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+/**
+ * @type {IconVars} iconVars
+ */
+
+var iconVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  size_small: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_small,
+  // 16 
+  size_regular: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size,
+  // 24
+  size_medium: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_medium,
+  // 32
+  size_large: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_large,
+  // 40
+  // avatar background is visible when image is not yet loaded
+  color_light_avatar_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_disabled),
+  color_dark_avatar_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_background_disabled),
+  color_light: "currentcolor",
+  color_dark: "currentcolor"
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, iconVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, iconVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: iconVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-ios-spinner/dist/polythene-css-ios-spinner.mjs":
+/*!************************************************************************************!*\
+  !*** ../node_modules/polythene-css-ios-spinner/dist/polythene-css-ios-spinner.mjs ***!
+  \************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return iOSSpinnerVars; });
+/* harmony import */ var polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-css-base-spinner */ "../node_modules/polythene-css-base-spinner/dist/polythene-css-base-spinner.mjs");
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-core */ "../node_modules/polythene-core/dist/polythene-core.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+
+
+var classes = {
+  component: "pe-ios-spinner",
+  // elements
+  blades: "pe-ios-spinner__blades",
+  blade: "pe-ios-spinner__blade"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      " .pe-ios-spinner__blade": {
+        background: "currentcolor"
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  return _defineProperty({}, "color_" + tint, function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      color: vars$$1["color_" + tint]
+    })];
+  });
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  },
+  superColor: polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["color"]
+});
+
+var bladeWidth = 9; // percent
+
+var bladeHeight = 28; // percent
+
+var kfFade = function kfFade() {
+  return {
+    " 0%": {
+      opacity: .640
+    },
+    " 100%": {
+      opacity: .035
+    }
+  };
+};
+
+var positionBlades = function positionBlades(vars$$1) {
+  return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(function (i) {
+    // reverse to improve performance on iOS
+    var delay = -1 / 12 * i * Object(polythene_core__WEBPACK_IMPORTED_MODULE_2__["styleDurationToMs"])(vars$$1.rotation_animation_duration);
+    var rotation = 360 - 360 / 12 * i;
+    return _defineProperty({}, " .pe-ios-spinner__blade:nth-of-type(" + (i + 1) + ")", {
+      transform: "rotate(" + rotation + "deg) translate3d(0,-140%,0)",
+      animation: "iosSpinnerFade " + vars$$1.rotation_animation_duration + " " + delay + "ms linear infinite"
+    });
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      " .pe-ios-spinner__blades": {
+        transform: "translate3d(0,0,0)",
+        position: "relative",
+        width: "100%",
+        height: "100%"
+      },
+      " .pe-ios-spinner__blade": {
+        position: "absolute",
+        width: bladeWidth + "%",
+        height: bladeHeight + "%",
+        left: (100 - bladeWidth) / 2 + "%",
+        top: (100 - bladeHeight) / 2 + "%",
+        opacity: 0,
+        borderRadius: "50px"
+      },
+      "@keyframes iosSpinnerFade": kfFade()
+    })];
+  },
+  rotation_animation_duration: function rotation_animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      " .pe-ios-spinner__blades": [positionBlades(vars$$1)]
+    })];
+  }
+};
+var layout$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["createLayout"])({
+  varFns: varFns,
+  superLayout: polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["layout"]
+});
+
+// @ts-check
+/**
+ * @type {IOSSpinnerVars} iOSSpinnerVars
+ */
+
+var iOSSpinnerVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  rotation_animation_duration: "1s",
+  color_light: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].color_light_foreground),
+  color_dark: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_3__["vars"].color_dark_foreground)
+};
+
+// @ts-check
+var fns = [layout$1, color$1];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].createAddStyle(selector, fns, iOSSpinnerVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].createGetStyle(selector, fns, iOSSpinnerVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: iOSSpinnerVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-list-tile/dist/polythene-css-list-tile.mjs":
+/*!********************************************************************************!*\
+  !*** ../node_modules/polythene-css-list-tile/dist/polythene-css-list-tile.mjs ***!
+  \********************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return listTileVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-list-tile",
+  // elements
+  content: "pe-list-tile__content",
+  highSubtitle: "pe-list-tile__high-subtitle",
+  primary: "pe-list-tile__primary",
+  secondary: "pe-list-tile__secondary",
+  subtitle: "pe-list-tile__subtitle",
+  title: "pe-list-tile__title",
+  contentFront: "pe-list-tile__content-front",
+  // states  
+  compact: "pe-list-tile--compact",
+  compactFront: "pe-list-tile--compact-front",
+  disabled: "pe-list-tile--disabled",
+  hasFront: "pe-list-tile--front",
+  hasHighSubtitle: "pe-list-tile--high-subtitle",
+  hasSubtitle: "pe-list-tile--subtitle",
+  header: "pe-list-tile--header",
+  hoverable: "pe-list-tile--hoverable",
+  insetH: "pe-list-tile--inset-h",
+  insetV: "pe-list-tile--inset-v",
+  selectable: "pe-list-tile--selectable",
+  selected: "pe-list-tile--selected",
+  rounded: "pe-list-tile--rounded",
+  highlight: "pe-list-tile--highlight",
+  sticky: "pe-list-tile--sticky",
+  navigation: "pe-list-tile--navigation"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+var _selected = function selected(selector, vars$$1, tint) {
+  var selectedTextColor = vars$$1["color_" + tint + "_selected_text"];
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, _objectSpread({}, selectedTextColor !== "inherit" ? {
+    "&, .pe-list-tile__title, .pe-list-tile__content, .pe-list-tile__subtitle": {
+      color: selectedTextColor
+    }
+  } : undefined, {
+    " .pe-list-tile__primary, pe-list-tile__secondary": {
+      backgroundColor: vars$$1["color_" + tint + "_selected_background"]
+    }
+  }));
+};
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--header": {
+        " .pe-list-tile__primary, pe-list-tile__secondary": {
+          backgroundColor: "inherit"
+        }
+      },
+      ":not(.pe-list-tile--disabled):not(.pe-list-tile--selected)": {
+        " a.pe-list-tile__primary:focus, a.pe-list-tile__secondary:focus": {
+          outline: "none",
+          backgroundColor: "inherit"
+        }
+      },
+      "&.pe-list-tile--sticky": {
+        backgroundColor: "inherit"
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_title", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: vars$$1["color_" + tint + "_title"]
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      backgroundColor: vars$$1["color_" + tint + "_background"],
+      "&.pe-list-tile--sticky": {
+        backgroundColor: vars$$1["color_" + tint + "_background"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_list_header", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--header": {
+        color: vars$$1["color_" + tint + "_list_header"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_subtitle", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-list-tile__subtitle": {
+        color: vars$$1["color_" + tint + "_subtitle"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_secondary", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-list-tile__secondary": {
+        color: vars$$1["color_" + tint + "_secondary"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_front", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-list-tile__content-front": {
+        color: vars$$1["color_" + tint + "_front"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_text_disabled", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--disabled": {
+        "&, .pe-list-tile__title, .pe-list-tile__content, .pe-list-tile__subtitle": {
+          color: vars$$1["color_" + tint + "_text_disabled"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_highlight_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--highlight:not(.pe-list-tile--selected)": {
+        " .pe-list-tile__primary, pe-list-tile__secondary": {
+          backgroundColor: vars$$1["color_" + tint + "_highlight_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-list-tile--disabled):not(.pe-list-tile--selected)": {
+        " a.pe-list-tile__primary:focus, a.pe-list-tile__secondary:focus": {
+          backgroundColor: vars$$1["color_" + tint + "_focus_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_selected_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--selected": _selected(selector, vars$$1, tint)
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_selected_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--selected": _selected(selector, vars$$1, tint)
+    })];
+  }), _ref;
+};
+
+var hoverTintFns = function hoverTintFns(tint) {
+  var _ref2;
+
+  return _ref2 = {}, _defineProperty(_ref2, "color_" + tint + "_hover", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--hoverable:not(.pe-list-tile--selected)": {
+        color: vars$$1["color_" + tint + "_hover"]
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_hover_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--hoverable:not(.pe-list-tile--selected)": {
+        " .pe-list-tile__primary, .pe-list-tile__secondary": {
+          backgroundColor: vars$$1["color_" + tint + "_hover_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_hover_front", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--hoverable:not(.pe-list-tile--selected)": {
+        " .pe-list-tile__primary .pe-list-tile__content-front": {
+          color: vars$$1["color_" + tint + "_hover_front"]
+        }
+      }
+    })];
+  }), _ref2;
+};
+
+var themeFns = function themeFns(tint) {
+  return {
+    selected: function selected(selector, vars$$1) {
+      return vars$$1.selected && _selected(selector, vars$$1, tint);
+    }
+  };
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"), themeFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"), themeFns("dark"));
+
+var lightTintHoverFns = hoverTintFns("light");
+var darkTintHoverFns = hoverTintFns("dark");
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns,
+    lightTintHoverFns: lightTintHoverFns,
+    darkTintHoverFns: darkTintHoverFns
+  }
+});
+
+var alignSide = function alignSide(isRTL) {
+  return function (vars$$1) {
+    return {
+      // eslint-disable-line no-unused-vars
+      " .pe-list-tile__content-front + .pe-list-tile__content": _defineProperty({}, isRTL ? "paddingRight" : "paddingLeft", 0)
+    };
+  };
+}; // eslint-disable-line no-unused-vars
+
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+/**
+ * @param {number} left
+ * @param {number} [right]
+ */
+
+var paddingH = function paddingH(left) {
+  var right = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : left;
+  return {
+    "padding-left": left + "px",
+    "padding-right": right + "px"
+  };
+};
+/**
+ * @param {number} top 
+ * @param {number} [bottom] 
+ */
+
+
+var paddingV = function paddingV(top) {
+  var bottom = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : top;
+  return {
+    "padding-top": top + "px",
+    "padding-bottom": bottom + "px"
+  };
+};
+/**
+ * @param {string} selector 
+ * @param {ListTileVars} vars 
+ */
+
+
+var title_line_count_single_line_height = function title_line_count_single_line_height(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    lineHeight: vars$$1.single_line_height + "px",
+    ".pe-list-tile--navigation": {
+      " .pe-list-tile__title": {
+        minHeight: vars$$1.single_line_height + "px"
+      }
+    },
+    " .pe-list-tile__title": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].ellipsis(vars$$1.title_line_count, vars$$1.single_line_height, "px")]
+  });
+};
+/**
+ * @param {string} selector 
+ * @param {ListTileVars} vars 
+ */
+
+
+var unSelectable = function unSelectable(selector, vars$$1) {
+  return (// eslint-disable-line no-unused-vars 
+    Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "&, a": {
+        pointerEvents: "none"
+      }
+    })
+  );
+};
+/**
+ * @param {string} selector 
+ * @param {ListTileVars} vars 
+ */
+
+
+var _inset = function inset(selector, vars$$1) {
+  return insetH(selector, vars$$1), insetV(selector, vars$$1);
+};
+/**
+ * @param {string} selector 
+ * @param {ListTileVars} vars 
+ */
+
+
+var insetH = function insetH(selector, vars$$1) {
+  var margin = vars$$1.inset_h_size;
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    marginLeft: margin + "px",
+    marginRight: margin + "px",
+    " .pe-list-tile__content": {
+      marginLeft: -margin + "px",
+      marginRight: -margin + "px"
+    }
+  });
+};
+/**
+ * @param {string} selector 
+ * @param {ListTileVars} vars 
+ */
+
+
+var insetV = function insetV(selector, vars$$1) {
+  var margin = vars$$1.inset_v_size;
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    marginTop: margin + "px",
+    marginBottom: margin + "px"
+  });
+};
+/**
+ * @param {string} selector 
+ * @param {ListTileVars} vars 
+ */
+
+
+var _rounded = function rounded(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    "&, .pe-list-tile__primary": {
+      borderRadius: vars$$1.rounded_border_radius + "px"
+    }
+  });
+};
+
+var varFns = {
+  /**
+   * @param {string} selector 
+   * @param {ListTileVars} vars 
+   */
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(vars$$1), polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layout, {
+      position: "relative",
+      ".pe-list-tile--navigation": {
+        " .pe-list-tile__title": {
+          whiteSpace: "pre-wrap"
+        }
+      },
+      ".pe-list-tile--sticky": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].sticky(2),
+      ".pe-list-tile--inset-h": insetH(selector, vars$$1),
+      ".pe-list-tile--inset-v": insetV(selector, vars$$1),
+      " .pe-list-tile__primary": {
+        width: "100%"
+      },
+      " .pe-list-tile__primary, .pe-list-tile__secondary": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("background", ".200s"), {
+        textDecoration: "none",
+        color: "inherit",
+        border: "none"
+      }],
+      ":not(.pe-list-tile--header) .pe-list-tile__primary": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), {
+        position: "relative",
+        " .pe-list-tile__content:not(.pe-list-tile__content-front)": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex()]
+      }],
+      ":not(.pe-list-tile--disabled)": {
+        outline: "none"
+      },
+      " .pe-list-tile__secondary": {
+        textAlign: "right",
+        position: "relative"
+      },
+      " .pe-list-tile__content": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutVertical, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].selfCenter, {
+        width: "100%",
+        ".pe-list-tile__content-front": {
+          flexShrink: 0
+        }
+      }],
+      " .pe-list-tile__title": {
+        whiteSpace: "normal"
+      },
+      " .pe-list-tile__subtitle": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].ellipsis(vars$$1.subtitle_line_count, vars$$1.line_height_subtitle, "px"), {
+        fontSize: vars$$1.font_size_subtitle + "px",
+        fontWeight: vars$$1.font_weight_subtitle,
+        lineHeight: vars$$1.line_height_subtitle + "px",
+        ".pe-list-tile__high-subtitle": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].ellipsis(vars$$1.high_subtitle_line_count, vars$$1.line_height_subtitle, "px"), {
+          whiteSpace: "normal"
+        }]
+      }],
+      ".pe-list-tile--selected, &.pe-list-tile--disabled": unSelectable(selector, vars$$1),
+      ".pe-list-tile--subtitle": {
+        " .pe-list-tile__content": {
+          " .pe-list-tile__title": {
+            padding: 0
+          }
+        }
+      },
+      ".pe-list-tile--high-subtitle": {
+        " .pe-list-tile--high-subtitle .pe-list-tile__secondary": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutStart],
+        " .pe-list-tile__content": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].selfStart, {
+          " .pe-list-tile__title": {
+            padding: 0
+          }
+        }]
+      },
+      // List header
+      ".pe-list-tile--header": {
+        pointerEvents: "none",
+        " .pe-list-tile__content": {
+          paddingTop: 0,
+          paddingBottom: 0
+        },
+        " .pe-list-tile__title": {
+          padding: 0
+        }
+      },
+      // Firefox only
+      "@supports (-moz-appearance:none) and (display:contents)": {
+        " .pe-list-tile__primary, .pe-list-tile__content": {
+          overflow: "hidden"
+        }
+      },
+      // Menu
+      ".pe-dialog .pe-menu__content &": {
+        " .pe-list-tile__content": {
+          paddingLeft: "24px",
+          paddingRight: "24px"
+        },
+        " .pe-list-tile__content-front": {
+          paddingRight: 0,
+          width: "64px",
+          marginRight: "-7px"
+        },
+        " .pe-list-tile__title": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].ellipsis("none")
+      },
+      ".pe-menu__content &": {
+        ":not(.pe-list-tile--disabled)": {
+          cursor: "default",
+          "&, .pe-list-tile__primary, .pe-list-tile__secondary": {
+            " .pe-list-tile__title, .pe-list-tile__subtitle": {
+              userSelect: "none",
+              "-moz-user-select": "none"
+            }
+          }
+        }
+      },
+      // Non-touch
+      "html.pe-no-touch &.pe-list-tile--hoverable, \
+        html.pe-no-touch &.pe-list-tile--selectable": {
+        ":not(.pe-list-tile--header):not(.pe-list-tile--disabled):not(.pe-list-tile--selected):hover": {
+          cursor: "pointer"
+        }
+      }
+    }]), _defineProperty({}, Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), alignRight(vars$$1))];
+  },
+  title_line_count: function title_line_count(selector, vars$$1) {
+    return [title_line_count_single_line_height(selector, vars$$1)];
+  },
+  single_line_height: function single_line_height(selector, vars$$1) {
+    return [title_line_count_single_line_height(selector, vars$$1)];
+  },
+  font_size_title: function font_size_title(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      fontSize: vars$$1.font_size_title + "px",
+      " .pe-list-tile__secondary": {
+        fontSize: vars$$1.font_size_title + "px"
+      }
+    })];
+  },
+  font_weight_title: function font_weight_title(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      fontWeight: vars$$1.font_weight_title
+    })];
+  },
+  font_size_navigation_title: function font_size_navigation_title(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--navigation": {
+        fontSize: vars$$1.font_size_navigation_title + "px"
+      }
+    })];
+  },
+  font_weight_navigation_title: function font_weight_navigation_title(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--navigation": {
+        fontWeight: vars$$1.font_weight_navigation_title
+      }
+    })];
+  },
+  padding: function padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-list-tile--header)": {
+        " .pe-list-tile__content:not(.pe-list-tile__content-front)": [paddingV(vars$$1.padding, vars$$1.padding + 1)]
+      },
+      " .pe-list-tile__content": {
+        ".pe-list-tile__content-front": [paddingV(vars$$1.padding - 5)]
+      }
+    })];
+  },
+  side_padding: function side_padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-list-tile__content": [paddingH(vars$$1.side_padding)]
+    })];
+  },
+  inset_size: function inset_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--inset": _inset(selector, vars$$1)
+    })];
+  },
+  rounded_border_radius: function rounded_border_radius(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--rounded": _rounded(selector, vars$$1)
+    })];
+  },
+  compact_front_item_width: function compact_front_item_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-list-tile__content-front": {
+        ".pe-list-tile--compact-front": {
+          width: vars$$1.compact_front_item_width + "px"
+        }
+      }
+    })];
+  },
+  front_item_width: function front_item_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-list-tile__content-front": {
+        ":not(.pe-list-tile--compact-front)": {
+          width: vars$$1.front_item_width + "px"
+        }
+      }
+    })];
+  },
+  font_size_small: function font_size_small(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-list-tile__content": {
+        " small": {
+          fontSize: vars$$1.font_size_small + "px"
+        }
+      }
+    })];
+  },
+  has_high_subtitle_padding: function has_high_subtitle_padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--high-subtitle": {
+        " .pe-list-tile__content": [paddingV(vars$$1.has_high_subtitle_padding, vars$$1.has_high_subtitle_padding + 1)]
+      }
+    })];
+  },
+  has_subtitle_padding: function has_subtitle_padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--subtitle": {
+        " .pe-list-tile__content": [paddingV(vars$$1.has_subtitle_padding, vars$$1.has_subtitle_padding + 1)]
+      }
+    })];
+  },
+  single_height: function single_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--header": {
+        height: vars$$1.single_height + "px",
+        " .pe-list-tile__title": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].ellipsis(1, vars$$1.single_height, "px"), {
+          lineHeight: vars$$1.single_height + "px",
+          padding: 0
+        }]
+      }
+    })];
+  },
+  font_size_list_header: function font_size_list_header(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--header": {
+        " .pe-list-tile__title": {
+          fontSize: vars$$1.font_size_list_header + "px"
+        }
+      }
+    })];
+  },
+  font_weight_list_header: function font_weight_list_header(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list-tile--header": {
+        " .pe-list-tile__title": {
+          fontWeight: vars$$1.font_weight_list_header
+        }
+      }
+    })];
+  },
+  compact_padding: function compact_padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-list--compact &, &.pe-list-tile--compact": {
+        ":not(.pe-list-tile--header)": {
+          " .pe-list-tile__content:not(.pe-list-tile__content-front)": paddingV(vars$$1.compact_padding, vars$$1.compact_padding + 1)
+        }
+      }
+    })];
+  },
+  // Theme vars
+  inset: function inset(selector, vars$$1) {
+    return vars$$1.inset && _inset(selector, vars$$1);
+  },
+  inset_h: function inset_h(selector, vars$$1) {
+    return vars$$1.inset_h && insetH(selector, vars$$1);
+  },
+  inset_v: function inset_v(selector, vars$$1) {
+    return vars$$1.inset_h && insetV(selector, vars$$1);
+  },
+  rounded: function rounded(selector, vars$$1) {
+    return vars$$1.rounded && _rounded(selector, vars$$1);
+  },
+  selected: function selected(selector, vars$$1) {
+    return vars$$1.selected && unSelectable(selector, vars$$1);
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+//
+// heights:
+// single line: 48
+// single line, dense: 40
+// single line, with icon: 48
+// single line, with icon, dense: 40
+// single line, with avatar: 56
+// single line, with avatar, dense: 48
+// two-line: 72
+// two-line, dense: 60
+// three-line: 88
+// three-line, dense: 76
+
+var single_height = 48;
+var padding = 8;
+var single_with_icon_height = 56;
+var themeVars = {
+  inset: false,
+  inset_h: false,
+  inset_v: false,
+  selected: false,
+  rounded: false
+};
+/**
+ * @type {ListTileVars} listTileVars
+ */
+
+var listTileVars = _objectSpread({
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  compact_front_item_width: 64,
+  compact_padding: 9,
+  compact_side_padding: 1 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  font_size_list_header: 14,
+  font_size_navigation_title: 14,
+  font_size_small: 12,
+  font_size_subtitle: 14,
+  font_size_title: 16,
+  font_weight_list_header: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].font_weight_medium,
+  font_weight_navigation_title: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].font_weight_medium,
+  font_weight_subtitle: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].font_weight_normal,
+  font_weight_title: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].font_weight_normal,
+  front_item_width: 72,
+  has_high_subtitle_padding: 13,
+  has_subtitle_padding: 15,
+  high_subtitle_line_count: 2,
+  inset_h_size: 1 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // 8
+  inset_v_size: 1 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // 8
+  line_height_subtitle: 20,
+  padding: 13,
+  rounded_border_radius: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_item_border_radius,
+  side_padding: 2 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // 16
+  single_height: single_height,
+  single_line_height: single_height - 2 * padding - (2 * 5 + 1),
+  single_with_icon_height: single_with_icon_height,
+  single_with_icon_line_height: single_with_icon_height - 2 * padding - (2 * 5 + 1),
+  subtitle_line_count: 1,
+  title_line_count: 1,
+  color_light_title: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary),
+  color_light_subtitle: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_info: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_tertiary),
+  color_light_front: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_text_disabled: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_disabled),
+  color_light_list_header: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_tertiary),
+  color_light_secondary: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_hover: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary),
+  color_light_hover_front: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary),
+  color_light_hover_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_hover),
+  color_light_focus_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_hover),
+  color_light_selected_text: "inherit",
+  color_light_selected_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_hover),
+  color_light_highlight_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_background_hover),
+  // background color may be set in theme; disabled by default
+  // color_light_background:          "inherit",
+  color_dark_title: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_primary),
+  color_dark_subtitle: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_info: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_tertiary),
+  color_dark_front: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_text_disabled: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_disabled),
+  color_dark_list_header: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_tertiary),
+  color_dark_secondary: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_hover: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_primary),
+  color_dark_hover_front: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_primary),
+  color_dark_hover_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_background_hover),
+  color_dark_selected_text: "inherit",
+  color_dark_selected_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_background_hover),
+  color_dark_highlight_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_background_hover)
+}, themeVars);
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, listTileVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, listTileVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: listTileVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-list/dist/polythene-css-list.mjs":
+/*!**********************************************************************!*\
+  !*** ../node_modules/polythene-css-list/dist/polythene-css-list.mjs ***!
+  \**********************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return listVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var listTileClasses = {
+  component: "pe-list-tile",
+  // elements
+  content: "pe-list-tile__content",
+  highSubtitle: "pe-list-tile__high-subtitle",
+  primary: "pe-list-tile__primary",
+  secondary: "pe-list-tile__secondary",
+  subtitle: "pe-list-tile__subtitle",
+  title: "pe-list-tile__title",
+  contentFront: "pe-list-tile__content-front",
+  // states  
+  compact: "pe-list-tile--compact",
+  compactFront: "pe-list-tile--compact-front",
+  disabled: "pe-list-tile--disabled",
+  hasFront: "pe-list-tile--front",
+  hasHighSubtitle: "pe-list-tile--high-subtitle",
+  hasSubtitle: "pe-list-tile--subtitle",
+  header: "pe-list-tile--header",
+  hoverable: "pe-list-tile--hoverable",
+  insetH: "pe-list-tile--inset-h",
+  insetV: "pe-list-tile--inset-v",
+  selectable: "pe-list-tile--selectable",
+  selected: "pe-list-tile--selected",
+  rounded: "pe-list-tile--rounded",
+  highlight: "pe-list-tile--highlight",
+  sticky: "pe-list-tile--sticky",
+  navigation: "pe-list-tile--navigation"
+};
+
+var classes = {
+  component: "pe-list",
+  // states
+  border: "pe-list--border",
+  compact: "pe-list--compact",
+  hasHeader: "pe-list--header",
+  indentedBorder: "pe-list--indented-border",
+  padding: "pe-list--padding",
+  paddingTop: "pe-list--padding-top",
+  paddingBottom: "pe-list--padding-bottom",
+  // lookup
+  header: listTileClasses.header
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles() {
+    return [];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      backgroundColor: vars$$1["color_" + tint + "_background"]
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_border", function (selector, vars$$1) {
+    var _sel;
+
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, (_sel = {}, _defineProperty(_sel, "& + .pe-list", {
+      borderTopColor: vars$$1["color_" + tint + "_border"]
+    }), _defineProperty(_sel, ".pe-list--border", {
+      " .pe-list-tile": {
+        ":not(:last-child)": {
+          borderColor: vars$$1["color_" + tint + "_border"]
+        }
+      }
+    }), _defineProperty(_sel, ".pe-list--indented-border", {
+      " .pe-list-tile": {
+        " .pe-list-tile__content:not(.pe-list-tile__content-front)": {
+          borderColor: vars$$1["color_" + tint + "_border"]
+        }
+      }
+    }), _sel))];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+// @ts-check
+
+var borderStyle = function borderStyle(vars$$1) {
+  return {
+    borderStyle: "none none solid none",
+    borderWidth: vars$$1.border_width_bordered + "px"
+  };
+};
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      flexGrow: 1,
+      ".pe-list--header": {
+        paddingTop: 0
+      },
+      ".pe-list--indented-border": {
+        borderTop: "none"
+      }
+    })];
+  },
+  padding: function padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list--padding": {
+        padding: vars$$1.padding + "px 0"
+      },
+      ".pe-list--padding-top": {
+        paddingTop: vars$$1.padding + "px"
+      },
+      ".pe-list--padding-bottom": {
+        paddingBottom: vars$$1.padding + "px"
+      }
+    })];
+  },
+  padding_compact: function padding_compact(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list--compact": {
+        padding: vars$$1.padding_compact + "px 0"
+      }
+    })];
+  },
+  border_width_stacked: function border_width_stacked(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      "& + &": {
+        borderStyle: "solid none none none",
+        borderWidth: vars$$1.border_width_stacked + "px"
+      }
+    })];
+  },
+  border_width_bordered: function border_width_bordered(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-list--border": {
+        " .pe-list-tile": {
+          ":not(.pe-list-tile--header):not(:last-child)": {
+            "&": borderStyle(vars$$1)
+          }
+        }
+      },
+      ".pe-list--indented-border": {
+        " .pe-list-tile": {
+          ":not(.pe-list-tile--header):not(:last-child)": {
+            " .pe-list-tile__content:not(.pe-list-tile__content-front)": borderStyle(vars$$1)
+          }
+        }
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+/**
+ * @type {ListVars} listVars
+ */
+
+var listVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  border_width_bordered: 1,
+  border_width_stacked: 1,
+  padding: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // vertical padding
+  padding_compact: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component * 3 / 4,
+  color_light_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_border_light),
+  color_dark_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_border_light) // background color may be set in theme; disabled by default
+  // color_light_background: "inherit",
+  // color_dark_background:  "inherit"
+
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, listVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, listVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: listVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-material-design-progress-spinner/dist/polythene-css-material-design-progress-spinner.mjs":
+/*!******************************************************************************************************************************!*\
+  !*** ../node_modules/polythene-css-material-design-progress-spinner/dist/polythene-css-material-design-progress-spinner.mjs ***!
+  \******************************************************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return materialDesignProgressSpinnerVars; });
+/* harmony import */ var polythene_css_material_design_spinner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-css-material-design-spinner */ "../node_modules/polythene-css-material-design-spinner/dist/polythene-css-material-design-spinner.mjs");
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+
+var classes = {
+  component: "pe-md-progress-spinner",
+  // elements
+  animation: "pe-md-progress-spinner__animation",
+  circle: "pe-md-progress-spinner__circle",
+  circleRight: "pe-md-progress-spinner__circle-right",
+  circleLeft: "pe-md-progress-spinner__circle-left"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      " .pe-md-progress-spinner__circle": {
+        borderColor: "currentcolor"
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  return _defineProperty({}, "color_" + tint, function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      color: vars$$1["color_" + tint]
+    })];
+  });
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  },
+  superColor: polythene_css_material_design_spinner__WEBPACK_IMPORTED_MODULE_0__["color"]
+});
+
+// @ts-check
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      position: "relative",
+      " .pe-md-progress-spinner__animation": {
+        position: "absolute",
+        width: "100%",
+        height: "100%"
+      },
+      " .pe-md-progress-spinner__circle": {
+        position: "absolute",
+        boxSizing: "border-box",
+        width: "100%",
+        height: "100%",
+        borderStyle: "solid",
+        borderRadius: "50%"
+      },
+      " .pe-md-progress-spinner__circle-left, .pe-md-progress-spinner__circle-right": {
+        transform: "rotate(0)",
+        clip: "rect(0, 0, 0, 0)"
+      }
+    })];
+  },
+  progress_animation_duration: function progress_animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      " .pe-md-progress-spinner__animation": {
+        animationDuration: vars$$1.progress_animation_duration
+      }
+    })];
+  }
+};
+var layout$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["createLayout"])({
+  varFns: varFns,
+  superLayout: polythene_css_material_design_spinner__WEBPACK_IMPORTED_MODULE_0__["layout"]
+});
+
+// @ts-check
+/**
+ * @type {MaterialDesignProgressSpinnerVars} materialDesignProgressSpinnerVars
+ */
+
+var materialDesignProgressSpinnerVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  progress_animation_duration: ".8s",
+  color_light: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary),
+  color_dark: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary)
+};
+
+// @ts-check
+var fns = [layout$1, color$1];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].createAddStyle(selector, fns, materialDesignProgressSpinnerVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].createGetStyle(selector, fns, materialDesignProgressSpinnerVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: materialDesignProgressSpinnerVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-material-design-spinner/dist/polythene-css-material-design-spinner.mjs":
+/*!************************************************************************************************************!*\
+  !*** ../node_modules/polythene-css-material-design-spinner/dist/polythene-css-material-design-spinner.mjs ***!
+  \************************************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return materialDesignSpinnerVars; });
+/* harmony import */ var polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-css-base-spinner */ "../node_modules/polythene-css-base-spinner/dist/polythene-css-base-spinner.mjs");
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+
+var classes = {
+  component: "pe-md-spinner",
+  // elements
+  animation: "pe-md-spinner__animation",
+  circle: "pe-md-spinner__circle",
+  circleClipper: "pe-md-spinner__circle-clipper",
+  circleClipperLeft: "pe-md-spinner__circle-clipper-left",
+  circleClipperRight: "pe-md-spinner__circle-clipper-right",
+  gapPatch: "pe-md-spinner__gap-patch",
+  layer: "pe-md-spinner__layer",
+  layerN: "pe-md-spinner__layer-"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+/*
+Styling derived from https://github.com/PolymerElements/paper-spinner
+
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+*/
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      " .pe-md-spinner__layer": {
+        borderColor: "currentcolor"
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_single", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      color: vars$$1["color_" + tint + "_single"]
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_1", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ":not(.pe-spinner--single-color)": {
+        " .pe-md-spinner__layer-1": {
+          borderColor: vars$$1["color_" + tint + "_1"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_2", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ":not(.pe-spinner--single-color)": {
+        " .pe-md-spinner__layer-2": {
+          borderColor: vars$$1["color_" + tint + "_2"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_3", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ":not(.pe-spinner--single-color)": {
+        " .pe-md-spinner__layer-3": {
+          borderColor: vars$$1["color_" + tint + "_3"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_4", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ":not(.pe-spinner--single-color)": {
+        " .pe-md-spinner__layer-4": {
+          borderColor: vars$$1["color_" + tint + "_4"]
+        }
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  },
+  superColor: polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["color"]
+});
+
+var OPACITY_MIN = 0;
+var OPACITY_MAX = .99;
+var CURVE_INFINITE = "cubic-bezier(0.4, 0.0, 0.2, 1) infinite both";
+
+var kfRotate = function kfRotate() {
+  return {
+    " to": {
+      transform: "rotate(360deg)"
+    }
+  };
+};
+
+var kfLeftSpin = function kfLeftSpin() {
+  return kfSpin(1);
+};
+
+var kfRightSpin = function kfRightSpin() {
+  return kfSpin(-1);
+};
+
+var kfSpin = function kfSpin(direction) {
+  return {
+    " from": {
+      "transform": "rotate(" + direction * 130 + "deg)"
+    },
+    " 50%": {
+      "transform": "rotate(" + direction * -5 + "deg)"
+    },
+    " to": {
+      "transform": "rotate(" + direction * 130 + "deg)"
+    }
+  };
+};
+
+var kfFadeOut = function kfFadeOut() {
+  return {
+    " from": {
+      opacity: OPACITY_MAX
+    },
+    " to": {
+      opacity: OPACITY_MIN
+    }
+  };
+};
+
+var kfFillUnfillRotate = function kfFillUnfillRotate(arcSize) {
+  return {
+    " 12.5%": {
+      transform: "rotate(" + 0.5 * arcSize + "deg)"
+    },
+    " 25%": {
+      transform: "rotate(" + 1.0 * arcSize + "deg)"
+    },
+    " 37.5%": {
+      transform: "rotate(" + 1.5 * arcSize + "deg)"
+    },
+    " 50%": {
+      transform: "rotate(" + 2.0 * arcSize + "deg)"
+    },
+    " 62.5%": {
+      transform: "rotate(" + 2.5 * arcSize + "deg)"
+    },
+    " 75%": {
+      transform: "rotate(" + 3.0 * arcSize + "deg)"
+    },
+    " 87.5%": {
+      transform: "rotate(" + 3.5 * arcSize + "deg)"
+    },
+    " to": {
+      transform: "rotate(" + 4.0 * arcSize + "deg)"
+    }
+  };
+};
+/**
+ * HACK: Even though the intention is to have the current .pe-md-spinner__layer at
+ * `opacity: 1`, we set it to `opacity: 0.99` instead since this forces Chrome
+ * to do proper subpixel rendering for the elements being animated. This is
+ * especially visible in Chrome 39 on Ubuntu 14.04. See:
+ *
+ * - https://github.com/Polymer/paper-spinner/issues/9
+ * - https://code.google.com/p/chromium/issues/detail?id=436255
+ */
+
+
+var kfLayer1FadeInOut = function kfLayer1FadeInOut() {
+  return {
+    " from": {
+      opacity: OPACITY_MAX
+    },
+    " 25%": {
+      opacity: OPACITY_MAX
+    },
+    " 26%": {
+      opacity: OPACITY_MIN
+    },
+    " 89%": {
+      opacity: OPACITY_MIN
+    },
+    " 90%": {
+      opacity: OPACITY_MAX
+    },
+    " 100%": {
+      opacity: OPACITY_MAX
+    }
+  };
+};
+
+var kfLayer2FadeInOut = function kfLayer2FadeInOut() {
+  return {
+    " from": {
+      opacity: OPACITY_MIN
+    },
+    " 15%": {
+      opacity: OPACITY_MIN
+    },
+    " 25%": {
+      opacity: OPACITY_MAX
+    },
+    " 50%": {
+      opacity: OPACITY_MAX
+    },
+    " 51%": {
+      opacity: OPACITY_MIN
+    }
+  };
+};
+
+var kfLayer3FadeInOut = function kfLayer3FadeInOut() {
+  return {
+    " from": {
+      opacity: OPACITY_MIN
+    },
+    " 40%": {
+      opacity: OPACITY_MIN
+    },
+    " 50%": {
+      opacity: OPACITY_MAX
+    },
+    " 75%": {
+      opacity: OPACITY_MAX
+    },
+    " 76%": {
+      opacity: OPACITY_MIN
+    }
+  };
+};
+
+var kfLayer4FadeInOut = function kfLayer4FadeInOut() {
+  return {
+    " from": {
+      opacity: OPACITY_MIN
+    },
+    " 65%": {
+      opacity: OPACITY_MIN
+    },
+    " 75%": {
+      opacity: OPACITY_MAX
+    },
+    " 90%": {
+      opacity: OPACITY_MAX
+    },
+    " 100%": {
+      opacity: OPACITY_MIN
+    }
+  };
+};
+
+var layerAnimation = function layerAnimation(vars$$1, num) {
+  return _defineProperty({}, ".pe-md-spinner__layer-" + num, {
+    animation: "mdSpinnerFillUnfillRotate " + 4 * vars$$1.arc_time + "s " + CURVE_INFINITE + ",  mdSpinnerLayer" + num + "FadeInOut " + 4 * vars$$1.arc_time + "s " + CURVE_INFINITE
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      "@keyframes mdSpinnerRotate": kfRotate(),
+      "@keyframes mdSpinnerRightSpin": kfRightSpin(),
+      "@keyframes mdSpinnerLeftSpin": kfLeftSpin(),
+      "@keyframes mdSpinnerFadeOut": kfFadeOut(),
+      "@keyframes mdSpinnerLayer1FadeInOut": kfLayer1FadeInOut(),
+      "@keyframes mdSpinnerLayer2FadeInOut": kfLayer2FadeInOut(),
+      "@keyframes mdSpinnerLayer3FadeInOut": kfLayer3FadeInOut(),
+      "@keyframes mdSpinnerLayer4FadeInOut": kfLayer4FadeInOut(),
+      " .pe-md-spinner__animation": {
+        position: "relative",
+        width: "100%",
+        height: "100%",
+
+        /* The spinner does not have any contents that would have to be
+        * flipped if the direction changes. Always use ltr so that the
+        * style works out correctly in both cases. */
+        direction: "ltr"
+      },
+
+      /**
+      * Patch the gap that appear between the two adjacent div.pe-md-spinner__circle-clipper while the
+      * spinner is rotating (appears on Chrome 38, Safari 7.1, and IE 11).
+      *
+      * Update: the gap no longer appears on Chrome when .pe-md-spinner__layer"s opacity is 0.99,
+      * but still does on Safari and IE.
+      */
+      " .pe-md-spinner__gap-patch": {
+        position: "absolute",
+        boxSizing: "border-box",
+        top: 0,
+        left: "45%",
+        width: "10%",
+        height: "100%",
+        overflow: "hidden",
+        borderColor: "inherit"
+      },
+      " .pe-md-spinner__gap-patch .pe-md-spinner__circle": {
+        width: "1000%",
+        left: "-450%"
+      },
+      " .pe-md-spinner__circle-clipper": {
+        display: "inline-block",
+        fontSize: 0,
+        lineHeight: 0,
+        position: "relative",
+        width: "50%",
+        height: "100%",
+        overflow: "hidden",
+        borderColor: "inherit"
+      },
+      " .pe-md-spinner__circle-clipper .pe-md-spinner__circle": {
+        width: "200%"
+      },
+      " .pe-md-spinner__circle": [polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["mixin"].fit(), {
+        animation: "none",
+        boxSizing: "border-box",
+        height: "100%",
+        borderStyle: "solid",
+        borderColor: "inherit",
+        borderRadius: "50%",
+        borderBottomColor: "transparent !important"
+      }],
+      " .pe-md-spinner__circle-clipper-left .pe-md-spinner__circle": {
+        transform: "rotate(129deg)",
+        borderRightColor: "transparent !important"
+      },
+      " .pe-md-spinner__circle-clipper-right .pe-md-spinner__circle": {
+        transform: "rotate(-129deg)",
+        left: "-100%",
+        borderLeftColor: "transparent !important"
+      },
+
+      /**
+      * IMPORTANT NOTE ABOUT CSS ANIMATION PROPERTIES (keanulee):
+      *
+      * iOS Safari (tested on iOS 8.1) does not handle animation-delay very well - it doesn"t
+      * guarantee that the animation will start _exactly_ after that value. So we avoid using
+      * animation-delay and instead set custom keyframes for each color (as redundant as it
+      * seems).
+      *
+      * We write out each animation in full (instead of separating animation-name,
+      * animation-duration, etc.) because under the polyfill, Safari does not recognize those
+      * specific properties properly, treats them as -webkit-animation, and overrides the
+      * other animation rules. See https://github.com/Polymer/platform/issues/53.
+      */
+      " .pe-md-spinner__layer": [[1, 2, 3, 4].map(function (num) {
+        return layerAnimation(vars$$1, num);
+      }), {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        whiteSpace: "nowrap"
+      }]
+    })];
+  },
+  rotation_duration: function rotation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      " .pe-md-spinner__animation": {
+        animation: "mdSpinnerRotate " + vars$$1.rotation_duration + "s linear infinite"
+      }
+    })];
+  },
+  border_width_small: function border_width_small(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ".pe-spinner--small": {
+        " .pe-md-spinner__circle": {
+          borderWidth: vars$$1.border_width_small + "px"
+        }
+      }
+    })];
+  },
+  border_width_regular: function border_width_regular(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ".pe-spinner--regular": {
+        " .pe-md-spinner__circle": {
+          borderWidth: vars$$1.border_width_regular + "px"
+        }
+      }
+    })];
+  },
+  border_width_medium: function border_width_medium(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ".pe-spinner--medium": {
+        " .pe-md-spinner__circle": {
+          borderWidth: vars$$1.border_width_medium + "px"
+        }
+      }
+    })];
+  },
+  border_width_large: function border_width_large(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ".pe-spinner--large": {
+        " .pe-md-spinner__circle": {
+          borderWidth: vars$$1.border_width_large + "px"
+        }
+      }
+    })];
+  },
+  border_width_fab: function border_width_fab(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      ".pe-spinner--fab": {
+        " .pe-md-spinner__circle": {
+          borderWidth: vars$$1.border_width_fab + "px"
+        }
+      }
+    })];
+  },
+  arc_size: function arc_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      "@keyframes mdSpinnerFillUnfillRotate": kfFillUnfillRotate(vars$$1.arc_size)
+    })];
+  },
+  arc_time: function arc_time(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["sel"])(selector, {
+      " .pe-md-spinner__circle-clipper-left .pe-md-spinner__circle": {
+        animation: "mdSpinnerLeftSpin " + vars$$1.arc_time + "s " + CURVE_INFINITE
+      },
+      " .pe-md-spinner__circle-clipper-right .pe-md-spinner__circle": {
+        animation: "mdSpinnerRightSpin " + vars$$1.arc_time + "s " + CURVE_INFINITE
+      },
+      " .pe-md-spinner__layer": {
+        animation: "mdSpinnerFillUnfillRotate " + 4 * vars$$1.arc_time + "s " + CURVE_INFINITE
+      }
+    })];
+  }
+};
+var layout$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["createLayout"])({
+  varFns: varFns,
+  superLayout: polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["layout"]
+});
+
+// @ts-check
+var arc_size = 270; // degrees - amount of circle the arc takes up
+
+var arc_time = 1.333; // s - time it takes to expand and contract arc
+
+var arc_start_degrees = 360 / 5 * 3; // degrees - how much the start location of the arc should rotate each time, 216 gives us a 5 pointed star shape (it"s 360/5 * 3). For a 7 pointed star, we might do 360/7 * 3 = 154.286.
+
+var rotation_duration = 360 * arc_time / (arc_start_degrees + (360 - arc_size)); // 1.568s
+
+var blue400 = "#42a5f5";
+var red500 = "#f44336";
+var yellow600 = "#fdd835";
+var green500 = "#4caf50";
+/**
+ * @type {MaterialDesignSpinnerVars} materialDesignSpinnerVars
+ */
+
+var materialDesignSpinnerVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  arc_size: arc_size,
+  arc_start_degrees: arc_start_degrees,
+  arc_time: arc_time,
+  border_width_fab: polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["vars"].size_fab / polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["vars"].size_regular * 3,
+  border_width_large: polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["vars"].size_large / polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["vars"].size_regular * 3,
+  border_width_medium: polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["vars"].size_medium / polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["vars"].size_regular * 3,
+  border_width_regular: 3,
+  border_width_small: polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["vars"].size_small / polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__["vars"].size_regular * 3,
+  rotation_duration: rotation_duration,
+  color_light_single: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary),
+  color_light_1: blue400,
+  color_light_2: red500,
+  color_light_3: yellow600,
+  color_light_4: green500,
+  color_dark_single: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary),
+  color_dark_1: blue400,
+  color_dark_2: red500,
+  color_dark_3: yellow600,
+  color_dark_4: green500
+};
+
+// @ts-check
+var fns = [layout$1, color$1];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].createAddStyle(selector, fns, materialDesignSpinnerVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].createGetStyle(selector, fns, materialDesignSpinnerVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_1__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: materialDesignSpinnerVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-menu/dist/polythene-css-menu.mjs":
+/*!**********************************************************************!*\
+  !*** ../node_modules/polythene-css-menu/dist/polythene-css-menu.mjs ***!
+  \**********************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return menuVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+/* harmony import */ var polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-css-shadow */ "../node_modules/polythene-css-shadow/dist/polythene-css-shadow.mjs");
+
+
+
+
+var listTileClasses = {
+  component: "pe-list-tile",
+  // elements
+  content: "pe-list-tile__content",
+  highSubtitle: "pe-list-tile__high-subtitle",
+  primary: "pe-list-tile__primary",
+  secondary: "pe-list-tile__secondary",
+  subtitle: "pe-list-tile__subtitle",
+  title: "pe-list-tile__title",
+  contentFront: "pe-list-tile__content-front",
+  // states  
+  compact: "pe-list-tile--compact",
+  compactFront: "pe-list-tile--compact-front",
+  disabled: "pe-list-tile--disabled",
+  hasFront: "pe-list-tile--front",
+  hasHighSubtitle: "pe-list-tile--high-subtitle",
+  hasSubtitle: "pe-list-tile--subtitle",
+  header: "pe-list-tile--header",
+  hoverable: "pe-list-tile--hoverable",
+  insetH: "pe-list-tile--inset-h",
+  insetV: "pe-list-tile--inset-v",
+  selectable: "pe-list-tile--selectable",
+  selected: "pe-list-tile--selected",
+  rounded: "pe-list-tile--rounded",
+  highlight: "pe-list-tile--highlight",
+  sticky: "pe-list-tile--sticky",
+  navigation: "pe-list-tile--navigation"
+};
+
+var classes = {
+  component: "pe-menu",
+  // elements
+  panel: "pe-menu__panel",
+  content: "pe-menu__content",
+  placeholder: "pe-menu__placeholder",
+  backdrop: "pe-menu__backdrop",
+  // states
+  floating: "pe-menu--floating",
+  origin: "pe-menu--origin",
+  permanent: "pe-menu--permanent",
+  showBackdrop: "pe-menu--backdrop",
+  visible: "pe-menu--visible",
+  width_auto: "pe-menu--width-auto",
+  width_n: "pe-menu--width-",
+  isTopMenu: "pe-menu--top-menu",
+  // lookup
+  listTile: listTileClasses.component,
+  selectedListTile: listTileClasses.selected
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [];
+  } // eslint-disable-line no-unused-vars
+
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__panel": {
+        "background-color": vars$$1["color_" + tint + "_background"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_backdrop_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__backdrop": {
+        "background-color": vars$$1["color_" + tint + "_backdrop_background"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var behaviorVars = {
+  top_menu: false // set to true to position the menu at the top of the screen, full width
+
+};
+
+var themeVars = _objectSpread({
+  backdrop: undefined,
+  // (Boolean) - if not set, backdrop existence is set by component option
+  z: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].z_menu
+}, behaviorVars, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__["sharedVars"]);
+/**
+ * @type {MenuVars} menuVars
+ */
+
+
+var menuVars = _objectSpread({
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_delay: "0s",
+  animation_duration: ".180s",
+  animation_hide_css: "opacity: 0;",
+  animation_hide_origin_effect_css: "transform: scale(0.75);",
+  // set to "transform: scale(1)" to reset scaling
+  animation_show_css: "opacity: 1;",
+  animation_show_origin_effect_css: "transform: scale(1);",
+  animation_timing_function: "ease-in-out",
+  border_radius: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_block_border_radius,
+  height: undefined,
+  // (height value with unit) - if not set, height is set by component option
+  min_width: 1.5,
+  width_factor: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_menu,
+  widths: [1, 1.5, 2, 3, 4, 5, 6, 7],
+  // color vars
+  color_light_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background),
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_background),
+  color_light_backdrop_background: "rgba(0, 0, 0, .1)",
+  color_dark_backdrop_background: "rgba(0, 0, 0, .5)"
+}, themeVars);
+
+/**
+ * 
+ * @param {boolean} isRTL 
+ */
+
+var alignSide = function alignSide(isRTL) {
+  return function () {
+    return {
+      textAlign: isRTL ? "right" : "left"
+    };
+  };
+};
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var unifyWidth = function unifyWidth(vars$$1, width) {
+  return width < vars$$1.min_width ? vars$$1.min_width : width;
+};
+
+var widthClass = function widthClass(width) {
+  var widthStr = width.toString().replace(".", "-");
+  return "pe-menu--width-" + widthStr;
+};
+/**
+ * 
+ * @param {object} params
+ * @param {object} params.vars
+ * @param {number} params.width
+ * @param {string} [params.value]
+ */
+
+
+var widthStyle = function widthStyle(_ref) {
+  var vars$$1 = _ref.vars,
+      width = _ref.width,
+      value = _ref.value;
+  var s = unifyWidth(vars$$1, width);
+  return _defineProperty({}, "." + widthClass(s), {
+    " .pe-menu__panel": {
+      width: value || vars$$1.width_factor * s + "px" // We can't set maxWidth because we don't know the width of the container
+
+    }
+  });
+};
+
+var widths_min_width_width_factor = function widths_min_width_width_factor(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [vars$$1.widths.map(function (width) {
+    return widthStyle({
+      vars: vars$$1,
+      width: width
+    });
+  }), {
+    " .pe-menu__panel": {
+      minWidth: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_menu * vars$$1.min_width + "px"
+    }
+  }]);
+};
+
+var _backdrop = function backdrop(selector, vars$$1) {
+  return (// eslint-disable-line no-unused-vars
+    Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__backdrop": {
+        display: "block"
+      }
+    })
+  );
+};
+
+var _top_menu = function top_menu(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [vars$$1.widths.map(function (width) {
+    return widthStyle({
+      vars: vars$$1,
+      width: width,
+      value: "100vw"
+    });
+  }), Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createMarker"])(vars$$1, behaviorVars), {
+    " .pe-menu__panel": {
+      position: "fixed",
+      width: "100vw",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: "auto",
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0
+    }
+  }]);
+};
+
+var _z = function z(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-menu--floating": {
+      " .pe-menu__panel, .pe-menu__backdrop": {
+        zIndex: vars$$1.z
+      }
+    }
+  });
+};
+
+var varFns = _objectSpread({
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(), {
+      position: "static",
+      ".pe-menu--width-auto": {
+        width: "auto"
+      },
+      ".pe-menu--permanent": {
+        " .pe-menu__panel": {
+          opacity: 1,
+          position: "relative"
+        }
+      },
+      ".pe-menu--floating": {
+        " .pe-menu__panel": {
+          transitionProperty: "opacity, transform"
+        }
+      },
+      " .pe-menu__panel": {
+        transitionProperty: "all",
+        opacity: 0,
+        position: "absolute"
+      },
+      " .pe-menu__backdrop": {
+        display: "none",
+        transitionProperty: "all",
+        position: "fixed",
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        opacity: 0
+      },
+      ".pe-menu--backdrop": _backdrop(selector),
+      ".pe-menu--visible .pe-menu__backdrop": {
+        opacity: 1
+      },
+      ".pe-menu--top-menu": _top_menu(selector, vars$$1),
+      " .pe-menu__content": {
+        overflowX: "auto",
+        overflowY: "auto",
+        width: "100%",
+        height: "100%"
+      },
+      ".pe-menu--full-height": {
+        height: "100%",
+        " .pe-menu__panel": {
+          height: "100%"
+        }
+      }
+    }]), _defineProperty({}, Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), alignRight())];
+  },
+  animation_delay: function animation_delay(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__panel, .pe-menu__backdrop": {
+        transitionDelay: vars$$1.animation_delay
+      }
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__panel, .pe-menu__backdrop": {
+        transitionDuration: vars$$1.animation_duration
+      }
+    })];
+  },
+  animation_timing_function: function animation_timing_function(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__panel, .pe-menu__backdrop": {
+        transitionTimingFunction: vars$$1.animation_timing_function
+      }
+    })];
+  },
+  animation_show_css: function animation_show_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-menu--visible": {
+        " .pe-menu__panel": vars$$1.animation_show_css
+      }
+    })];
+  },
+  animation_hide_css: function animation_hide_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__panel": vars$$1.animation_hide_css
+    })];
+  },
+  animation_show_origin_effect_css: function animation_show_origin_effect_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-menu--origin.pe-menu--visible": {
+        " .pe-menu__panel": vars$$1.animation_show_origin_effect_css
+      }
+    })];
+  },
+  animation_hide_origin_effect_css: function animation_hide_origin_effect_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-menu--origin:not(.pe-menu--visible)": {
+        " .pe-menu__panel": vars$$1.animation_hide_origin_effect_css
+      }
+    })];
+  },
+  height: function height(selector, vars$$1) {
+    return [vars$$1.height !== undefined && Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__panel": {
+        height: vars$$1.height
+      }
+    })];
+  },
+  widths: function widths(selector, vars$$1) {
+    return [widths_min_width_width_factor(selector, vars$$1)];
+  },
+  min_width: function min_width(selector, vars$$1) {
+    return [widths_min_width_width_factor(selector, vars$$1)];
+  },
+  width_factor: function width_factor(selector, vars$$1) {
+    return [widths_min_width_width_factor(selector, vars$$1)];
+  },
+  border_radius: function border_radius(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-menu__panel": {
+        borderRadius: vars$$1.border_radius + "px"
+      }
+    })];
+  },
+  // Theme vars
+  backdrop: function backdrop(selector, vars$$1) {
+    return [vars$$1.backdrop && _backdrop(selector, vars$$1)];
+  },
+  top_menu: function top_menu(selector, vars$$1) {
+    return [vars$$1.top_menu && _top_menu(selector, vars$$1)];
+  },
+  z: function z(selector, vars$$1) {
+    return [vars$$1.z && _z(selector, vars$$1)];
+  }
+}, polythene_css_shadow__WEBPACK_IMPORTED_MODULE_2__["sharedVarFns"]);
+
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, menuVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, menuVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: menuVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-notification/dist/polythene-css-notification.mjs":
+/*!**************************************************************************************!*\
+  !*** ../node_modules/polythene-css-notification/dist/polythene-css-notification.mjs ***!
+  \**************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars, customLayoutFns, holderLayout */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return notificationVars; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "customLayoutFns", function() { return customLayoutFns; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "holderLayout", function() { return holderLayout; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-notification",
+  // elements
+  action: "pe-notification__action",
+  content: "pe-notification__content",
+  holder: "pe-notification__holder",
+  placeholder: "pe-notification__placeholder",
+  title: "pe-notification__title",
+  // states
+  hasContainer: "pe-notification--container",
+  horizontal: "pe-notification--horizontal",
+  multilineTitle: "pe-notification__title--multi-line",
+  vertical: "pe-notification--vertical",
+  visible: "pe-notification--visible"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [];
+  } // eslint-disable-line no-unused-vars
+
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-notification__content": {
+        color: vars$$1["color_" + tint + "_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-notification__content": {
+        background: vars$$1["color_" + tint + "_background"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+// @ts-check
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenterCenter, {
+      // assumes position relative
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      pointerEvents: "none",
+      justifyContent: "flex-start",
+      // For IE 11
+      ".pe-multiple--screen": {
+        position: "fixed",
+        zIndex: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].z_notification
+      }
+    }]), {
+      ":not(.pe-notification--container) .pe-multiple--container": {
+        position: "absolute"
+      }
+    }];
+  }
+};
+var holderLayout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+var title_single_padding_v_title_padding_h = function title_single_padding_v_title_padding_h(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-notification__title": {
+      padding: vars$$1.title_single_padding_v + "px " + vars$$1.title_padding_h + "px"
+    }
+  });
+};
+
+var customLayoutFns = {
+  animation_hide_css: function animation_hide_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, vars$$1.animation_hide_css)];
+  },
+  animation_show_css: function animation_show_css(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-notification--visible": [vars$$1.animation_show_css]
+    })];
+  },
+  width: function width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-notification__content": {
+        width: vars$$1.width + "px"
+      }
+    })];
+  },
+  animation_delay: function animation_delay(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      transitionDelay: vars$$1.animation_delay
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      transitionDuration: vars$$1.animation_duration
+    })];
+  },
+  animation_timing_function: function animation_timing_function(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      transitionTimingFunction: vars$$1.animation_timing_function
+    })];
+  },
+  side_padding: function side_padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-notification__content": {
+        padding: "0 " + vars$$1.side_padding + "px"
+      }
+    })];
+  },
+  border_radius: function border_radius(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-notification__content": {
+        borderRadius: vars$$1.border_radius + "px"
+      }
+    })];
+  },
+  title_single_padding_v: function title_single_padding_v(selector, vars$$1) {
+    return [title_single_padding_v_title_padding_h(selector, vars$$1)];
+  },
+  title_padding_h: function title_padding_h(selector, vars$$1) {
+    return [title_single_padding_v_title_padding_h(selector, vars$$1)];
+  },
+  font_size: function font_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-notification__title": {
+        fontSize: vars$$1.font_size + "px"
+      }
+    })];
+  },
+  line_height: function line_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-notification__title": {
+        lineHeight: vars$$1.line_height + "px"
+      }
+    })];
+  },
+  title_multi_padding_v: function title_multi_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-notification--horizontal": {
+        " .pe-notification__title--multi-line": {
+          paddingTop: vars$$1.title_multi_padding_v + "px",
+          paddingBottom: vars$$1.title_multi_padding_v + "px"
+        }
+      },
+      ".pe-notification--vertical": {
+        " .pe-notification__title--multi-line": {
+          paddingTop: vars$$1.title_multi_padding_v + "px"
+        }
+      }
+    })];
+  }
+};
+
+var varFns$1 = _extends({}, {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenter, {
+      pointerEvents: "all",
+      justifyContent: "center",
+      margin: "0 auto",
+      transitionProperty: "all",
+      opacity: 0,
+      " .pe-notification__title": {
+        flex: "1 0 auto"
+      },
+      " .pe-notification__action": {
+        " .pe-button": {
+          margin: 0
+        }
+      },
+      " .pe-notification__content": {
+        maxWidth: "100%"
+      },
+      ".pe-notification--horizontal": {
+        " .pe-notification__content": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal,
+        " .pe-notification__title": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), {
+          alignSelf: "center"
+        }],
+        " .pe-notification__action": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenter
+      },
+      ".pe-notification--vertical": {
+        " .pe-notification__content": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutVertical],
+        " .pe-notification__title": {
+          paddingBottom: "6px"
+        },
+        " .pe-notification__action": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutEndJustified, {
+          width: "100%"
+        }]
+      }
+    }])];
+  }
+}, customLayoutFns);
+
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns$1
+});
+
+// @ts-check
+var buttonPaddingH = 8; // padding, inner text space
+
+/**
+ * @type {NotificationVars} notificationVars
+ */
+
+var notificationVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_delay: "0s",
+  animation_duration: ".3s",
+  animation_hide_css: "opacity: 0;",
+  animation_show_css: "opacity: 1;",
+  animation_timing_function: "ease-in-out",
+  border_radius: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_block_border_radius,
+  font_size: 14,
+  line_height: 20,
+  min_height: 80,
+  side_padding: 24 - buttonPaddingH,
+  title_multi_padding_v: 20,
+  // 24 - natural line height
+  title_padding_h: buttonPaddingH,
+  title_single_padding_v: 14,
+  width: 288,
+  color_light_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background),
+  color_light_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_dark_primary),
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_background),
+  color_dark_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary)
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var holderFns = [holderLayout];
+var holderSelector = ".".concat(classes.holder);
+
+var addStyle = function addStyle(customSelector, customVars) {
+  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref$mediaQuery = _ref.mediaQuery,
+      mediaQuery = _ref$mediaQuery === void 0 ? "" : _ref$mediaQuery,
+      _ref$scope = _ref.scope,
+      scope = _ref$scope === void 0 ? "" : _ref$scope;
+
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, selector],
+    fns: fns,
+    vars: notificationVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, holderSelector],
+    fns: holderFns,
+    vars: notificationVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+};
+
+var getStyle = function getStyle() {
+  var customSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var customVars = arguments.length > 1 ? arguments[1] : undefined;
+
+  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref2$mediaQuery = _ref2.mediaQuery,
+      mediaQuery = _ref2$mediaQuery === void 0 ? "" : _ref2$mediaQuery,
+      _ref2$scope = _ref2.scope,
+      scope = _ref2$scope === void 0 ? "" : _ref2$scope;
+
+  return polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [customSelector, selector],
+    fns: fns,
+    vars: notificationVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }).concat(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [holderSelector],
+    fns: holderFns,
+    vars: notificationVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }));
+};
+
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [holderSelector],
+  fns: holderFns,
+  vars: notificationVars
+});
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: notificationVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-radio-button/dist/polythene-css-radio-button.mjs":
+/*!**************************************************************************************!*\
+  !*** ../node_modules/polythene-css-radio-button/dist/polythene-css-radio-button.mjs ***!
+  \**************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return radioButtonVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-css-selection-control */ "../node_modules/polythene-css-selection-control/dist/polythene-css-selection-control.mjs");
+
+
+
+var classes = {
+  component: "pe-radio-control"
+};
+
+// @ts-check
+var color$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  superColor: polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__["color"]
+});
+
+// @ts-check
+var varFns = {
+  general_styles: function general_styles() {
+    return {
+      " .pe-radio-group": {
+        display: "flex"
+      }
+    };
+  }
+};
+var layout$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns,
+  superLayout: polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__["layout"]
+});
+
+// @ts-check
+
+/**
+ * @typedef {import("../index").RadioButtonVars} RadioButtonVars
+ */
+
+/**
+ * @type {RadioButtonVars} radioButtonVars
+ */
+var radioButtonVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true
+};
+
+// @ts-check
+var fns = [layout$1, color$1];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, radioButtonVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, radioButtonVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: radioButtonVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-ripple/dist/polythene-css-ripple.mjs":
+/*!**************************************************************************!*\
+  !*** ../node_modules/polythene-css-ripple/dist/polythene-css-ripple.mjs ***!
+  \**************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return rippleVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+
+
+var classes = {
+  component: "pe-ripple",
+  // elements
+  mask: "pe-ripple__mask",
+  waves: "pe-ripple__waves",
+  // states
+  unconstrained: "pe-ripple--unconstrained",
+  wavesAnimating: "pe-ripple__waves--animating"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: "inherit"
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color", function color(selector, vars) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: vars["color"]
+    })];
+  }), _defineProperty(_ref, "color_" + tint, function (selector, vars) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: vars["color_" + tint]
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+// @ts-check
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+      color: "inherit",
+      borderRadius: "inherit",
+      pointerEvents: "none",
+      ":not(.pe-ripple--unconstrained)": {
+        borderRadius: "inherit",
+        " .pe-ripple__mask": {
+          overflow: "hidden",
+          borderRadius: "inherit"
+        }
+      },
+      " .pe-ripple__mask": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+        transform: "translate3d(0,0,0)"
+      }],
+      " .pe-ripple__waves": {
+        outline: "1px solid transparent",
+        // for IE10
+        position: "absolute",
+        borderRadius: "50%",
+        pointerEvents: "none",
+        display: "none"
+      },
+      " .pe-ripple__waves--animating": {
+        display: "block"
+      }
+    }])];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+
+/**
+ * @typedef {import("../index").RippleVars} RippleVars
+ */
+
+/**
+ * @type {RippleVars} rippleVars
+ */
+var rippleVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  color: "inherit" // only specify this variable to get both states
+  // color_light:   "inherit",
+  // color_dark:    "inherit"
+
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, rippleVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, rippleVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: rippleVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-search/dist/polythene-css-search.mjs":
+/*!**************************************************************************!*\
+  !*** ../node_modules/polythene-css-search/dist/polythene-css-search.mjs ***!
+  \**************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return searchVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-search",
+  // elements
+  content: "pe-search__content",
+  // states
+  searchFullWidth: "pe-search--full-width",
+  searchInset: "pe-search--inset"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input-area": {
+        backgroundColor: "transparent"
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      backgroundColor: vars$$1["color_" + tint + "_background"]
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_label_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield": {
+        " .pe-textfield__label": {
+          color: vars$$1["color_" + tint + "_label_text"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_input_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield": {
+        " .pe-textfield__input": {
+          color: vars$$1["color_" + tint + "_input_text"]
+        }
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+// @ts-check
+
+var inset_height_line_height_input = function inset_height_line_height_input(selector, vars$$1) {
+  var inset_input_padding_v = (vars$$1.inset_height - vars$$1.line_height_input) / 2;
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-search--inset": {
+      " .pe-textfield__input, .pe-textfield__label": {
+        paddingTop: inset_input_padding_v + "px",
+        paddingBottom: inset_input_padding_v + "px"
+      }
+    }
+  });
+};
+
+var full_width_height_line_height_input = function full_width_height_line_height_input(selector, vars$$1) {
+  var full_width_input_padding_v = (vars$$1.full_width_height - vars$$1.line_height_input) / 2;
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-search--full-width": {
+      " .pe-textfield__input, .pe-textfield__label": {
+        paddingTop: full_width_input_padding_v + "px",
+        paddingBottom: full_width_input_padding_v + "px"
+      }
+    }
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), {
+      position: "relative",
+      // necessary when a shadow is added
+      " .pe-textfield": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), {
+        alignItems: "center",
+        padding: 0,
+        // prevent that neighboring icon button with ripple hides the cursor
+        position: "relative",
+        zIndex: 1,
+        " .pe-textfield__input-area": {
+          padding: 0,
+          ":after": {
+            display: "none"
+          }
+        },
+        " .pe-textfield__input": {
+          // reset
+          border: "none"
+        },
+        " .pe-textfield__label": {
+          // reset
+          top: 0,
+          bottom: 0
+        }
+      }],
+      " .pe-search__content": {
+        "&, .pe-textfield": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal,
+        "&, .pe-textfield__input-area": {
+          flexGrow: 1
+        }
+      },
+      " .pe-search__content > *": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutVertical, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].selfCenter],
+      ".pe-search--inset": {
+        "&, .pe-textfield__input-area, .pe-textfield__input, .pe-textfield__label": {
+          padding: 0
+        }
+      }
+    }])];
+  },
+  font_size_input: function font_size_input(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield": {
+        " .pe-textfield__input, .pe-textfield__label": {
+          fontSize: vars$$1.font_size_input + "px"
+        }
+      }
+    })];
+  },
+  line_height_input: function line_height_input(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input, .pe-textfield__label": {
+        lineHeight: vars$$1.line_height_input + "px"
+      }
+    }), inset_height_line_height_input(selector, vars$$1)];
+  },
+  inset_border_radius: function inset_border_radius(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--inset": {
+        "border-radius": vars$$1.inset_border_radius + "px"
+      }
+    })];
+  },
+  inset_side_padding: function inset_side_padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--inset": {
+        padding: "0 " + vars$$1.inset_side_padding + "px"
+      }
+    })];
+  },
+  inset_height: function inset_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--inset": {
+        "&, .pe-textfield__input-area, .pe-textfield__input, .pe-textfield__label": {
+          padding: 0,
+          height: vars$$1.inset_height + "px"
+        }
+      }
+    }), inset_height_line_height_input(selector, vars$$1)];
+  },
+  full_width_height: function full_width_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--full-width": {
+        "&, .pe-textfield__input-area, .pe-textfield__input, .pe-textfield__label": {
+          height: vars$$1.full_width_height + "px"
+        }
+      }
+    }), full_width_height_line_height_input(selector, vars$$1)];
+  },
+  inset_input_indent: function inset_input_indent(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--inset": {
+        " .pe-textfield__input, .pe-textfield__label": {
+          paddingLeft: vars$$1.inset_input_indent + "px"
+        }
+      }
+    })];
+  },
+  inset_input_right_padding: function inset_input_right_padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--inset": {
+        " .pe-textfield__input, .pe-textfield__label": {
+          paddingRight: vars$$1.inset_input_right_padding + "px"
+        }
+      }
+    })];
+  },
+  full_width_side_padding: function full_width_side_padding(selector, vars$$1) {
+    var full_width_input_indent = polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_indent - vars$$1.full_width_side_padding - polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_icon_button;
+    return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--full-width": {
+        padding: "0 " + vars$$1.full_width_side_padding + "px",
+        " .pe-textfield__input, .pe-textfield__label": {
+          paddingLeft: full_width_input_indent + "px"
+        }
+      },
+      ".pe-search--full-width + .pe-list .pe-list-tile": {
+        "> :first-child": {
+          paddingLeft: vars$$1.full_width_side_padding + "px"
+        },
+        "> :last-child": {
+          paddingRight: vars$$1.full_width_side_padding + "px"
+        }
+      }
+    });
+  },
+  full_width_border_radius: function full_width_border_radius(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--full-width": {
+        borderRadius: vars$$1.full_width_border_radius + "px"
+      }
+    })];
+  },
+  full_width_input_right_padding: function full_width_input_right_padding(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-search--full-width": {
+        " .pe-textfield__input, .pe-textfield__label": {
+          paddingRight: vars$$1.full_width_input_right_padding + "px"
+        }
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+/**
+ * @type {SearchVars} searchVars
+ */
+
+var searchVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  font_size_input: 20,
+  full_width_border_radius: 0,
+  full_width_height: 56,
+  full_width_input_right_padding: 0,
+  full_width_side_margin: 0,
+  full_width_side_padding: 8,
+  inset_border_radius: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_block_border_radius,
+  inset_height: 48,
+  inset_input_indent: 16,
+  inset_input_right_padding: 0,
+  inset_side_padding: 0,
+  line_height_input: 20,
+  color_light_label_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_disabled),
+  color_light_input_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary),
+  color_light_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background),
+  color_dark_label_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_disabled),
+  color_dark_input_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_primary),
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_background)
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, searchVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, searchVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: searchVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-selection-control/dist/polythene-css-selection-control.mjs":
+/*!************************************************************************************************!*\
+  !*** ../node_modules/polythene-css-selection-control/dist/polythene-css-selection-control.mjs ***!
+  \************************************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return vars$1; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-control",
+  // elements
+  formLabel: "pe-control__form-label",
+  input: "pe-control__input",
+  label: "pe-control__label",
+  // states
+  disabled: "pe-control--disabled",
+  inactive: "pe-control--inactive",
+  large: "pe-control--large",
+  medium: "pe-control--medium",
+  off: "pe-control--off",
+  on: "pe-control--on",
+  regular: "pe-control--regular",
+  small: "pe-control--small",
+  // control view elements
+  box: "pe-control__box",
+  button: "pe-control__button",
+  // control view states
+  buttonOff: "pe-control__button--off",
+  buttonOn: "pe-control__button--on"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-control__box": {
+        " .pe-control__button": {
+          color: "inherit"
+        },
+        " .pe-control__button--on": {
+          color: "inherit"
+        }
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_on", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: vars$$1["color_" + tint + "_on"] // override by specifying "color"
+
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_off", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-control__button--off": {
+        color: vars$$1["color_" + tint + "_off"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--disabled": {
+        " .pe-control__label": {
+          color: vars$$1["color_" + tint + "_disabled"]
+        },
+        " .pe-control__box": {
+          " .pe-control__button--on, .pe-control__button--off": {
+            color: vars$$1["color_" + tint + "_disabled"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-control__label": {
+        color: vars$$1["color_" + tint + "_label"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_on_icon", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-control__box": {
+        " .pe-control__button--on": {
+          color: vars$$1["color_" + tint + "_on_icon"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_off_icon", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-control__box": {
+        " .pe-control__button--off": {
+          color: vars$$1["color_" + tint + "_off_icon"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_on", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-button--focus .pe-button__focus": {
+          backgroundColor: vars$$1["color_" + tint + "_focus_on"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_off", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-button--focus .pe-button__focus": {
+          backgroundColor: vars$$1["color_" + tint + "_focus_off"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_on_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-button--focus .pe-button__focus": {
+          opacity: vars$$1["color_" + tint + "_focus_on_opacity"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_off_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-button--focus .pe-button__focus": {
+          opacity: vars$$1["color_" + tint + "_focus_off_opacity"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_on_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-control__label": {
+          color: vars$$1["color_" + tint + "_on_label"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_off_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-control__label": {
+          color: vars$$1["color_" + tint + "_off_label"]
+        }
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var alignSide = function alignSide(isRTL) {
+  return function (vars$$1) {
+    return {};
+  };
+}; // eslint-disable-line no-unused-vars
+
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var makeSize = function makeSize(vars$$1, height) {
+  var iconSize = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size;
+  var labelSize = iconSize + vars$$1.label_height;
+  var iconOffset = (labelSize - iconSize) / 2;
+  return {
+    " .pe-control__form-label": {
+      height: height + "px"
+    },
+    " .pe-control__box": {
+      width: iconSize + "px",
+      height: iconSize + "px"
+    },
+    " .pe-button__content": {
+      width: labelSize + "px",
+      height: labelSize + "px",
+      flexShrink: 0,
+      " .pe-icon": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(iconOffset)]
+    }
+  };
+};
+
+var activeButton = function activeButton() {
+  return {
+    opacity: 1,
+    zIndex: 0
+  };
+};
+
+var inactiveButton = function inactiveButton() {
+  return {
+    opacity: 0,
+    zIndex: -1
+  };
+};
+
+var button_size_icon_size = function button_size_icon_size(selector, vars$$1, isRTL) {
+  var _peButtonPeContr;
+
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-button.pe-control__button": (_peButtonPeContr = {
+      top: -((vars$$1.button_size - vars$$1.icon_size) / 2) + "px"
+    }, _defineProperty(_peButtonPeContr, isRTL ? "right" : "left", -((vars$$1.button_size - vars$$1.icon_size) / 2) + "px"), _defineProperty(_peButtonPeContr, isRTL ? "left" : "right", "auto"), _peButtonPeContr)
+  });
+};
+
+var _label_padding_before = function label_padding_before(selector, vars$$1, isRTL) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-control__label": _defineProperty({}, isRTL ? "paddingRight" : "paddingLeft", vars$$1.label_padding_before + "px")
+  });
+};
+
+var _label_padding_after = function label_padding_after(selector, vars$$1, isRTL) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-control__label": _defineProperty({}, isRTL ? "paddingLeft" : "paddingRight", vars$$1.label_padding_after + "px")
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(vars$$1), {
+      display: "inline-block",
+      boxSizing: "border-box",
+      margin: 0,
+      padding: 0,
+      " input[type=checkbox], input[type=radio]": {
+        display: "none"
+      },
+      " .pe-control__form-label": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenter, {
+        position: "relative",
+        cursor: "pointer",
+        margin: 0,
+        color: "inherit",
+        ":focus": {
+          outline: 0
+        }
+      }],
+      ".pe-control--inactive": {
+        " .pe-control__form-label": {
+          cursor: "default"
+        }
+      },
+      " .pe-control__box": {
+        position: "relative",
+        display: "inline-block",
+        boxSizing: "border-box",
+        color: "inherit",
+        flexShrink: 0,
+        ":focus": {
+          outline: 0
+        }
+      },
+      " .pe-button.pe-control__button": {
+        position: "absolute"
+      },
+      ".pe-control--off": {
+        " .pe-control__button--on": inactiveButton(),
+        " .pe-control__button--off": activeButton()
+      },
+      ".pe-control--on": {
+        " .pe-control__button--on": activeButton(),
+        " .pe-control__button--off": inactiveButton()
+      },
+      " .pe-control__label": {
+        // padding: RTL
+        alignSelf: "center"
+      },
+      ".pe-control--disabled": {
+        " .pe-control__form-label": {
+          cursor: "auto"
+        },
+        " .pe-control__button": {
+          pointerEvents: "none"
+        }
+      },
+      " .pe-button__content": {
+        " .pe-icon": {
+          position: "absolute"
+        }
+      }
+    }, _defineProperty({}, "*[dir=rtl] ".concat(selector, ", .pe-rtl ").concat(selector), [alignRight(vars$$1)])])];
+  },
+  label_font_size: function label_font_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-control__form-label": {
+        fontSize: vars$$1.label_font_size + "px"
+      }
+    })];
+  },
+  label_height: function label_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-control__box": {
+        width: vars$$1.label_height + "px",
+        height: vars$$1.label_height + "px"
+      },
+      ".pe-control--small": makeSize(vars$$1, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_small, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_small),
+      ".pe-control--regular": makeSize(vars$$1, vars$$1.label_height, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size),
+      ".pe-control--medium": makeSize(vars$$1, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_medium, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_medium),
+      ".pe-control--large": makeSize(vars$$1, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_large, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size_large)
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button.pe-control__button": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("opacity", vars$$1.animation_duration)],
+      " .pe-control__label": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("all", vars$$1.animation_duration)]
+    })];
+  },
+  button_size: function button_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), button_size_icon_size(selector, vars$$1, false), button_size_icon_size(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), vars$$1, true)];
+  },
+  icon_size: function icon_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), button_size_icon_size(selector, vars$$1, false), button_size_icon_size(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), vars$$1, true)];
+  },
+  label_padding_after: function label_padding_after(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), _label_padding_after(selector, vars$$1, false), _label_padding_after(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), vars$$1, true)];
+  },
+  label_padding_before: function label_padding_before(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), _label_padding_before(selector, vars$$1, false), _label_padding_before(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), vars$$1, true)];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+var vars$1 = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_duration: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].animation_duration,
+  button_size: 6 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  icon_size: 3 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  label_font_size: 2 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // 16
+  label_height: 3 * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component,
+  // 24
+  label_padding_after: 0,
+  label_padding_before: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit * 4,
+  // 16
+  color_light_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_light_off: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_label: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_disabled: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_disabled),
+  color_light_thumb_off_focus_opacity: .08,
+  color_light_thumb_on_focus_opacity: .11,
+  // icon colors may be set in theme; set to "inherit" by default
+  // color_light_on_icon
+  // color_light_off_icon
+  // label on/off colors may be set in theme; set to color_light_label by default
+  // color_light_on_label
+  // color_light_off_label
+  color_light_focus_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_light_focus_on_opacity: .11,
+  color_light_focus_off: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground),
+  color_light_focus_off_opacity: .07,
+  color_dark_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_dark_off: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_label: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_disabled: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_disabled),
+  color_dark_thumb_off_focus_opacity: .08,
+  color_dark_thumb_on_focus_opacity: .11,
+  // icon color may be set in theme; set to "inherit" by default
+  // color_dark_on_icon
+  // color_dark_off_icon
+  // label on/off colors may be set in theme; set to color_dark_label by default
+  // color_dark_on_label
+  // color_dark_off_label
+  color_dark_focus_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  // or '#80cbc4'
+  color_dark_focus_on_opacity: .14,
+  color_dark_focus_off: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground),
+  color_dark_focus_off_opacity: .09
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, vars$1);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, vars$1);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: vars$1
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-shadow/dist/polythene-css-shadow.mjs":
+/*!**************************************************************************!*\
+  !*** ../node_modules/polythene-css-shadow/dist/polythene-css-shadow.mjs ***!
+  \**************************************************************************/
+/*! exports provided: addStyle, getStyle, layout, vars, sharedVars, sharedVarFns */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return vars$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sharedVars", function() { return sharedVars; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sharedVarFns", function() { return sharedVarFns; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-shadow",
+  // elements
+  bottomShadow: "pe-shadow__bottom",
+  topShadow: "pe-shadow__top",
+  // states
+  animated: "pe-shadow--animated",
+  depth_n: "pe-shadow--depth-"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+var _createShadowForSelector = function _createShadowForSelector(which, depth) {
+  return function (selector, vars$$1) {
+    return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, _defineProperty({}, " .pe-shadow__".concat(which, ".pe-shadow--depth-").concat(depth), {
+      boxShadow: vars$$1["shadow_".concat(which, "_depth_").concat(depth)]
+    }));
+  };
+};
+/**
+ * @param {string} selector 
+ * @param {object} vars 
+ * @param {number} depth 
+ * @param {"top"|"bottom"} which 
+ */
+
+
+var _createShadow = function _createShadow(selector, vars$$1, depth, which) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, _defineProperty({}, " .pe-shadow__".concat(which), {
+    boxShadow: vars$$1["shadow_".concat(which, "_depth_").concat(depth)]
+  }));
+};
+/**
+ * @param {string} selector 
+ * @param {object} vars 
+ * @param {number} depth
+ * @returns {object}
+ */
+
+
+var shadow = function shadow(selector, vars$$1, depth) {
+  return [_createShadow(selector, vars$$1, depth, "top"), _createShadow(selector, vars$$1, depth, "bottom")];
+};
+/**
+ * @param {string} selector 
+ * @param {object} vars 
+ * @returns {object}
+ */
+
+
+var shadow_depth = function shadow_depth(selector, vars$$1) {
+  return vars$$1.shadow_depth !== undefined ? shadow(selector, vars$$1, vars$$1.shadow_depth) : null;
+};
+
+var sharedVarFns = {
+  shadow_depth: shadow_depth
+};
+
+var varFns = _extends({}, {
+  general_styles: function general_styles(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), shadow(selector, vars$$1, 1), {
+      borderRadius: "inherit",
+      pointerEvents: "none",
+      " .pe-shadow__bottom, .pe-shadow__top": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+        borderRadius: "inherit"
+      }]
+    }])];
+  },
+  transition: function transition(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-shadow--animated": {
+        " .pe-shadow__bottom, .pe-shadow__top": {
+          transition: vars$$1.transition
+        }
+      }
+    })];
+  },
+  shadow_depth: shadow_depth
+}, [0, 1, 2, 3, 4, 5].reduce(function (acc, depth) {
+  return acc["shadow_top_depth_".concat(depth)] = _createShadowForSelector("top", depth), acc["shadow_bottom_depth_".concat(depth)] = _createShadowForSelector("bottom", depth), acc;
+}, {}));
+
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+var sharedVars = {
+  shadow_top_depth_0: "none",
+  shadow_bottom_depth_0: "none",
+  shadow_top_depth_1: "none",
+  shadow_bottom_depth_1: "0 1px 4px 0 rgba(0, 0, 0, 0.37)",
+  shadow_top_depth_2: "0 2px 2px 0 rgba(0, 0, 0, 0.2)",
+  shadow_bottom_depth_2: "0 6px 10px 0 rgba(0, 0, 0, 0.3)",
+  shadow_top_depth_3: "0 11px 7px 0 rgba(0, 0, 0, 0.19)",
+  shadow_bottom_depth_3: "0 13px 25px 0 rgba(0, 0, 0, 0.3)",
+  shadow_top_depth_4: "0 14px 12px 0 rgba(0, 0, 0, 0.17)",
+  shadow_bottom_depth_4: "0 20px 40px 0 rgba(0, 0, 0, 0.3)",
+  shadow_top_depth_5: "0 17px 17px 0 rgba(0, 0, 0, 0.15)",
+  shadow_bottom_depth_5: "0 27px 55px 0 rgba(0, 0, 0, 0.3)",
+  // theme vars
+  shadow_depth: undefined
+};
+var vars$1 = _objectSpread({
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  transition: "box-shadow ".concat(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].animation_duration, " ease-out")
+}, sharedVars);
+
+// @ts-check
+var fns = [layout];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, vars$1);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, vars$1);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: vars$1
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-slider/dist/polythene-css-slider.mjs":
+/*!**************************************************************************!*\
+  !*** ../node_modules/polythene-css-slider/dist/polythene-css-slider.mjs ***!
+  \**************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return vars$1; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-slider",
+  // elements
+  control: "pe-slider__control",
+  label: "pe-slider__label",
+  pin: "pe-slider__pin",
+  thumb: "pe-slider__thumb",
+  tick: "pe-slider__tick",
+  ticks: "pe-slider__ticks",
+  track: "pe-slider__track",
+  trackBar: "pe-slider__track-bar",
+  trackBarValue: "pe-slider__track-bar-value",
+  trackPart: "pe-slider__track-part",
+  trackPartRest: "pe-slider__track-rest",
+  trackPartValue: "pe-slider__track-value",
+  // states
+  hasFocus: "pe-slider--focus",
+  hasPin: "pe-slider--pin",
+  hasTicks: "pe-slider--ticks",
+  hasTrack: "pe-slider--track",
+  isActive: "pe-slider--active",
+  isAtMin: "pe-slider--min",
+  isDisabled: "pe-slider--disabled",
+  tickValue: "pe-slider__tick--value"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__control": {
+        ":after": {
+          borderColor: "transparent"
+        }
+      },
+      " .pe-slider__pin": {
+        backgroundColor: "currentcolor",
+        ":before": {
+          backgroundColor: "inherit"
+        }
+      },
+      ":not(.pe-slider--disabled)": {
+        " .pe-slider__control": {
+          backgroundColor: "currentcolor"
+        },
+        " .pe-slider__track-value .pe-slider__track-bar-value": {
+          background: "currentcolor"
+        },
+        ".pe-slider--focus:not(.pe-slider--min):not(.pe-slider--pin) .pe-slider__control:before,\
+        &:not(.pe-slider--min):not(.pe-slider--pin) .pe-slider__control:focus:before": {
+          backgroundColor: "currentcolor"
+        }
+      },
+      ".pe-slider--min:not(.pe-slider--disabled):not(.pe-slider--ticks)": {
+        " .pe-slider__control": {
+          backgroundColor: "transparent"
+        },
+        " .pe-slider__thumb": {
+          opacity: 0
+        },
+        ".pe-slider--ticks": {
+          " .pe-slider__control:after": {
+            borderColor: "transparent"
+          }
+        }
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_icon", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-slider--disabled)": {
+        " .pe-icon": {
+          color: vars$$1["color_" + tint + "_icon"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-slider--disabled)": {
+        " .pe-slider__label": {
+          color: vars$$1["color_" + tint + "_label"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_on", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: vars$$1["color_" + tint + "_thumb_on"] // override by specifying "color"
+
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_inactive", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__track-bar-value": {
+        background: vars$$1["color_" + tint + "_track_inactive"]
+      },
+      ".pe-slider--min:not(.pe-slider--disabled):not(.pe-slider--ticks)": {
+        " .pe-slider__control:after": {
+          borderColor: vars$$1["color_" + tint + "_track_inactive"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_tick", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__tick": {
+        background: vars$$1["color_" + tint + "_tick"]
+      },
+      ".pe-slider--min:not(.pe-slider--disabled)": {
+        ".pe-slider--tick": {
+          backgroundColor: vars$$1["color_" + tint + "_tick"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_tick_value", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__tick--value": {
+        background: vars$$1["color_" + tint + "_tick_value"]
+      },
+      ".pe-slider--min:not(.pe-slider--disabled)": {
+        ".pe-slider--tick--value": {
+          backgroundColor: vars$$1["color_" + tint + "_tick_value"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled_icon", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-icon": {
+        color: vars$$1["color_" + tint + "_disabled_icon"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__label": {
+        color: vars$$1["color_" + tint + "_disabled_label"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_active", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-slider--active": {
+        " .pe-slider__track-bar-value": {
+          background: vars$$1["color_" + tint + "_track_active"]
+        }
+      },
+      ".pe-slider--min:not(.pe-slider--disabled)": {
+        ".pe-slider--active .pe-slider__control:after": {
+          borderColor: vars$$1["color_" + tint + "_track_active"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_inactive", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-slider--disabled": {
+        " .pe-slider__control": {
+          background: vars$$1["color_" + tint + "_thumb_inactive"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-slider--disabled)": {
+        " .pe-slider__control": {
+          backgroundColor: vars$$1["color_" + tint + "_thumb_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_off_focus_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-slider--disabled)": {
+        " .pe-slider__control": {
+          ":before": {
+            opacity: vars$$1["color_" + tint + "_thumb_off_focus_opacity"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_off_focus", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-slider--disabled)": {
+        ".pe-slider--focus.pe-slider--min:not(.pe-slider--pin) .pe-slider__control:before,\
+        .pe-slider--min:not(.pe-slider--pin) .pe-slider__control:focus:before": {
+          backgroundColor: vars$$1["color_" + tint + "_thumb_off_focus"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_on_focus_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-slider--disabled)": {
+        ".pe-slider--focus:not(.pe-slider--min):not(.pe-slider--pin) .pe-slider__control:before,\
+        &:not(.pe-slider--min):not(.pe-slider--pin) .pe-slider__control:focus:before": {
+          opacity: vars$$1["color_" + tint + "_thumb_on_focus_opacity"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_pin_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__pin:after": {
+        color: vars$$1["color_" + tint + "_pin_label"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_pin_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__pin": {
+        backgroundColor: vars$$1["color_" + tint + "_pin_background"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_value", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-slider--disabled)": {
+        " .pe-slider__track-value .pe-slider__track-bar-value": {
+          backgroundColor: vars$$1["color_" + tint + "_track_value"]
+        }
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+// @ts-check
+
+var getThumbSize = function getThumbSize(vars$$1) {
+  var thumbSize = Math.max(vars$$1.thumb_size, 2 * vars$$1.thumb_border_width);
+  var barOffset = thumbSize / 2;
+  var stepsOffset = barOffset - 1;
+  return {
+    normalThumbSize: thumbSize,
+    disabledThumbSize: thumbSize - 2 * vars$$1.thumb_border_width,
+    barOffset: barOffset,
+    stepsOffset: stepsOffset
+  };
+};
+
+var getBorderWidth = function getBorderWidth(vars$$1) {
+  var borderWidth = vars$$1.thumb_border_width;
+  var scaledBorderWidth = Math.max(1, vars$$1.thumb_border_width / vars$$1.active_thumb_scale);
+  return {
+    normalBorderWidth: borderWidth,
+    disabledBorderWidth: 1 / vars$$1.disabled_thumb_scale * vars$$1.thumb_border_width,
+    scaledBorderWidth: scaledBorderWidth
+  };
+};
+
+var thumb_size_thumb_border_width_disabled_thumb_scale = function thumb_size_thumb_border_width_disabled_thumb_scale(selector, vars$$1) {
+  var _getThumbSize = getThumbSize(vars$$1),
+      normalThumbSize = _getThumbSize.normalThumbSize,
+      disabledThumbSize = _getThumbSize.disabledThumbSize;
+
+  var _getBorderWidth = getBorderWidth(vars$$1),
+      normalBorderWidth = _getBorderWidth.normalBorderWidth,
+      disabledBorderWidth = _getBorderWidth.disabledBorderWidth;
+
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-slider__control:after": {
+      borderWidth: normalBorderWidth + "px",
+      width: normalThumbSize + "px",
+      height: normalThumbSize + "px",
+      left: 0,
+      top: 0
+    },
+    ".pe-slider--disabled .pe-slider__control:after": {
+      borderWidth: disabledBorderWidth + "px",
+      width: disabledThumbSize + "px",
+      height: disabledThumbSize + "px",
+      left: normalThumbSize - disabledThumbSize + "px",
+      top: normalThumbSize - disabledThumbSize + "px"
+    },
+    ".pe-slider--ticks .pe-slider__control:after": {
+      borderWidth: 0
+    }
+  });
+};
+
+var height_track_height = function height_track_height(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    marginTop: (vars$$1.height - vars$$1.track_height) / 2 + "px "
+  });
+};
+
+var track_height_bar_height = function track_height_bar_height(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-slider__track-part": {
+      margin: (vars$$1.track_height - vars$$1.bar_height) / 2 + "px 0"
+    }
+  });
+};
+
+var thumb_size_thumb_touch_size = function thumb_size_thumb_touch_size(selector, vars$$1) {
+  var _getThumbSize2 = getThumbSize(vars$$1),
+      normalThumbSize = _getThumbSize2.normalThumbSize;
+
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-slider__control:before": {
+      left: -vars$$1.thumb_touch_size / 2 + normalThumbSize / 2 + "px",
+      top: -vars$$1.thumb_touch_size / 2 + normalThumbSize / 2 + "px"
+    }
+  });
+};
+
+var thumb_size_active_thumb_scale = function thumb_size_active_thumb_scale(selector, vars$$1) {
+  var _getThumbSize3 = getThumbSize(vars$$1),
+      normalThumbSize = _getThumbSize3.normalThumbSize;
+
+  var _getBorderWidth2 = getBorderWidth(vars$$1),
+      scaledBorderWidth = _getBorderWidth2.scaledBorderWidth;
+
+  var scaledThumbDiff = (vars$$1.active_thumb_scale - 1) * normalThumbSize / 2;
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-slider--active:not(.pe-slider--ticks)": {
+      " .pe-slider__control": {
+        borderWidth: scaledBorderWidth + "px"
+      },
+      // left side
+      " .pe-slider__track-value .pe-slider__track-bar-value": {
+        transform: "translateX(" + -scaledThumbDiff + "px)"
+      },
+      // right side
+      " .pe-slider__track-rest .pe-slider__track-bar-value": {
+        transform: "translateX(" + scaledThumbDiff + "px)"
+      }
+    },
+    ".pe-slider--active.pe-slider--ticks": {
+      " .pe-slider__control:after": {
+        borderWidth: 0
+      }
+    }
+  });
+};
+
+var thumb_size_pin_width = function thumb_size_pin_width(selector, vars$$1) {
+  var _getThumbSize4 = getThumbSize(vars$$1),
+      stepsOffset = _getThumbSize4.stepsOffset;
+
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-slider__pin": {
+      margin: "0 " + stepsOffset + "px 0 " + (stepsOffset - vars$$1.pin_width / 2 + 1) + "px"
+    }
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flexGrow(1), {
+      userSelect: "none",
+      "-moz-user-select": "none",
+      alignItems: "center",
+      " > .pe-icon": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenter,
+      " .pe-slider__track": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flexGrow(1), {
+        userSelect: "none",
+        "-moz-user-select": "none",
+        position: "relative",
+        outline: 0
+      }],
+      " .pe-slider__control": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].selfCenter, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("transform, background", ".200s"), {
+        transform: "scale(1)",
+        userSelect: "none",
+        "-moz-user-select": "none",
+        lineHeight: 0,
+        borderRadius: "50%",
+        outline: 0,
+        zIndex: 1,
+        position: "relative",
+        // touch area
+        ":before": {
+          content: "\"\"",
+          position: "absolute",
+          borderRadius: "50%"
+        },
+        // border
+        ":after": {
+          content: "\"\"",
+          position: "absolute",
+          borderRadius: "50%",
+          borderStyle: "solid"
+        }
+      }],
+      " .pe-slider__thumb": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+        "&, .pe-icon": {
+          width: "inherit",
+          height: "inherit"
+        }
+      }],
+      " .pe-slider__label": {
+        minWidth: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_icon_size + "px",
+        textAlign: "center",
+        fontSize: "16px",
+        fontWeight: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].font_weight_medium
+      },
+      " .pe-slider__track-part": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), {
+        userSelect: "none",
+        "-moz-user-select": "none",
+        overflow: "hidden" // Firefox otherwise uses 6x at 0%
+
+      }],
+      " .pe-slider__track-value, .pe-slider__track-rest": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal,
+      " .pe-slider__track-bar": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), {
+        position: "relative",
+        overflow: "hidden"
+      }],
+      " .pe-slider__track-bar-value": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(),
+      " .pe-slider__ticks": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutJustified, {
+        userSelect: "none",
+        "-moz-user-select": "none",
+        position: "absolute",
+        left: 0,
+        pointerEvents: "none"
+      }],
+      " .pe-slider__pin": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("transform", ".11s"), {
+        transform: "translateZ(0) scale(0) translate(0, 0)",
+        transformOrigin: "bottom",
+        position: "absolute",
+        zIndex: 1,
+        height: 0,
+        left: 0,
+        // set in js
+        top: 0,
+        pointerEvents: "none",
+        "&::before, &::after": {
+          position: "absolute",
+          top: 0,
+          left: 0
+        },
+        "::before": {
+          transform: "rotate(-45deg)",
+          content: "\"\"",
+          borderRadius: "50% 50% 50% 0"
+        },
+        "::after": {
+          content: "attr(value)",
+          textAlign: "center"
+        }
+      }],
+      ".pe-slider--pin.pe-slider--active, &.pe-slider--pin.pe-slider--focus": {
+        " .pe-slider__pin": {
+          transform: "translateZ(0) scale(1) translate(0, -24px)"
+        }
+      },
+      ":not(.pe-slider--disabled)": {
+        " .pe-slider__control": {
+          cursor: "pointer"
+        },
+        ".pe-slider--track": {
+          " .pe-slider__track": {
+            cursor: "pointer"
+          }
+        }
+      },
+      ".pe-slider--disabled": {
+        " .pe-slider__control": {
+          borderWidth: 0
+        }
+      }
+    }])];
+  },
+  thumb_size: function thumb_size(selector, vars$$1) {
+    var _getThumbSize5 = getThumbSize(vars$$1),
+        normalThumbSize = _getThumbSize5.normalThumbSize,
+        barOffset = _getThumbSize5.barOffset,
+        stepsOffset = _getThumbSize5.stepsOffset;
+
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__control": {
+        width: normalThumbSize + "px",
+        height: normalThumbSize + "px"
+      },
+      " .pe-slider__track-value .pe-slider__track-bar": {
+        marginLeft: barOffset + "px"
+      },
+      " .pe-slider__track-rest .pe-slider__track-bar": {
+        marginRight: barOffset + "px"
+      },
+      " .pe-slider__ticks": {
+        width: "calc(100% - " + 2 * stepsOffset + "px)",
+        margin: "0 " + stepsOffset + "px"
+      }
+    }), thumb_size_thumb_border_width_disabled_thumb_scale(selector, vars$$1), thumb_size_thumb_touch_size(selector, vars$$1), thumb_size_active_thumb_scale(selector, vars$$1), thumb_size_pin_width(selector, vars$$1)];
+  },
+  active_thumb_scale: function active_thumb_scale(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-slider--active:not(.pe-slider--ticks)": {
+        " .pe-slider__control": {
+          transform: "scale(" + vars$$1.active_thumb_scale + ")"
+        }
+      }
+    }), thumb_size_active_thumb_scale(selector, vars$$1)];
+  },
+  thumb_touch_size: function thumb_touch_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__control": {
+        ":before": {
+          width: vars$$1.thumb_touch_size + "px",
+          height: vars$$1.thumb_touch_size + "px"
+        }
+      }
+    }), thumb_size_thumb_touch_size(selector, vars$$1)];
+  },
+  thumb_border_width: function thumb_border_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {}), thumb_size_thumb_border_width_disabled_thumb_scale(selector, vars$$1)];
+  },
+  disabled_thumb_scale: function disabled_thumb_scale(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-slider--disabled": {
+        " .pe-slider__control": {
+          transform: "scale(" + vars$$1.disabled_thumb_scale + ")"
+        }
+      }
+    }), thumb_size_thumb_border_width_disabled_thumb_scale(selector, vars$$1)];
+  },
+  active_pin_thumb_scale: function active_pin_thumb_scale(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-slider--pin.pe-slider--active, &.pe-slider--pin.pe-slider--focus": {
+        " .pe-slider__control": {
+          transform: "scale(" + vars$$1.active_pin_thumb_scale + ")"
+        }
+      }
+    })];
+  },
+  height: function height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      height: vars$$1.height + "px",
+      " > .pe-icon": {
+        height: vars$$1.height + "px"
+      },
+      " .pe-slider__label": {
+        height: vars$$1.height + "px",
+        lineHeight: vars$$1.height + "px"
+      },
+      " .pe-slider__ticks": {
+        top: vars$$1.height / 2 - 1 + "px"
+      }
+    }), height_track_height(selector, vars$$1)];
+  },
+  track_height: function track_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__track": {
+        height: vars$$1.track_height + "px"
+      }
+    }), height_track_height(selector, vars$$1), track_height_bar_height(selector, vars$$1)];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__track": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("transform", vars$$1.animation_duration),
+      " .pe-slider__control:before": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("background-color", vars$$1.animation_duration),
+      " .pe-slider__control:after": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("border", vars$$1.animation_duration),
+      " .pe-slider__thumb": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("opacity", vars$$1.animation_duration),
+      " .pe-slider__track-bar-value": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("transform, background-color", vars$$1.animation_duration)
+    })];
+  },
+  side_spacing: function side_spacing(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__track": {
+        margin: "0 " + vars$$1.side_spacing + "px"
+      }
+    })];
+  },
+  horizontal_layout_side_spacing: function horizontal_layout_side_spacing(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " div + .pe-slider__track": {
+        margin: "0 " + vars$$1.horizontal_layout_side_spacing + "px"
+      }
+    })];
+  },
+  bar_height: function bar_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__track-part,\
+        .pe-slider__track-bar-value,\
+        .pe-slider__ticks,\
+        .pe-slider__tick": {
+        height: vars$$1.bar_height + "px"
+      }
+    }), track_height_bar_height(selector, vars$$1)];
+  },
+  step_width: function step_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__tick": {
+        width: vars$$1.step_width + "px"
+      }
+    })];
+  },
+  pin_width: function pin_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__pin": {
+        width: vars$$1.pin_width + "px",
+        "::before": {
+          width: vars$$1.pin_width + "px",
+          height: vars$$1.pin_width + "px"
+        },
+        "::after": {
+          width: vars$$1.pin_width + "px",
+          height: vars$$1.pin_height + "px",
+          lineHeight: vars$$1.pin_width + "px"
+        }
+      }
+    }), thumb_size_pin_width(selector, vars$$1)];
+  },
+  pin_font_size: function pin_font_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-slider__pin::after": {
+        fontSize: vars$$1.pin_font_size + "px"
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+var lightForeground = polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground;
+var darkForeground = polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground;
+var activeColor = polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary; // or override in CSS by setting 'color' property on '.pe-slider'
+
+var thumb_size = 12;
+var thumb_touch_size = Math.max(40, thumb_size);
+var thumb_border_width = 2;
+var active_thumb_scale = 3 / 2;
+var disabled_thumb_scale = 1 / 2;
+var active_pin_thumb_scale = 2 / 6;
+var largestThumbSize = active_thumb_scale * thumb_size;
+var largestElement = Math.max(thumb_touch_size, largestThumbSize);
+var height = Math.max(52, largestThumbSize);
+var side_spacing = Math.max(10, largestElement / 2 - thumb_size / 2);
+var horizontal_layout_side_spacing = side_spacing + 4; // optimization for horizontal layout
+
+var vars$1 = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  active_pin_thumb_scale: active_pin_thumb_scale,
+  active_thumb_scale: active_thumb_scale,
+  animation_duration: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].animation_duration,
+  bar_height: 2,
+  disabled_thumb_scale: disabled_thumb_scale,
+  height: height,
+  horizontal_layout_side_spacing: horizontal_layout_side_spacing,
+  pin_font_size: 10,
+  pin_height: 32,
+  pin_width: 26,
+  side_spacing: side_spacing,
+  step_width: 2,
+  thumb_border_width: thumb_border_width,
+  thumb_size: thumb_size,
+  thumb_touch_size: thumb_touch_size,
+  track_height: height,
+  color_light_track_active: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(lightForeground, .38),
+  color_light_track_inactive: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(lightForeground, .26),
+  color_light_track_value: "currentColor",
+  // background color may be set in theme; disabled by default
+  // color_light_thumb_background:        undefined,
+  color_light_thumb_off: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(lightForeground, .26),
+  color_light_thumb_off_focus: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(lightForeground),
+  color_light_thumb_off_focus_opacity: .08,
+  color_light_thumb_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(activeColor),
+  color_light_thumb_on_focus_opacity: .11,
+  color_light_thumb_inactive: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(lightForeground, .26),
+  color_light_tick: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(lightForeground, 1),
+  color_light_tick_value: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(lightForeground, 1),
+  color_light_icon: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_disabled_icon: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_disabled),
+  color_light_label: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_secondary),
+  color_light_disabled_label: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_disabled),
+  color_light_pin_label: "#fff",
+  color_light_pin_background: "currentColor",
+  color_dark_track_active: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(darkForeground, .3),
+  color_dark_track_inactive: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(darkForeground, .2),
+  color_dark_track_value: "currentColor",
+  // background color may be set in theme; disabled by default
+  // color_dark_thumb_background:         undefined,
+  color_dark_thumb_off: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(darkForeground, .2),
+  color_dark_thumb_off_focus: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(darkForeground),
+  color_dark_thumb_off_focus_opacity: .08,
+  color_dark_thumb_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(activeColor),
+  color_dark_thumb_on_focus_opacity: .11,
+  color_dark_thumb_inactive: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(darkForeground, .2),
+  color_dark_tick: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(darkForeground, 1),
+  color_dark_tick_value: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(darkForeground, 1),
+  color_dark_icon: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_disabled_icon: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_disabled),
+  color_dark_label: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_secondary),
+  color_dark_disabled_label: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_disabled),
+  color_dark_pin_label: "#fff",
+  color_dark_pin_background: "currentColor"
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, vars$1);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, vars$1);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: vars$1
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-snackbar/dist/polythene-css-snackbar.mjs":
+/*!******************************************************************************!*\
+  !*** ../node_modules/polythene-css-snackbar/dist/polythene-css-snackbar.mjs ***!
+  \******************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars, holderLayout */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return snackbarVars; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "holderLayout", function() { return holderLayout; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_css_notification__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-css-notification */ "../node_modules/polythene-css-notification/dist/polythene-css-notification.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+var notificationClasses = {
+  component: "pe-notification",
+  // elements
+  action: "pe-notification__action",
+  content: "pe-notification__content",
+  holder: "pe-notification__holder",
+  placeholder: "pe-notification__placeholder",
+  title: "pe-notification__title",
+  // states
+  hasContainer: "pe-notification--container",
+  horizontal: "pe-notification--horizontal",
+  multilineTitle: "pe-notification__title--multi-line",
+  vertical: "pe-notification--vertical",
+  visible: "pe-notification--visible"
+};
+
+var classes = _objectSpread({}, notificationClasses, {
+  component: "pe-notification pe-snackbar",
+  // elements
+  holder: "pe-snackbar__holder",
+  placeholder: "pe-snackbar__placeholder",
+  // states
+  open: "pe-snackbar--open"
+});
+
+// @ts-check
+var color$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  superColor: polythene_css_notification__WEBPACK_IMPORTED_MODULE_1__["color"]
+});
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenterCenter, {
+      position: "fixed",
+      top: "auto",
+      right: 0,
+      bottom: 0,
+      left: 0,
+      zIndex: polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].z_notification,
+      pointerEvents: "none",
+      justifyContent: "flex-start",
+      // For IE11
+      width: "100%"
+    }]), _defineProperty({}, ".pe-notification--container ".concat(selector), {
+      position: "relative"
+    })];
+  }
+};
+var holderLayout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+var breakpoint = function breakpoint(breakpointSel) {
+  return function (selector, o) {
+    return _defineProperty({}, breakpointSel, _defineProperty({}, selector, o));
+  };
+};
+
+var breakpointTabletPortraitUp = breakpoint("@media (min-width: ".concat(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].breakpoint_for_tablet_portrait_up, "px)"));
+var varFns$1 = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      width: "100%",
+      opacity: 1,
+      " .pe-notification__content": {
+        width: "100%",
+        margin: "0 auto",
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0
+      }
+    }), breakpointTabletPortraitUp(selector, {
+      ".pe-notification--horizontal": {
+        " .pe-notification__title": {
+          paddingRight: "30px"
+        }
+      }
+    })];
+  },
+  min_width: function min_width(selector, vars$$1) {
+    return [breakpointTabletPortraitUp(selector, {
+      minWidth: vars$$1.min_width + "px"
+    })];
+  },
+  max_width: function max_width(selector, vars$$1) {
+    return [breakpointTabletPortraitUp(selector, {
+      maxWidth: vars$$1.max_width + "px"
+    })];
+  },
+  border_radius: function border_radius(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-notification__content": {
+        borderTopLeftRadius: vars$$1.border_radius + "px",
+        borderTopRightRadius: vars$$1.border_radius + "px",
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns$1,
+  customVarFns: polythene_css_notification__WEBPACK_IMPORTED_MODULE_1__["customLayoutFns"]
+});
+
+// @ts-check
+/**
+ * @type {SnackbarVars} snackbarVars
+ */
+
+var snackbarVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_hide_css: "",
+  animation_show_css: "",
+  border_radius: 0,
+  max_width: 568,
+  min_height: 0,
+  min_width: 288,
+  color_light_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_background),
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_dark_background)
+};
+
+// @ts-check
+var fns = [layout, color$1];
+var selector = ".".concat(classes.component.replace(/ /g, "."));
+var holderFns = [holderLayout];
+var holderSelector = ".".concat(classes.holder.replace(/ /g, "."));
+
+var addStyle = function addStyle(customSelector, customVars) {
+  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref$mediaQuery = _ref.mediaQuery,
+      mediaQuery = _ref$mediaQuery === void 0 ? "" : _ref$mediaQuery,
+      _ref$scope = _ref.scope,
+      scope = _ref$scope === void 0 ? "" : _ref$scope;
+
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, selector],
+    fns: fns,
+    vars: snackbarVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, holderSelector],
+    fns: holderFns,
+    vars: snackbarVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+};
+
+var getStyle = function getStyle() {
+  var customSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var customVars = arguments.length > 1 ? arguments[1] : undefined;
+
+  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref2$mediaQuery = _ref2.mediaQuery,
+      mediaQuery = _ref2$mediaQuery === void 0 ? "" : _ref2$mediaQuery,
+      _ref2$scope = _ref2.scope,
+      scope = _ref2$scope === void 0 ? "" : _ref2$scope;
+
+  return polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [customSelector, selector],
+    fns: fns,
+    vars: snackbarVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }).concat(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [holderSelector],
+    fns: holderFns,
+    vars: snackbarVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }));
+};
+
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [holderSelector],
+  fns: holderFns,
+  vars: snackbarVars
+});
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: snackbarVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-svg/dist/polythene-css-svg.mjs":
+/*!********************************************************************!*\
+  !*** ../node_modules/polythene-css-svg/dist/polythene-css-svg.mjs ***!
+  \********************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return svgVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+
+
+var classes = {
+  component: "pe-svg"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: "inherit",
+      " svg": {
+        color: "inherit",
+        " path, rect, circle, polygon": {
+          "&:not([fill=none])": {
+            fill: "currentcolor"
+          }
+        }
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  return _defineProperty({}, "color_" + tint, function (selector, vars) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " svg": {
+        " path, rect, circle, polygon": {
+          "&:not([fill=none])": {
+            fill: vars["color_" + tint]
+          }
+        }
+      }
+    })];
+  });
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+// @ts-check
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      lineHeight: 1,
+      " > div, svg": {
+        width: "inherit",
+        height: "inherit"
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+
+/**
+ * @typedef {import("../index").SVGVars} SVGVars
+ */
+
+/**
+ * @type {SVGVars} svgVars
+ */
+var svgVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  color_light: "currentcolor",
+  color_dark: "currentcolor"
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, svgVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, svgVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: svgVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-switch/dist/polythene-css-switch.mjs":
+/*!**************************************************************************!*\
+  !*** ../node_modules/polythene-css-switch/dist/polythene-css-switch.mjs ***!
+  \**************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return switchVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-css-selection-control */ "../node_modules/polythene-css-selection-control/dist/polythene-css-selection-control.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+/* harmony import */ var polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! polythene-css-icon-button */ "../node_modules/polythene-css-icon-button/dist/polythene-css-icon-button.mjs");
+
+
+
+
+
+var classes = {
+  component: "pe-switch-control",
+  // elements
+  knob: "pe-switch-control__knob",
+  thumb: "pe-switch-control__thumb",
+  track: "pe-switch-control__track"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-switch-control__knob": {
+          backgroundColor: "currentcolor"
+        },
+        " .pe-icon": {
+          color: "currentcolor"
+        }
+      },
+      ".pe-control--on": {
+        " .pe-switch-control__knob": {
+          backgroundColor: "currentcolor"
+        },
+        " .pe-icon": {
+          color: "currentcolor"
+        }
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-control__label": {
+        color: vars$$1["color_" + tint + "_label"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_off", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-switch-control__track": {
+          backgroundColor: vars$$1["color_" + tint + "_track_off"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_off_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-switch-control__track": {
+          opacity: vars$$1["color_" + tint + "_track_off_opacity"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_off", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-switch-control__thumb": {
+          color: vars$$1["color_" + tint + "_thumb_off"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_off", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-button--focus": {
+          " .pe-button__focus": {
+            backgroundColor: vars$$1["color_" + tint + "_focus_off"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_off_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-button--focus": {
+          " .pe-button__focus": {
+            opacity: vars$$1["color_" + tint + "_focus_off_opacity"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_icon_off", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-icon": {
+          color: vars$$1["color_" + tint + "_icon_off"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_off_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-control__label": {
+          color: vars$$1["color_" + tint + "_off_label"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_on", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-switch-control__track": {
+          backgroundColor: vars$$1["color_" + tint + "_track_on"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_on_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-switch-control__track": {
+          opacity: vars$$1["color_" + tint + "_track_on_opacity"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_on", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-switch-control__thumb": {
+          color: vars$$1["color_" + tint + "_thumb_on"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_on", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-button--focus": {
+          " .pe-button__focus": {
+            backgroundColor: vars$$1["color_" + tint + "_focus_on"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_focus_on_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-button--focus": {
+          " .pe-button__focus": {
+            opacity: vars$$1["color_" + tint + "_focus_on_opacity"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_icon_on", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-icon": {
+          color: vars$$1["color_" + tint + "_icon_on"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_on_label", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-control__label": {
+          color: vars$$1["color_" + tint + "_on_label"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on.pe-control--disabled, &.pe-control--off.pe-control--disabled": {
+        " .pe-control__label": {
+          color: vars$$1["color_" + tint + "_disabled"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_disabled", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on.pe-control--disabled, &.pe-control--off.pe-control--disabled": {
+        " .pe-switch-control__track": {
+          backgroundColor: vars$$1["color_" + tint + "_track_disabled"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_track_disabled_opacity", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on.pe-control--disabled, &.pe-control--off.pe-control--disabled": {
+        " .pe-switch-control__track": {
+          opacity: vars$$1["color_" + tint + "_track_disabled_opacity"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_thumb_disabled", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on.pe-control--disabled, &.pe-control--off.pe-control--disabled": {
+        " .pe-switch-control__thumb, .pe-button__content": {
+          color: vars$$1["color_" + tint + "_thumb_disabled"]
+        }
+      }
+    })];
+  }), _ref;
+};
+
+var hoverTintFns = function hoverTintFns(tint) {
+  var _ref2;
+
+  return _ref2 = {}, _defineProperty(_ref2, "color_" + tint + "_wash_on", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--on": {
+        " .pe-button__wash": {
+          backgroundColor: vars$$1["color_" + tint + "_wash_on"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref2, "color_" + tint + "_wash_off", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-control--off": {
+        " .pe-button__wash": {
+          backgroundColor: vars$$1["color_" + tint + "_wash_off"]
+        }
+      }
+    })];
+  }), _ref2;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var lightTintHoverFns = hoverTintFns("light");
+var darkTintHoverFns = hoverTintFns("dark");
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns,
+    lightTintHoverFns: lightTintHoverFns,
+    darkTintHoverFns: darkTintHoverFns
+  }
+});
+
+var transition = function transition(vars$$1, properties) {
+  var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : vars$$1.animation_duration;
+  return polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition(properties, duration, "ease-out");
+};
+
+var getSizeData = function getSizeData(vars$$1, size) {
+  var factor = size / polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].unit_icon_size;
+  var thumbSize = Math.floor(0.5 * vars$$1.thumb_size * factor) * 2; // round to even
+
+  var scaledTrackHeight = Math.floor(0.5 * vars$$1.track_height * factor) * 2; // round to even
+
+  var scaledTrackWidth = Math.floor(0.5 * vars$$1.track_length * factor) * 2;
+  var scaledThumbSize = Math.floor(0.5 * vars$$1.thumb_size * factor) * 2;
+  var trackTop = (vars$$1.label_height * factor - scaledTrackHeight) / 2;
+  var thumbPadding = vars$$1.icon_button_padding;
+  var thumbMargin = (size - scaledThumbSize) / 2;
+  var thumbOuterSize = size + 2 * thumbPadding;
+  var thumbOffsetMin = -(thumbOuterSize / 2) + thumbSize / 2;
+  var thumbOffsetMax = thumbOffsetMin + scaledTrackWidth - thumbSize;
+  var thumbOffsetY = thumbOffsetMin + thumbMargin;
+  var trackVisualOffset = 0.3; // prevent sub pixel of track to shine through knob border
+
+  return {
+    factor: factor,
+    scaledThumbSize: scaledThumbSize,
+    scaledTrackHeight: scaledTrackHeight,
+    scaledTrackWidth: scaledTrackWidth,
+    size: size,
+    thumbMargin: thumbMargin,
+    thumbOffsetMax: thumbOffsetMax,
+    thumbOffsetMin: thumbOffsetMin,
+    thumbOffsetY: thumbOffsetY,
+    thumbPadding: thumbPadding,
+    trackTop: trackTop,
+    trackVisualOffset: trackVisualOffset
+  };
+};
+
+var customSize = function customSize(vars$$1, _ref) {
+  var scaledThumbSize = _ref.scaledThumbSize,
+      scaledTrackHeight = _ref.scaledTrackHeight,
+      scaledTrackWidth = _ref.scaledTrackWidth,
+      size = _ref.size,
+      thumbMargin = _ref.thumbMargin,
+      thumbOffsetY = _ref.thumbOffsetY,
+      thumbPadding = _ref.thumbPadding,
+      trackTop = _ref.trackTop,
+      trackVisualOffset = _ref.trackVisualOffset;
+  return {
+    " .pe-control__form-label": {
+      height: size + "px",
+      minWidth: scaledTrackWidth + "px"
+    },
+    " .pe-switch-control__track": {
+      height: scaledTrackHeight + "px",
+      width: scaledTrackWidth - 2 * trackVisualOffset + "px",
+      top: trackTop + "px",
+      borderRadius: scaledTrackHeight + "px"
+    },
+    " .pe-switch-control__thumb": {
+      top: thumbOffsetY + "px"
+    },
+    " .pe-switch-control__knob": {
+      width: scaledThumbSize + "px",
+      height: scaledThumbSize + "px",
+      margin: thumbMargin + "px"
+    },
+    " .pe-button__content": {
+      padding: thumbPadding + "px"
+    }
+  };
+};
+
+var customSpacing = function customSpacing(vars$$1, _ref2, isRTL) {
+  var _peControl__label, _peSwitchControl_, _peSwitchControl_2, _peSwitchControl_3;
+
+  var factor = _ref2.factor,
+      scaledTrackWidth = _ref2.scaledTrackWidth,
+      thumbOffsetMax = _ref2.thumbOffsetMax,
+      thumbOffsetMin = _ref2.thumbOffsetMin,
+      trackVisualOffset = _ref2.trackVisualOffset;
+  return {
+    " .pe-control__label": (_peControl__label = {}, _defineProperty(_peControl__label, isRTL ? "paddingRight" : "paddingLeft", vars$$1.padding * factor + 8 + scaledTrackWidth + "px"), _defineProperty(_peControl__label, isRTL ? "paddingLeft" : "paddingRight", 0), _peControl__label),
+    " .pe-switch-control__track": (_peSwitchControl_ = {}, _defineProperty(_peSwitchControl_, isRTL ? "right" : "left", trackVisualOffset + "px"), _defineProperty(_peSwitchControl_, isRTL ? "left" : "right", "auto"), _peSwitchControl_),
+    " .pe-switch-control__thumb": (_peSwitchControl_2 = {}, _defineProperty(_peSwitchControl_2, isRTL ? "right" : "left", thumbOffsetMin + "px"), _defineProperty(_peSwitchControl_2, isRTL ? "left" : "right", "auto"), _peSwitchControl_2),
+    ".pe-control--on": {
+      " .pe-switch-control__thumb": (_peSwitchControl_3 = {}, _defineProperty(_peSwitchControl_3, isRTL ? "right" : "left", thumbOffsetMax + "px"), _defineProperty(_peSwitchControl_3, isRTL ? "left" : "right", "auto"), _peSwitchControl_3)
+    }
+  };
+};
+
+var alignSide = function alignSide(isRTL) {
+  return function () {
+    var _peSwitchControl_4;
+
+    return {
+      " .pe-switch-control__track": (_peSwitchControl_4 = {}, _defineProperty(_peSwitchControl_4, isRTL ? "right" : "left", 0), _defineProperty(_peSwitchControl_4, isRTL ? "left" : "right", "auto"), _peSwitchControl_4)
+    };
+  };
+};
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var createSize = function createSize(selector, vars$$1) {
+  var sizeData = {
+    small: getSizeData(vars$$1, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].unit_icon_size_small),
+    regular: getSizeData(vars$$1, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].unit_icon_size),
+    medium: getSizeData(vars$$1, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].unit_icon_size_medium),
+    large: getSizeData(vars$$1, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].unit_icon_size_large)
+  };
+  return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-control--small": [customSize(vars$$1, sizeData.small), customSpacing(vars$$1, sizeData.small, false)],
+    ".pe-control--regular": [customSize(vars$$1, sizeData.regular), customSpacing(vars$$1, sizeData.regular, false)],
+    ".pe-control--medium": [customSize(vars$$1, sizeData.medium), customSpacing(vars$$1, sizeData.medium, false)],
+    ".pe-control--large": [customSize(vars$$1, sizeData.large), customSpacing(vars$$1, sizeData.large, false)]
+  }), _defineProperty({}, "*[dir=rtl] ".concat(selector, ", .pe-rtl ").concat(selector), [alignRight(), {
+    ".pe-control--small": [customSpacing(vars$$1, sizeData.small, true)],
+    ".pe-control--regular": [customSpacing(vars$$1, sizeData.regular, true)],
+    ".pe-control--medium": [customSpacing(vars$$1, sizeData.medium, true)],
+    ".pe-control--large": [customSpacing(vars$$1, sizeData.large, true)]
+  }])];
+};
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(), {
+      " .pe-switch-control__track": [{
+        position: "absolute"
+      }],
+      " .pe-switch-control__thumb": {
+        position: "absolute",
+        zIndex: 1,
+        // Prevents flickering of text label when toggling
+        color: "inherit",
+        ":focus": {
+          outline: 0
+        }
+      },
+      " .pe-switch-control__knob": {
+        position: "relative",
+        borderRadius: "50%"
+      },
+      " .pe-icon-button .pe-button__content": {
+        transition: "none",
+        " .pe-switch-control__knob .pe-icon": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+          width: "100%",
+          height: "100%"
+        }]
+      }
+    }]), _defineProperty({}, "_:-ms-fullscreen, :root ".concat(selector), {
+      " input": {
+        position: "absolute",
+        zIndex: 1,
+        width: "100%",
+        height: "100%",
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        display: "block",
+        opacity: 0,
+        cursor: "pointer"
+      },
+      " label": {
+        cursor: "auto"
+      }
+    })];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-switch-control__track, .pe-switch-control__thumb, .pe-control__label, .pe-button__focus": transition(vars$$1, "all")
+    })];
+  },
+  createSize: createSize
+};
+
+var withCreateSizeVar = function withCreateSizeVar(vars$$1) {
+  return vars$$1.thumb_size || vars$$1.track_height || vars$$1.track_length || vars$$1.label_height || vars$$1.icon_button_padding ? _extends({}, vars$$1, {
+    createSize: true
+  }) : vars$$1;
+};
+
+var layout$1 = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns,
+  superLayout: polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__["layout"],
+  varMixin: withCreateSizeVar
+});
+
+// @ts-check
+/**
+ * @type {SwitchVars} switchVars
+ */
+
+var switchVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_duration: polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].animation_duration,
+  hit_area_padding: (polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].grid_unit_icon_button - polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].unit_icon_size) / 2,
+  // 12
+  icon_button_padding: polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_3__["vars"].padding,
+  padding: polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].grid_unit_component,
+  thumb_size: 20,
+  track_height: 14,
+  track_length: 36,
+  label_height: polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_1__["vars"].label_height,
+  color_light_thumb_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary),
+  color_light_thumb_off: "#f1f1f1",
+  color_light_thumb_disabled: "#eee",
+  color_light_wash_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_background_active),
+  color_light_wash_off: polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_3__["vars"].color_light_wash_background,
+  color_light_track_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary_faded),
+  color_light_track_on_opacity: .55,
+  color_light_track_off: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_text_regular),
+  color_light_track_off_opacity: .55,
+  color_light_track_disabled: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_light_background_disabled),
+  color_light_track_disabled_opacity: 1,
+  // icon color may be set in theme; default "currentcolor"
+  // color_light_icon_on:                   "currentcolor",
+  // color_light_icon_off:                  "currentcolor",
+  // color_light_focus_on and so on taken from selectionControlVars
+  color_dark_thumb_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary),
+  color_dark_thumb_off: "#bdbdbd",
+  color_dark_thumb_disabled: "#555",
+  color_dark_wash_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_background_active),
+  color_dark_wash_off: polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_3__["vars"].color_dark_wash_background,
+  color_dark_track_on: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].color_primary_faded, polythene_theme__WEBPACK_IMPORTED_MODULE_2__["vars"].blend_dark_text_tertiary),
+  // or "#5a7f7c"
+  color_dark_track_on_opacity: 9,
+  color_dark_track_off: "#717171",
+  color_dark_track_off_opacity: .55,
+  color_dark_track_disabled: "#717171",
+  color_dark_track_disabled_opacity: .3 // icon color may be set in theme; default "currentcolor"
+  // color_dark_icon_on:                    "currentcolor"
+  // color_dark_icon_off:                   "currentcolor"
+  // color_dark_focus_on and so on taken from selectionControlVars
+
+};
+
+// @ts-check
+var fns = [layout$1, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, switchVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, switchVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: switchVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-tabs/dist/polythene-css-tabs.mjs":
+/*!**********************************************************************!*\
+  !*** ../node_modules/polythene-css-tabs/dist/polythene-css-tabs.mjs ***!
+  \**********************************************************************/
+/*! exports provided: addStyle, getStyle, vars, tabColor, tabLayout, tabsColor, tabsLayout */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return tabsVars; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tabColor", function() { return tabColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tabLayout", function() { return tabLayout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tabsColor", function() { return tabsColor; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tabsLayout", function() { return tabsLayout; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+/* harmony import */ var polythene_css_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-css-button */ "../node_modules/polythene-css-button/dist/polythene-css-button.mjs");
+/* harmony import */ var polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! polythene-css-icon-button */ "../node_modules/polythene-css-icon-button/dist/polythene-css-icon-button.mjs");
+
+
+
+
+
+var buttonClasses = {
+  component: "pe-text-button",
+  super: "pe-button",
+  row: "pe-button-row",
+  // elements      
+  content: "pe-button__content",
+  label: "pe-button__label",
+  textLabel: "pe-button__text-label",
+  wash: "pe-button__wash",
+  dropdown: "pe-button__dropdown",
+  // states      
+  border: "pe-button--border",
+  contained: "pe-button--contained",
+  disabled: "pe-button--disabled",
+  dropdownClosed: "pe-button--dropdown-closed",
+  dropdownOpen: "pe-button--dropdown-open",
+  extraWide: "pe-button--extra-wide",
+  hasDropdown: "pe-button--dropdown",
+  highLabel: "pe-button--high-label",
+  inactive: "pe-button--inactive",
+  raised: "pe-button--raised",
+  selected: "pe-button--selected",
+  separatorAtStart: "pe-button--separator-start"
+};
+
+var classes = {
+  component: "pe-tabs",
+  // elements
+  indicator: "pe-tabs__indicator",
+  scrollButton: "pe-tabs__scroll-button",
+  scrollButtonAtEnd: "pe-tabs__scroll-button-end",
+  scrollButtonAtStart: "pe-tabs__scroll-button-start",
+  tab: "pe-tab",
+  tabContent: "pe-tabs__tab-content",
+  tabRow: "pe-tabs__row",
+  // states
+  activeSelectable: "pe-tabs__active--selectable",
+  isAtEnd: "pe-tabs--end",
+  isAtStart: "pe-tabs--start",
+  isAutofit: "pe-tabs--autofit",
+  isMenu: "pe-tabs--menu",
+  scrollable: "pe-tabs--scrollable",
+  compactTabs: "pe-tabs--compact",
+  tabHasIcon: "pe-tabs__tab--icon",
+  tabRowCentered: "pe-tabs__row--centered",
+  tabRowIndent: "pe-tabs__row--indent",
+  // lookup
+  label: buttonClasses.label
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--selected": {
+        " .pe-button__content": {
+          background: "transparent"
+        }
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_selected", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--selected": {
+        " .pe-button__content": {
+          color: vars$$1["color_" + tint + "_selected"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_selected_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-button--selected": {
+        " .pe-button__content": {
+          background: vars$$1["color_" + tint + "_selected_background"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_icon", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ":not(.pe-button--selected) .pe-icon": {
+        color: vars$$1["color_" + tint + "_icon"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var tabColor = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var tab_label_transition_property_animation_duration = function tab_label_transition_property_animation_duration(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-button__content": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition(vars$$1.tab_label_transition_property, vars$$1.animation_duration)
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flexIndex("none"), {
+      userSelect: "none",
+      "-moz-user-select": "none",
+      margin: 0,
+      borderRadius: 0,
+      padding: 0,
+      " .pe-button__content": {
+        lineHeight: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].line_height + "em",
+        borderRadius: 0,
+        position: "relative",
+        " .pe-button__label, .pe-icon": {
+          overflow: "hidden",
+          whiteSpace: "normal"
+        },
+        " .pe-button__label": {
+          padding: 0,
+          width: "100%" // for IE 11
+
+        },
+        " .pe-icon": {
+          marginLeft: "auto",
+          marginRight: "auto"
+        },
+        " .pe-button__focus": {
+          display: "none"
+        }
+      },
+      ".pe-tabs__tab--icon": {
+        "&, .pe-button__content": {
+          " .pe-button__content, .pe-icon": {
+            margin: "0 auto"
+          }
+        }
+      },
+      ".pe-tabs--menu &": {
+        "&, &.pe-tabs__tab--icon, &.pe-text-button": {
+          minWidth: 0,
+          " .pe-button__content": {
+            " .pe-icon": {
+              marginBottom: 0
+            },
+            " .pe-button__content": {
+              fontSize: "10px",
+              lineHeight: "12px",
+              textTransform: "none"
+            }
+          }
+        }
+      },
+      ".pe-tabs--compact &": {
+        minWidth: "initial"
+      },
+      " .pe-tabs__tab-content": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenterCenter, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutVertical, {
+        height: "inherit"
+      }],
+      ".pe-tabs--autofit &": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), {
+        minWidth: "initial",
+        maxWidth: "none"
+      }],
+      ".pe-tabs__active--selectable &": {
+        ".pe-button--selected": {
+          cursor: "pointer",
+          pointerEvents: "initial"
+        }
+      }
+    }])];
+  },
+  tab_height: function tab_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      height: vars$$1.tab_height + "px",
+      " .pe-button__content": {
+        height: vars$$1.tab_height + "px"
+      }
+    })];
+  },
+  tab_min_width: function tab_min_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      minWidth: vars$$1.tab_min_width + "px" // for smaller screens, see also media query
+
+    })];
+  },
+  tab_max_width: function tab_max_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      maxWidth: isNaN(vars$$1.tab_max_width) ? vars$$1.tab_max_width : vars$$1.tab_max_width + "px"
+    })];
+  },
+  tab_min_width_tablet: function tab_min_width_tablet(selector, vars$$1) {
+    return _defineProperty({}, "@media (min-width: " + polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].breakpoint_for_tablet_landscape_up + "px)", _defineProperty({}, ".pe-tabs:not(.pe-tabs--small):not(.pe-tabs--menu):not(.pe-tabs--autofit):not(.pe-tabs--scrollable):not(.pe-tabs--compact) ".concat(selector), {
+      minWidth: vars$$1.tab_min_width_tablet + "px"
+    }));
+  },
+  tab_icon_label_height: function tab_icon_label_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-tabs__tab--icon": {
+        "&, .pe-button__content": {
+          height: vars$$1.tab_icon_label_height + "px"
+        }
+      }
+    })];
+  },
+  tab_label_transition_property: function tab_label_transition_property(selector, vars$$1) {
+    return [tab_label_transition_property_animation_duration(selector, vars$$1)];
+  },
+  animation_duration: function animation_duration(selector, vars$$1) {
+    return [tab_label_transition_property_animation_duration(selector, vars$$1)];
+  },
+  tab_content_padding_v: function tab_content_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        padding: "0 " + vars$$1.tab_content_padding_v + "px"
+      }
+    })];
+  },
+  label_max_width: function label_max_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        " .pe-button__label, .pe-icon": {
+          maxWidth: vars$$1.label_max_width + "px" // or .pe-tabs width minus 56dp
+
+        }
+      }
+    })];
+  },
+  tab_label_line_height: function tab_label_line_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        " .pe-button__label, .pe-icon": {
+          lineHeight: vars$$1.tab_label_line_height + "px",
+          maxHeight: 2 * vars$$1.tab_label_line_height + "px"
+        }
+      }
+    })];
+  },
+  tab_label_vertical_offset: function tab_label_vertical_offset(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-button__content": {
+        " .pe-button__label": {
+          margin: vars$$1.tab_label_vertical_offset + "px 0 0 0"
+        }
+      }
+    })];
+  },
+  tab_icon_label_icon_spacing: function tab_icon_label_icon_spacing(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-tabs__tab--icon": {
+        "&, .pe-button__content": {
+          " .pe-icon": {
+            marginBottom: vars$$1.tab_icon_label_icon_spacing + "px"
+          }
+        }
+      }
+    })];
+  },
+  menu_tab_height: function menu_tab_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-tabs--menu &": {
+        // reset sizes to fit within a small space
+        height: vars$$1.menu_tab_height + "px",
+        "&, &.pe-tabs__tab--icon, &.pe-text-button": {
+          " .pe-button__content": {
+            height: vars$$1.menu_tab_height + "px"
+          }
+        }
+      }
+    })];
+  },
+  menu_tab_icon_label_height: function menu_tab_icon_label_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-tabs--menu &": {
+        "&.pe-tabs__tab--icon": {
+          height: vars$$1.menu_tab_icon_label_height + "px"
+        }
+      }
+    })];
+  },
+  tab_menu_content_padding_v: function tab_menu_content_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-tabs--menu &": {
+        "&, &.pe-tabs__tab--icon, &.pe-text-button": {
+          " .pe-button__content": {
+            padding: "0 " + vars$$1.tab_menu_content_padding_v + "px"
+          }
+        }
+      }
+    })];
+  }
+};
+var tabLayout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+var generalFns$1 = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-tabs__scroll-button": {
+        color: "inherit"
+      },
+      " .pe-no-touch &": {
+        ".pe-tabs--scrollable": {
+          backgroundColor: "inherit"
+        },
+        " .pe-tabs__scroll-button": {
+          backgroundColor: "inherit",
+          " .pe-button__content": {
+            backgroundColor: "inherit"
+          }
+        }
+      }
+    })];
+  }
+};
+
+var tintFns$1 = function tintFns(tint) {
+  return _defineProperty({}, "color_" + tint + "_tab_indicator", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-tabs__indicator": {
+        backgroundColor: vars$$1["color_" + tint + "_tab_indicator"]
+      }
+    })];
+  });
+};
+
+var lightTintFns$1 = _extends({}, generalFns$1, tintFns$1("light"));
+
+var darkTintFns$1 = _extends({}, generalFns$1, tintFns$1("dark"));
+
+var tabsColor = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns$1,
+    darkTintFns: darkTintFns$1
+  }
+});
+
+var alignSide = function alignSide(isRTL) {
+  return function () {
+    return {
+      " .pe-tabs__indicator": _defineProperty({
+        transformOrigin: isRTL ? "right 50%" : "left 50%"
+      }, isRTL ? "right" : "left", 0)
+    };
+  };
+};
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var _tabs_indent = function tabs_indent(selector, vars$$1, isRTL) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-tabs__row": {
+      ".pe-tabs__row--indent": _defineProperty({}, isRTL ? "paddingRight" : "paddingLeft", vars$$1.tabs_indent + "px")
+    }
+  });
+};
+
+var varFns$1 = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(), {
+      userSelect: "none",
+      "-moz-user-select": "none",
+      transform: "translate3d(0,0,0)",
+      "-webkit-overflow-scrolling": "touch",
+      "& ::-webkit-scrollbar": {
+        "display": "none"
+      },
+      ".pe-tabs--scrollable": {
+        display: "flex",
+        "-ms-overflow-style": "none",
+        " .pe-tabs__scroll-button": {
+          // default hide, show with html.pe-no-touch
+          display: "none"
+        },
+        " .pe-tabs__tab": {
+          minWidth: 0
+        }
+      },
+      " .pe-no-touch &": {
+        " .pe-tabs__scroll-button": {
+          position: "relative",
+          display: "block",
+          zIndex: 1,
+          borderRadius: 0,
+          " .pe-button__content": {
+            borderRadius: 0,
+            transitionProperty: "all",
+            transitionTimingFunction: "ease-in-out"
+          }
+        },
+        ".pe-tabs--start .pe-tabs__scroll-button-start": {
+          pointerEvents: "none",
+          cursor: "default",
+          opacity: 0
+        },
+        ".pe-tabs--end .pe-tabs__scroll-button-end": {
+          pointerEvents: "none",
+          cursor: "default",
+          opacity: 0
+        }
+      },
+      " .pe-tabs__row": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, {
+        userSelect: "none",
+        "-moz-user-select": "none",
+        position: "relative",
+        whiteSpace: "nowrap",
+        ".pe-tabs__row--indent": {
+          margin: 0,
+          overflow: "auto"
+        },
+        ".pe-tabs__row--centered": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenterJustified
+      }],
+      " .pe-tabs__scroll-button-offset": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flex(), polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].flexIndex("none")],
+      " .pe-tabs__indicator": {
+        transform: "translate3d(0,0,0)",
+        // transformOrigin set in alignSide
+        transitionProperty: "all",
+        transitionTimingFunction: "ease-in-out",
+        position: "absolute",
+        zIndex: 1,
+        bottom: 0,
+        // left/right set in alignSide
+        width: "100%" // and transformed with js
+        // background-color defined in implementation/theme css
+
+      },
+      " .pe-toolbar--tabs .pe-toolbar__bar &": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+        width: "auto",
+        margin: 0,
+        top: "auto"
+      }]
+    }]), _defineProperty({}, "*[dir=rtl] ".concat(selector, ", .pe-rtl ").concat(selector), [alignRight()])];
+  },
+  tabs_indent: function tabs_indent(selector, vars$$1) {
+    return [_tabs_indent(selector, vars$$1, false), _tabs_indent(Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector), vars$$1, true)];
+  },
+  tab_height: function tab_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-tabs--scrollable": {
+        display: "flex",
+        // hide scrollbar (this approach is required for Firefox)
+        "max-height": vars$$1.tab_height + "px"
+      }
+    })];
+  },
+  scrollbar_offset: function scrollbar_offset(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-tabs--scrollable": {
+        " .pe-tabs__row": {
+          marginBottom: -vars$$1.scrollbar_offset + "px"
+        }
+      }
+    })];
+  },
+  scroll_button_size: function scroll_button_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-no-touch &": {
+        " .pe-tabs__scroll-button": {
+          width: vars$$1.scroll_button_size + "px",
+          height: vars$$1.scroll_button_size + "px"
+        }
+      }
+    })];
+  },
+  scroll_button_fade_duration: function scroll_button_fade_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-no-touch &": {
+        " .pe-tabs__scroll-button": {
+          " .pe-button__content": {
+            transitionDuration: vars$$1.scroll_button_fade_duration
+          }
+        }
+      }
+    })];
+  },
+  scroll_button_fade_delay: function scroll_button_fade_delay(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-no-touch &": {
+        " .pe-tabs__scroll-button": {
+          " .pe-button__content": {
+            transitionDelay: vars$$1.scroll_button_fade_delay
+          }
+        }
+      }
+    })];
+  },
+  scroll_button_opacity: function scroll_button_opacity(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-no-touch &": {
+        " .pe-tabs__scroll-button": {
+          " .pe-button__content": {
+            opacity: vars$$1.scroll_button_opacity
+          }
+        }
+      }
+    })];
+  },
+  tab_indicator_height: function tab_indicator_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-tabs__indicator": {
+        height: vars$$1.tab_indicator_height + "px"
+      }
+    })];
+  }
+};
+var tabsLayout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns$1
+});
+
+// @ts-check
+var fontSize = polythene_css_button__WEBPACK_IMPORTED_MODULE_2__["textButtonVars"].font_size;
+var tab_label_line_height = 1.1 * fontSize;
+var tab_height = 48;
+var scroll_button_size = tab_height;
+/**
+ * @type {TabsVars} tabsVars
+ */
+
+var tabsVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  animation_duration: polythene_css_button__WEBPACK_IMPORTED_MODULE_2__["textButtonVars"].animation_duration,
+  indicator_slide_speed: 600,
+  // px per second
+  label_max_width: 264,
+  menu_tab_height: 44,
+  menu_tab_icon_label_height: 44,
+  scroll_button_fade_delay: ".25s",
+  scroll_button_fade_duration: ".2s",
+  scroll_button_opacity: .7,
+  scroll_button_size: scroll_button_size,
+  scrollbar_offset: 0,
+  tab_content_padding_v: 12,
+  tab_height: tab_height,
+  tab_icon_label_height: 72,
+  tab_icon_label_icon_spacing: 7,
+  tab_indicator_height: 2,
+  tab_label_line_height: tab_label_line_height,
+  tab_label_transition_property: "opacity, color, backgroundColor",
+  tab_label_vertical_offset: tab_label_line_height - fontSize,
+  tab_max_width: "initial",
+  tab_menu_content_padding_v: 6,
+  tab_min_width: 72,
+  tab_min_width_tablet: 160,
+  tabs_indent: 0,
+  color_light_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_regular),
+  color_light_selected: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_light_selected_background: "transparent",
+  color_light_tab_indicator: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_light_icon: polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_3__["vars"].color_light,
+  color_dark_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_regular),
+  color_dark_selected: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_dark_selected_background: "transparent",
+  color_dark_tab_indicator: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_dark_icon: polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_3__["vars"].color_dark // hover colors may be set in theme; disabled by default
+  // color_light_hover:                    rgba(vars.color_light_foreground, vars.blend_light_text_primary),
+  // color_light_hover_background:         "transparent",
+  //
+  // color_dark_hover:                     rgba(vars.color_dark_foreground, vars.blend_dark_text_primary),
+  // color_dark_hover_background:          "transparent",
+
+};
+
+// @ts-check
+var tabsFns = [tabsLayout, tabsColor];
+var tabFns = [tabLayout, tabColor];
+var tabsSelector = ".".concat(classes.component);
+var tabClass = "".concat(classes.tab, " pe-text-button pe-button");
+var tabSelector = " .".concat(tabClass.replace(/ /g, "."));
+
+var addStyle = function addStyle(customSelector, customVars) {
+  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref$mediaQuery = _ref.mediaQuery,
+      mediaQuery = _ref$mediaQuery === void 0 ? "" : _ref$mediaQuery,
+      _ref$scope = _ref.scope,
+      scope = _ref$scope === void 0 ? "" : _ref$scope;
+
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, tabsSelector],
+    fns: tabsFns,
+    vars: tabsVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+  customSelector && polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+    selectors: [customSelector, tabSelector],
+    fns: tabFns,
+    vars: tabsVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+};
+
+var getStyle = function getStyle() {
+  var customSelector = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var customVars = arguments.length > 1 ? arguments[1] : undefined;
+
+  var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref2$mediaQuery = _ref2.mediaQuery,
+      mediaQuery = _ref2$mediaQuery === void 0 ? "" : _ref2$mediaQuery,
+      _ref2$scope = _ref2.scope,
+      scope = _ref2$scope === void 0 ? "" : _ref2$scope;
+
+  return polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [customSelector, tabsSelector],
+    fns: tabsFns,
+    vars: tabsVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }).concat(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].getStyle({
+    selectors: [customSelector, tabSelector],
+    fns: tabFns,
+    vars: tabsVars,
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  }));
+};
+
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [tabsSelector],
+  fns: tabsFns,
+  vars: tabsVars
+});
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [tabSelector],
+  fns: tabFns,
+  vars: tabsVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-textfield/dist/polythene-css-textfield.mjs":
+/*!********************************************************************************!*\
+  !*** ../node_modules/polythene-css-textfield/dist/polythene-css-textfield.mjs ***!
+  \********************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return textfieldVars; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  component: "pe-textfield",
+  // elements
+  counter: "pe-textfield__counter",
+  error: "pe-textfield__error",
+  errorPlaceholder: "pe-textfield__error-placeholder",
+  focusHelp: "pe-textfield__help-focus",
+  help: "pe-textfield__help",
+  input: "pe-textfield__input",
+  inputArea: "pe-textfield__input-area",
+  label: "pe-textfield__label",
+  optionalIndicator: "pe-textfield__optional-indicator",
+  requiredIndicator: "pe-textfield__required-indicator",
+  // states
+  hasCounter: "pe-textfield--counter",
+  hasFloatingLabel: "pe-textfield--floating-label",
+  hasFullWidth: "pe-textfield--full-width",
+  hideClear: "pe-textfield--hide-clear",
+  hideSpinner: "pe-textfield--hide-spinner",
+  hideValidation: "pe-textfield--hide-validation",
+  isDense: "pe-textfield--dense",
+  isRequired: "pe-textfield--required",
+  stateDirty: "pe-textfield--dirty",
+  stateDisabled: "pe-textfield--disabled",
+  stateFocused: "pe-textfield--focused",
+  stateInvalid: "pe-textfield--invalid",
+  stateReadonly: "pe-textfield--readonly"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input-area": {
+        color: "inherit",
+        "&:after": {
+          backgroundColor: "currentcolor"
+        }
+      },
+      ".pe-textfield--disabled, &.pe-textfield--readonly": {
+        " .pe-textfield__input-area:after": {
+          backgroundColor: "transparent"
+        }
+      },
+      ".pe-textfield--invalid:not(.pe-textfield--hide-validation)": {
+        " .pe-textfield__input": {
+          boxShadow: "none"
+        }
+      }
+    })];
+  }
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_focus_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      color: vars$$1["color_" + tint + "_focus_border"] // override by specifying "color"
+
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_input_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input-area": {
+        backgroundColor: vars$$1["color_" + tint + "_input_background"]
+      },
+      " .pe-textfield__input:-webkit-autofill": {
+        "-webkit-box-shadow": "0 0 0px 1000px " + vars$$1["color_" + tint + "_input_background"] + " inset"
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_input_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input": {
+        color: vars$$1["color_" + tint + "_input_text"]
+      },
+      " .pe-textfield__input:-webkit-autofill": {
+        color: vars$$1["color_" + tint + "_input_text"] + " !important"
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_counter_ok_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--counter ": {
+        " .pe-textfield__input-area:after": {
+          backgroundColor: vars$$1["color_" + tint + "_counter_ok_border"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_input_bottom_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input": {
+        borderColor: vars$$1["color_" + tint + "_input_bottom_border"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_label_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__label": {
+        color: vars$$1["color_" + tint + "_label_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_disabled_label_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--disabled, &.pe-textfield--readonly": {
+        " .pe-textfield__input-area:after": {
+          backgroundImage: "linear-gradient(to right, " + vars$$1["color_" + tint + "_disabled_label_text"] + " 20%, rgba(255, 255, 255, 0) 0%)"
+        }
+      },
+      ".pe-textfield--disabled": {
+        " .pe-textfield__input, .pe-textfield__label": {
+          color: vars$$1["color_" + tint + "_disabled_label_text"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_readonly_label_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--readonly": {
+        " .pe-textfield__input, .pe-textfield__label": {
+          color: vars$$1["color_" + tint + "_readonly_label_text"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_highlight_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--focused": {
+        // note: not when textfield--dirty and not textfield--focused
+        ".pe-textfield--floating-label .pe-textfield__label": {
+          color: vars$$1["color_" + tint + "_highlight_text"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_required_symbol", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--focused": {
+        ".pe-textfield--required.pe-textfield--floating-label": {
+          " .pe-textfield__required-indicator": {
+            color: vars$$1["color_" + tint + "_required_symbol"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_help_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__help, .pe-textfield__counter": {
+        color: vars$$1["color_" + tint + "_help_text"]
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_input_error_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--invalid:not(.pe-textfield--hide-validation)": {
+        " .pe-textfield__input": {
+          borderColor: vars$$1["color_" + tint + "_input_error_border"]
+        },
+        "&, &.pe-textfield--counter": {
+          " .pe-textfield__input-area:after": {
+            backgroundColor: vars$$1["color_" + tint + "_input_error_border"]
+          }
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_input_error_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--invalid:not(.pe-textfield--hide-validation)": {
+        " .pe-textfield__label": {
+          color: vars$$1["color_" + tint + "_input_error_text"]
+        },
+        " .pe-textfield__error, .pe-textfield__counter, .pe-textfield__help": {
+          color: vars$$1["color_" + tint + "_input_error_text"]
+        },
+        ".pe-textfield--required .pe-textfield__label": {
+          color: vars$$1["color_" + tint + "_input_error_text"]
+        }
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+var alignSide = function alignSide(isRTL) {
+  return function () {
+    return {
+      " .pe-textfield__counter": {
+        textAlign: isRTL ? "left" : "right",
+        float: isRTL ? "left" : "right",
+        padding: isRTL ? "0 16px 0 0" : "0 0 0 16px"
+      }
+    };
+  };
+};
+
+var alignLeft = alignSide(false);
+var alignRight = alignSide(true);
+
+var vertical_spacing_top_input_padding_v = function vertical_spacing_top_input_padding_v(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-textfield__label": {
+      top: vars$$1.vertical_spacing_top + vars$$1.input_padding_v + "px"
+    }
+  });
+};
+
+var floating_label_vertical_spacing_top_input_padding_v = function floating_label_vertical_spacing_top_input_padding_v(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-textfield--floating-label .pe-textfield__label": {
+      top: vars$$1.floating_label_vertical_spacing_top + vars$$1.input_padding_v + "px"
+    }
+  });
+};
+
+var dense_floating_label_vertical_spacing_top_input_padding_v = function dense_floating_label_vertical_spacing_top_input_padding_v(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-textfield--floating-label.pe-textfield--dense .pe-textfield__label": {
+      top: vars$$1.dense_floating_label_vertical_spacing_top + vars$$1.input_padding_v + "px"
+    }
+  });
+};
+
+var input_padding_v_input_padding_h = function input_padding_v_input_padding_h(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    " .pe-textfield__input": {
+      padding: vars$$1.input_padding_v + "px " + vars$$1.input_padding_h + "px"
+    },
+    " textarea.pe-textfield__input": {
+      margin: vars$$1.input_padding_v + "px " + vars$$1.input_padding_h + "px"
+    }
+  });
+};
+
+var full_width_input_padding_v_full_width_input_padding_h = function full_width_input_padding_v_full_width_input_padding_h(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-textfield--full-width": {
+      " .pe-textfield__input": {
+        padding: vars$$1.full_width_input_padding_v + "px " + vars$$1.full_width_input_padding_h + "px"
+      }
+    }
+  });
+};
+
+var dense_full_width_input_padding_v_dense_full_width_input_padding_h = function dense_full_width_input_padding_v_dense_full_width_input_padding_h(selector, vars$$1) {
+  return Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+    ".pe-textfield--full-width.pe-textfield--dense": {
+      " .pe-textfield__input": {
+        padding: vars$$1.dense_full_width_input_padding_v + "px " + vars$$1.dense_full_width_input_padding_h + "px"
+      }
+    }
+  });
+};
+
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [alignLeft(), polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].clearfix(), {
+      position: "relative",
+      lineHeight: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].line_height,
+      display: "inline-block",
+      boxSizing: "border-box",
+      margin: 0,
+      overflow: "visible",
+      // Firefox needs this
+      width: "100%",
+      maxWidth: "100%",
+      " .pe-textfield__input-area": {
+        position: "relative",
+        "&:after": {
+          position: "absolute",
+          content: "\"\"",
+          bottom: 0,
+          left: 0,
+          width: "100%",
+          opacity: 0
+        }
+      },
+      ".pe-textfield--focused .pe-textfield__input-area:after": {
+        opacity: 1
+      },
+      " .pe-textfield__input": {
+        display: "block",
+        width: "100%",
+        background: "none",
+        color: "inherit",
+        borderStyle: "none none solid none",
+        borderRadius: 0,
+        margin: 0,
+        // disable glow on textfield--invalid fields
+        "&:textfield--invalid": {
+          boxShadow: "none"
+        },
+        ":invalid": {
+          boxShadow: "none"
+        },
+        // Remove clear cross icon from IE
+        "::-ms-clear": {
+          width: 0,
+          height: 0
+        }
+      },
+      " textarea.pe-textfield__input": {
+        padding: 0,
+        display: "block"
+      },
+      // focus border
+      ".pe-textfield--focused .pe-textfield__input": {
+        outline: "none"
+      },
+      " .pe-textfield__label": {
+        position: "absolute",
+        display: "block",
+        bottom: 0,
+        pointerEvents: "none",
+        whiteSpace: "nowrap",
+        cursor: "text"
+      },
+      ".pe-textfield--dirty .pe-textfield__label": {
+        visibility: "hidden"
+      },
+      "&:not(.pe-textfield--no-char)": {
+        " .pe-textfield__required-indicator, .pe-textfield__optional-indicator": {
+          padding: "0 0 0 .25em"
+        }
+      },
+      ".pe-textfield--floating-label": {
+        ".pe-textfield--focused, &.pe-textfield--dirty": {
+          " .pe-textfield__label": {
+            visibility: "visible"
+          }
+        }
+      },
+      ".pe-textfield--disabled, &.pe-textfield--readonly": {
+        " .pe-textfield__label": {
+          cursor: "auto"
+        },
+        " .pe-textfield__input": {
+          "border-bottom": "none"
+        },
+        " .pe-textfield__input-area:after": {
+          opacity: 1,
+          height: "1px",
+          bottom: "-1px",
+          backgroundPosition: "top",
+          backgroundSize: "4px 1px",
+          backgroundRepeat: "repeat-x"
+        }
+      },
+      " .pe-textfield__error, .pe-textfield__error-placeholder, .pe-textfield__help, .pe-textfield__counter": {
+        lineHeight: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].line_height
+      },
+      " .pe-textfield__help-focus": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("opacity"), {
+        opacity: 0
+      }],
+      ".pe-textfield--focused .pe-textfield__help-focus, &.pe-textfield--dirty .pe-textfield__help-focus": {
+        opacity: 1
+      },
+      ".pe-textfield--hide-clear": {
+        " .pe-textfield__input::-ms-clear": {
+          display: "none"
+        }
+      },
+      ".pe-textfield--hide-spinner": {
+        " input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button": {
+          "-webkit-appearance": "none",
+          margin: 0
+        },
+        " input[type=number]": {
+          "-moz-appearance": "textfield"
+        }
+      },
+      ".pe-textfield--full-width": {
+        width: "100%",
+        padding: 0,
+        " .pe-textfield__input-area": {
+          padding: 0
+        }
+      }
+    }]), _defineProperty({}, "*[dir=rtl] ".concat(selector, ", .pe-rtl ").concat(selector), [alignRight()])];
+  },
+  vertical_spacing_bottom: function vertical_spacing_bottom(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      paddingBottom: vars$$1.vertical_spacing_bottom + "px"
+    })];
+  },
+  floating_label_vertical_spacing_bottom: function floating_label_vertical_spacing_bottom(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--floating-label": {
+        paddingBottom: vars$$1.floating_label_vertical_spacing_bottom + "px"
+      },
+      ".pe-textfield--dense": {
+        paddingBottom: vars$$1.dense_floating_label_vertical_spacing_bottom + "px"
+      }
+    })];
+  },
+  vertical_spacing_top: function vertical_spacing_top(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input-area": {
+        paddingTop: vars$$1.vertical_spacing_top + "px"
+      }
+    }), vertical_spacing_top_input_padding_v(selector, vars$$1)];
+  },
+  input_padding_v: function input_padding_v(selector, vars$$1) {
+    return [vertical_spacing_top_input_padding_v(selector, vars$$1), floating_label_vertical_spacing_top_input_padding_v(selector, vars$$1), dense_floating_label_vertical_spacing_top_input_padding_v(selector, vars$$1), input_padding_v_input_padding_h(selector, vars$$1)];
+  },
+  input_padding_h: function input_padding_h(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__label": {
+        left: vars$$1.input_padding_h + "px",
+        right: vars$$1.input_padding_h + "px"
+      }
+    }), input_padding_v_input_padding_h(selector, vars$$1)];
+  },
+  floating_label_vertical_spacing_top: function floating_label_vertical_spacing_top(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--floating-label": {
+        " .pe-textfield__input-area": {
+          paddingTop: vars$$1.floating_label_vertical_spacing_top + "px"
+        }
+      }
+    }), floating_label_vertical_spacing_top_input_padding_v(selector, vars$$1)];
+  },
+  dense_floating_label_vertical_spacing_top: function dense_floating_label_vertical_spacing_top(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--floating-label.pe-textfield--dense": {
+        " .pe-textfield__input-area": {
+          paddingTop: vars$$1.dense_floating_label_vertical_spacing_top + "px"
+        }
+      }
+    }), dense_floating_label_vertical_spacing_top_input_padding_v(selector, vars$$1)];
+  },
+  input_focus_border_animation_duration: function input_focus_border_animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input-area:after": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("opacity", vars$$1.input_focus_border_animation_duration)
+    })];
+  },
+  input_focus_border_width: function input_focus_border_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input-area:after": {
+        height: vars$$1.input_focus_border_width + "px"
+      }
+    })];
+  },
+  font_size_error: function font_size_error(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__error, .pe-textfield__error-placeholder, .pe-textfield__help, .pe-textfield__counter": {
+        fontSize: vars$$1.font_size_error + "px",
+        minHeight: vars$$1.font_size_error * polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].line_height + "px"
+      }
+    })];
+  },
+  font_size_input: function font_size_input(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input, .pe-textfield__label": {
+        fontSize: vars$$1.font_size_input + "px"
+      }
+    })];
+  },
+  line_height_input: function line_height_input(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input, .pe-textfield__label": {
+        lineHeight: vars$$1.line_height_input + "px"
+      }
+    })];
+  },
+  input_border_width: function input_border_width(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__input": {
+        borderWidth: vars$$1.input_border_width + "px"
+      },
+      // focus border
+      ".pe-textfield--focused .pe-textfield__input": {
+        borderWidth: vars$$1.input_border_width + "px",
+        outline: "none"
+      }
+    })];
+  },
+  full_width_input_padding_v: function full_width_input_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--full-width": {
+        " .pe-textfield__label": {
+          top: vars$$1.full_width_input_padding_v + "px"
+        }
+      }
+    }), full_width_input_padding_v_full_width_input_padding_h(selector, vars$$1)];
+  },
+  full_width_input_padding_h: function full_width_input_padding_h(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--full-width": {
+        " .pe-textfield__error, .pe-textfield__help, .pe-textfield__counter": {
+          paddingLeft: vars$$1.full_width_input_padding_h + "px",
+          paddingRight: vars$$1.full_width_input_padding_h + "px"
+        },
+        " .pe-textfield__label": {
+          left: vars$$1.full_width_input_padding_h + "px",
+          right: vars$$1.full_width_input_padding_h + "px"
+        }
+      }
+    }), full_width_input_padding_v_full_width_input_padding_h(selector, vars$$1)];
+  },
+  dense_font_size_input: function dense_font_size_input(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--dense": {
+        "&, .pe-textfield__input, .pe-textfield__label": {
+          fontSize: vars$$1.dense_font_size_input + "px"
+        }
+      }
+    })];
+  },
+  dense_full_width_font_size_input: function dense_full_width_font_size_input(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--dense": {
+        " .pe-textfield__input": {
+          fontSize: vars$$1.dense_full_width_font_size_input + "px"
+        },
+        " .pe-textfield__label": {
+          fontSize: vars$$1.dense_full_width_font_size_input + "px"
+        }
+      }
+    })];
+  },
+  dense_full_width_input_padding_v: function dense_full_width_input_padding_v(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--full-width": {
+        ".pe-textfield--dense": {
+          " .pe-textfield__label": {
+            top: vars$$1.dense_full_width_input_padding_v + "px"
+          }
+        }
+      }
+    }), dense_full_width_input_padding_v_dense_full_width_input_padding_h(selector, vars$$1)];
+  },
+  dense_full_width_input_padding_h: function dense_full_width_input_padding_h(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--full-width": {
+        ".pe-textfield--dense": {
+          " .pe-textfield__label": {
+            left: vars$$1.dense_full_width_input_padding_h + "px",
+            right: vars$$1.dense_full_width_input_padding_h + "px"
+          }
+        }
+      }
+    }), dense_full_width_input_padding_v_dense_full_width_input_padding_h(selector, vars$$1)];
+  },
+  margin_top_error_message: function margin_top_error_message(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-textfield__error, .pe-textfield__error-placeholder, .pe-textfield__help, .pe-textfield__counter": {
+        marginTop: vars$$1.margin_top_error_message + "px"
+      }
+    })];
+  },
+  floating_label_animation_duration: function floating_label_animation_duration(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--floating-label": {
+        " .pe-textfield__label": polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].defaultTransition("all", vars$$1.floating_label_animation_duration)
+      }
+    })];
+  },
+  dense_font_size_floating_label: function dense_font_size_floating_label(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--floating-label": {
+        ".pe-textfield--dense": {
+          ".pe-textfield--focused, &.pe-textfield--dirty": {
+            fontSize: vars$$1.dense_font_size_floating_label + "px"
+          }
+        }
+      }
+    })];
+  },
+  dense_floating_label_top: function dense_floating_label_top(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--floating-label": {
+        ".pe-textfield--dense": {
+          ".pe-textfield--focused, &.pe-textfield--dirty": {
+            " .pe-textfield__label": {
+              top: vars$$1.dense_floating_label_top + "px"
+            }
+          }
+        }
+      }
+    })];
+  },
+  floating_label_top: function floating_label_top(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--floating-label": {
+        ".pe-textfield--focused, &.pe-textfield--dirty": {
+          " .pe-textfield__label": {
+            top: vars$$1.floating_label_top + "px"
+          }
+        }
+      }
+    })];
+  },
+  font_size_floating_label: function font_size_floating_label(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-textfield--floating-label": {
+        ".pe-textfield--focused, &.pe-textfield--dirty": {
+          " .pe-textfield__label": {
+            fontSize: vars$$1.font_size_floating_label + "px"
+          }
+        }
+      }
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+/**
+ * @type {TextfieldVars} textfieldVars
+ */
+
+var textfieldVars = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  dense_floating_label_top: 10,
+  dense_floating_label_vertical_spacing_bottom: 4,
+  // 8 minus natural label height padding (1)
+  dense_floating_label_vertical_spacing_top: 23,
+  // 12 + 8 + 4 minus natural label height padding (1)
+  dense_font_size_floating_label: 13,
+  dense_font_size_input: 13,
+  dense_full_width_font_size_input: 13,
+  dense_full_width_input_padding_h: 16,
+  dense_full_width_input_padding_v: 15,
+  // 16 minus natural label height padding (1)
+  floating_label_animation_duration: ".12s",
+
+  /**
+   * Top position in pixels
+   */
+  floating_label_top: 14,
+  floating_label_vertical_spacing_bottom: 7,
+  // 8 minus natural label height padding (1)
+  floating_label_vertical_spacing_top: 30,
+  // 16 + 8 + 8 minus natural label height padding (2)
+  font_size_error: 12,
+  font_size_floating_label: 12,
+  font_size_input: 16,
+  full_width_input_padding_h: 20,
+  full_width_input_padding_v: 18,
+  // 20 minus natural label height padding (2)
+  input_border_width: 1,
+  input_focus_border_animation_duration: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].animation_duration,
+  input_focus_border_width: 2,
+  input_padding_h: 0,
+  input_padding_v: 7,
+  line_height_input: 20,
+  margin_top_error_message: 6,
+  vertical_spacing_bottom: 7,
+  // 8 minus natural label height padding (1)
+  vertical_spacing_top: 6,
+  // 8 minus natural label height padding (1)
+  color_light_input_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary),
+  color_light_input_background: "transparent",
+  // only used to "remove" autofill color
+  color_light_highlight_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary),
+  color_light_input_bottom_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_border_light),
+  color_light_input_error_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])("221, 44, 0"),
+  color_light_input_error_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])("221, 44, 0"),
+  color_light_input_placeholder: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_tertiary),
+  color_light_label_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_tertiary),
+  color_light_disabled_label_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_disabled),
+  color_light_readonly_label_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_tertiary),
+  color_light_help_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_tertiary),
+  color_light_required_symbol: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])("221, 44, 0"),
+  color_light_focus_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_light_counter_ok_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_dark_input_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_primary),
+  color_dark_input_background: "transparent",
+  // only used to "remove" autofill color
+  color_dark_highlight_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_primary),
+  color_dark_input_bottom_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_border_light),
+  color_dark_input_error_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])("222, 50, 38"),
+  color_dark_input_error_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])("222, 50, 38"),
+  color_dark_input_placeholder: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_tertiary),
+  color_dark_label_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_tertiary),
+  color_dark_disabled_label_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_disabled),
+  color_dark_readonly_label_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_tertiary),
+  color_dark_help_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_tertiary),
+  color_dark_required_symbol: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])("221, 44, 0"),
+  color_dark_focus_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary),
+  color_dark_counter_ok_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_primary)
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, textfieldVars);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, textfieldVars);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: textfieldVars
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-toolbar/dist/polythene-css-toolbar.mjs":
+/*!****************************************************************************!*\
+  !*** ../node_modules/polythene-css-toolbar/dist/polythene-css-toolbar.mjs ***!
+  \****************************************************************************/
+/*! exports provided: addStyle, getStyle, color, layout, vars */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "color", function() { return color; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "layout", function() { return layout; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "vars", function() { return vars$1; });
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony import */ var polythene_theme__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-theme */ "../node_modules/polythene-theme/dist/polythene-theme.mjs");
+
+
+
+var classes = {
+  // Toolbar
+  component: "pe-toolbar",
+  // states
+  compact: "pe-toolbar--compact",
+  appBar: "pe-toolbar--app-bar",
+  // Toolbar title
+  // elements
+  title: "pe-toolbar__title",
+  // states
+  centeredTitle: "pe-toolbar__title--center",
+  indentedTitle: "pe-toolbar__title--indent",
+  fullbleed: "pe-toolbar--fullbleed",
+  border: "pe-toolbar--border"
+};
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+var generalFns = {
+  general_styles: function general_styles(selector) {
+    return [];
+  } // eslint-disable-line no-unused-vars
+
+};
+
+var tintFns = function tintFns(tint) {
+  var _ref;
+
+  return _ref = {}, _defineProperty(_ref, "color_" + tint + "_text", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " .pe-toolbar__title": {
+        "&, a:link, a:visited": {
+          color: vars$$1["color_" + tint + "_text"]
+        }
+      }
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_background", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      backgroundColor: vars$$1["color_" + tint + "_background"]
+    })];
+  }), _defineProperty(_ref, "color_" + tint + "_border", function (selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-toolbar--border": {
+        borderColor: vars$$1["color_" + tint + "_border"]
+      }
+    })];
+  }), _ref;
+};
+
+var lightTintFns = _extends({}, generalFns, tintFns("light"));
+
+var darkTintFns = _extends({}, generalFns, tintFns("dark"));
+
+var color = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createColor"])({
+  varFns: {
+    lightTintFns: lightTintFns,
+    darkTintFns: darkTintFns
+  }
+});
+
+/**
+ * 
+ * @param {string} breakpointSel 
+ */
+
+var breakpoint = function breakpoint(breakpointSel) {
+  return (
+    /**
+     * @param {string} selector
+     * @param {object} o
+     */
+    function (selector, o) {
+      return _defineProperty({}, breakpointSel, _defineProperty({}, selector, o));
+    }
+  );
+};
+/**
+ * @param {object} params
+ * @param {string} params.selector
+ * @param {object} params.vars
+ * @param {boolean} [params.isRTL]
+ * @param {boolean} [params.isLarge]
+ */
+
+
+var indent_padding_side = function indent_padding_side(_ref2) {
+  var _peToolbar__title;
+
+  var selector = _ref2.selector,
+      vars$$1 = _ref2.vars,
+      isRTL = _ref2.isRTL,
+      isLarge = _ref2.isLarge;
+  var indent = isLarge ? vars$$1.indent_large : vars$$1.indent;
+  var fn = isLarge ? breakpointTabletPortraitUp : polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"];
+  return fn(selector, {
+    " .pe-toolbar__title--indent, .pe-toolbar__title.pe-toolbar__title--indent": (_peToolbar__title = {}, _defineProperty(_peToolbar__title, isRTL ? "marginLeft" : "marginRight", 0), _defineProperty(_peToolbar__title, isRTL ? "marginRight" : "marginLeft", indent + "px"), _peToolbar__title)
+  });
+};
+/**
+ * @param {object} params
+ * @param {string} params.selector
+ * @param {object} params.vars
+ * @param {boolean} [params.isRTL]
+ * @param {boolean} [params.isLarge]
+ */
+
+
+var _title_padding = function title_padding(_ref3) {
+  var _spanPeToolbar;
+
+  var selector = _ref3.selector,
+      vars$$1 = _ref3.vars,
+      isRTL = _ref3.isRTL,
+      isLarge = _ref3.isLarge;
+  var title_padding = isLarge ? vars$$1.title_padding_large : vars$$1.title_padding;
+  var fn = isLarge ? breakpointTabletPortraitUp : polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"];
+  return fn(selector, {
+    " > span, .pe-toolbar__title": (_spanPeToolbar = {}, _defineProperty(_spanPeToolbar, isRTL ? "marginLeft" : "marginRight", 0), _defineProperty(_spanPeToolbar, isRTL ? "marginRight" : "marginLeft", title_padding + "px"), _spanPeToolbar),
+    " .pe-toolbar__title--center": {
+      marginLeft: title_padding + "px",
+      marginRight: title_padding + "px"
+    }
+  });
+};
+/**
+ * @param {object} params
+ * @param {string} params.selector
+ * @param {object} params.vars
+ * @param {boolean} [params.isRTL]
+ * @param {boolean} [params.isLarge]
+ */
+
+
+var title_padding_title_after_icon_padding = function title_padding_title_after_icon_padding(_ref4) {
+  var _notPeToolbar_;
+
+  var selector = _ref4.selector,
+      vars$$1 = _ref4.vars,
+      isRTL = _ref4.isRTL,
+      isLarge = _ref4.isLarge;
+  var padding = isLarge ? vars$$1.title_after_icon_padding_large : vars$$1.title_after_icon_padding;
+  var fn = isLarge ? breakpointTabletPortraitUp : polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"];
+  return fn(selector, {
+    " > :not(.pe-toolbar__title):first-child:not(.pe-toolbar__title--indent):first-child": (_notPeToolbar_ = {}, _defineProperty(_notPeToolbar_, isRTL ? "marginRight" : "marginLeft", 0), _defineProperty(_notPeToolbar_, isRTL ? "marginLeft" : "marginRight", padding + "px"), _notPeToolbar_)
+  });
+};
+
+var breakpointPhoneOnly = breakpoint("@media (min-width: ".concat(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].breakpoint_for_phone_only, "px) and (orientation: landscape)"));
+var breakpointTabletPortraitUp = breakpoint("@media (min-width: ".concat(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].breakpoint_for_tablet_portrait_up, "px)"));
+var varFns = {
+  general_styles: function general_styles(selector) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layout, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutHorizontal, polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["flex"].layoutCenter, {
+      position: "relative",
+      zIndex: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].z_toolbar,
+      " > a": {
+        textDecoration: "none"
+      },
+      ".pe-toolbar--fullbleed": {
+        padding: 0
+      },
+      ".pe-toolbar--border": {
+        borderWidth: "1px",
+        borderStyle: "none none solid none"
+      },
+      " > *": {
+        flexShrink: 0
+      },
+      " > span, .pe-toolbar__title, .pe-toolbar__title--indent": {
+        width: "100%",
+        display: "block",
+        wordBreak: "break-all",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+        flexShrink: 1
+      },
+      " .pe-toolbar__title--center": {
+        textAlign: "center",
+        justifyContent: "center"
+      },
+      " > .pe-action": {
+        paddingLeft: "12px",
+        paddingRight: "12px"
+      },
+      " .pe-fit": [polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["mixin"].fit(), {
+        margin: 0
+      }]
+    }])];
+  },
+  height: function height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      height: vars$$1.height + "px"
+    })];
+  },
+  height_compact: function height_compact(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      ".pe-toolbar--compact": {
+        height: vars$$1.height_compact + "px"
+      }
+    }), breakpointPhoneOnly(selector, {
+      height: vars$$1.height + "px"
+    })];
+  },
+  line_height: function line_height(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      lineHeight: vars$$1.line_height + "em",
+      " > span, .pe-toolbar__title, .pe-toolbar__title--indent": {
+        lineHeight: vars$$1.line_height
+      }
+    })];
+  },
+  font_size: function font_size(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " > span, .pe-toolbar__title, .pe-toolbar__title--indent, .pe-action": {
+        fontSize: vars$$1.font_size + "px"
+      }
+    })];
+  },
+  font_weight: function font_weight(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      " > span, .pe-toolbar__title, .pe-toolbar__title--indent": {
+        fontWeight: vars$$1.font_weight
+      }
+    })];
+  },
+  padding_side: function padding_side(selector, vars$$1) {
+    return [Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["sel"])(selector, {
+      padding: "0 " + vars$$1.padding_side + "px"
+    }), indent_padding_side({
+      selector: selector,
+      vars: vars$$1
+    }), indent_padding_side({
+      selector: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector),
+      vars: vars$$1,
+      isRTL: true
+    })];
+  },
+  indent: function indent(selector, vars$$1) {
+    return [indent_padding_side({
+      selector: selector,
+      vars: vars$$1
+    }), indent_padding_side({
+      selector: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector),
+      vars: vars$$1,
+      isRTL: true
+    })];
+  },
+  indent_large: function indent_large(selector, vars$$1) {
+    return [indent_padding_side({
+      selector: selector,
+      vars: vars$$1,
+      isLarge: true
+    }), indent_padding_side({
+      selector: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector),
+      vars: vars$$1,
+      isRTL: true,
+      isLarge: true
+    })];
+  },
+  title_padding: function title_padding(selector, vars$$1) {
+    return [_title_padding({
+      selector: selector,
+      vars: vars$$1
+    }), _title_padding({
+      selector: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector),
+      vars: vars$$1,
+      isRTL: true
+    })];
+  },
+  title_padding_large: function title_padding_large(selector, vars$$1) {
+    return [_title_padding({
+      selector: selector,
+      vars: vars$$1,
+      isLarge: true
+    }), _title_padding({
+      selector: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector),
+      vars: vars$$1,
+      isRTL: true,
+      isLarge: true
+    })];
+  },
+  title_after_icon_padding: function title_after_icon_padding(selector, vars$$1) {
+    return [title_padding_title_after_icon_padding({
+      selector: selector,
+      vars: vars$$1
+    }), title_padding_title_after_icon_padding({
+      selector: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector),
+      vars: vars$$1,
+      isRTL: true
+    })];
+  },
+  title_after_icon_padding_large: function title_after_icon_padding_large(selector, vars$$1) {
+    return [title_padding_title_after_icon_padding({
+      selector: selector,
+      vars: vars$$1,
+      isLarge: true
+    }), title_padding_title_after_icon_padding({
+      selector: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["selectorRTL"])(selector),
+      vars: vars$$1,
+      isRTL: true,
+      isLarge: true
+    })];
+  },
+  height_large: function height_large(selector, vars$$1) {
+    return [breakpointTabletPortraitUp(selector, {
+      height: vars$$1.height_large + "px"
+    })];
+  },
+  padding_side_large: function padding_side_large(selector, vars$$1) {
+    return [breakpointTabletPortraitUp(selector, {
+      padding: "0 " + vars$$1.padding_side_large + "px"
+    })];
+  }
+};
+var layout = Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["createLayout"])({
+  varFns: varFns
+});
+
+// @ts-check
+var padding_side = polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component * 2 - 12; // 16 - 12 = 4
+
+var padding_side_large = polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component * 3 - 12; // 24 - 12 = 12
+
+var vars$1 = {
+  /**
+   * Generate general styles, not defined by variables
+   */
+  general_styles: true,
+  font_size: 20,
+  font_weight: 400,
+  height: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component * 7,
+  // 56
+  height_compact: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component * 6,
+  // 48
+  height_large: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].grid_unit_component * 8,
+  // 64
+  line_height: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].line_height,
+  padding_side: padding_side,
+  padding_side_large: padding_side_large,
+  indent: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_indent - padding_side,
+  indent_large: polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].unit_indent_large - padding_side_large,
+  title_after_icon_padding: 4,
+  title_after_icon_padding_large: 12,
+  title_padding: 16,
+  title_padding_large: 8,
+  color_light_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_text_primary),
+  color_light_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_light_border_light),
+  color_light_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_light_background),
+  color_dark_text: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_text_primary),
+  color_dark_border: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_foreground, polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].blend_dark_border_light),
+  color_dark_background: Object(polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["rgba"])(polythene_theme__WEBPACK_IMPORTED_MODULE_1__["vars"].color_dark_background)
+};
+
+// @ts-check
+var fns = [layout, color];
+var selector = ".".concat(classes.component);
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createAddStyle(selector, fns, vars$1);
+var getStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].createGetStyle(selector, fns, vars$1);
+polythene_core_css__WEBPACK_IMPORTED_MODULE_0__["styler"].addStyle({
+  selectors: [selector],
+  fns: fns,
+  vars: vars$1
+});
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css-typography/dist/polythene-css-typography.mjs":
+/*!**********************************************************************************!*\
+  !*** ../node_modules/polythene-css-typography/dist/polythene-css-typography.mjs ***!
+  \**********************************************************************************/
+/*! exports provided: addRoboto, addStyle, addTypography, getStyle */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addRoboto", function() { return addRoboto; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addStyle", function() { return addStyle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addTypography", function() { return addTypography; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStyle", function() { return getStyle; });
+/* harmony import */ var polythene_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-style */ "../node_modules/polythene-style/dist/polythene-style.mjs");
+/* harmony import */ var polythene_utilities__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-utilities */ "../node_modules/polythene-utilities/dist/polythene-utilities.mjs");
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+
+
+
+
+// @ts-check
+var reset = (function () {
+  return [{
+    // apply a natural box layout model to all elements, but allow elements to change
+    " html": {
+      "box-sizing": "border-box"
+    },
+    " *, *:before, *:after": {
+      "box-sizing": "inherit"
+    },
+    " *": [// remove tap highlight in mobile Safari
+    {
+      "-webkit-tap-highlight-color": "rgba(0,0,0,0)"
+    }, {
+      "-webkit-tap-highlight-color": "transparent" // For some Androids
+
+    }],
+    // Remove dotted link borders in Firefox
+    " a, a:active, a:focus, input:active, *:focus": {
+      outline: 0
+    },
+    // Mobile Safari: override default fading of disabled elements
+    " input:disabled": {
+      opacity: 1
+    }
+  }];
+});
+
+// @ts-check
+var robotoStyle = function robotoStyle() {
+  return [{
+    "html, body, button, input, select, textarea": {
+      fontFamily: "Roboto, Helvetica, Arial, sans-serif"
+    }
+  }];
+};
+var loadRoboto = function loadRoboto() {
+  return [{
+    "@import": "url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700')"
+  }];
+};
+
+// @ts-check
+var fontSize = 14;
+var typography = (function () {
+  return [{
+    " h1, h2, h3, h4, h5, h6, p": {
+      margin: 0,
+      padding: 0
+    }
+  }, {
+    " h1, h2, h3, h4, h5, h6": {
+      " small": {
+        "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+        "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+        "letter-spacing": "-0.02em",
+        "font-size": "0.6em"
+      }
+    }
+  }, {
+    " h1": {
+      "font-size": "56px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "margin-top": "24px",
+      "margin-bottom": "24px"
+    }
+  }, {
+    " h2": {
+      "font-size": "45px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "margin-top": "24px",
+      "margin-bottom": "24px"
+    }
+  }, {
+    " h3": {
+      "font-size": "34px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "margin-top": "24px",
+      "margin-bottom": "24px"
+    }
+  }, {
+    " h4": {
+      "font-size": "24px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "-moz-osx-font-smoothing": "grayscale",
+      "margin-top": "24px",
+      "margin-bottom": "16px"
+    }
+  }, {
+    " h5": {
+      "font-size": "20px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_medium,
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "letter-spacing": "-0.02em",
+      "margin-top": "24px",
+      "margin-bottom": "16px"
+    }
+  }, {
+    " h6": {
+      "font-size": "16px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "letter-spacing": "0.04em",
+      "margin-top": "24px",
+      "margin-bottom": "16px"
+    }
+  }, {
+    " html, body": {
+      "font-size": fontSize + "px",
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal
+    },
+    " p": {
+      "font-size": fontSize + "px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "letter-spacing": "0",
+      "margin-bottom": "16px"
+    },
+    " blockquote": {
+      "position": "relative",
+      "font-size": "24px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+      "font-style": "italic",
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "letter-spacing": "0.08em",
+      "margin-top": "24px",
+      "margin-bottom": "16px"
+    },
+    " ul, ol": {
+      "font-size": fontSize + "px",
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_normal,
+      "line-height": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].line_height,
+      "letter-spacing": 0
+    },
+    " b, strong": {
+      "font-weight": polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"].font_weight_medium
+    }
+  }];
+});
+
+// @ts-check
+var fns = [robotoStyle, reset, typography];
+var fnsWithLoadRoboto = [loadRoboto, robotoStyle, reset, typography]; // adds font import for written CSS
+
+var selector = "";
+var addStyle = polythene_core_css__WEBPACK_IMPORTED_MODULE_2__["styler"].createAddStyle(selector, fns, polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"]);
+
+var getStyle = function getStyle(customSelector, customVars) {
+  var _ref = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+      _ref$mediaQuery = _ref.mediaQuery,
+      mediaQuery = _ref$mediaQuery === void 0 ? "" : _ref$mediaQuery,
+      _ref$scope = _ref.scope,
+      scope = _ref$scope === void 0 ? "" : _ref$scope;
+
+  return polythene_core_css__WEBPACK_IMPORTED_MODULE_2__["styler"].getStyle({
+    selectors: [customSelector, selector],
+    fns: fnsWithLoadRoboto,
+    vars: polythene_style__WEBPACK_IMPORTED_MODULE_0__["vars"],
+    customVars: customVars,
+    mediaQuery: mediaQuery,
+    scope: scope
+  });
+};
+
+var addRoboto = function addRoboto() {
+  Object(polythene_utilities__WEBPACK_IMPORTED_MODULE_1__["addWebFont"])("google", {
+    families: ["Roboto:400,500,700,400italic:latin"]
+  });
+};
+
+var addTypography = function addTypography() {
+  addRoboto();
+  polythene_core_css__WEBPACK_IMPORTED_MODULE_2__["styler"].add("pe-material-design-typography", fns.map(function (s) {
+    return s();
+  }));
+};
+
+
+
+
+/***/ }),
+
+/***/ "../node_modules/polythene-css/dist/polythene-css.mjs":
+/*!************************************************************!*\
+  !*** ../node_modules/polythene-css/dist/polythene-css.mjs ***!
+  \************************************************************/
+/*! exports provided: BaseSpinnerCSS, ButtonCSS, ButtonGroupCSS, CardCSS, CheckboxCSS, DialogCSS, DialogPaneCSS, DrawerCSS, FABCSS, IconCSS, IconButtonCSS, IOSSpinnerCSS, ListCSS, ListTileCSS, MaterialDesignProgressSpinnerCSS, MaterialDesignSpinnerCSS, MenuCSS, NotificationCSS, RadioButtonCSS, RippleCSS, SearchCSS, SelectionControlCSS, ShadowCSS, SliderCSS, SnackbarCSS, SVGCSS, SwitchCSS, TabsCSS, TextFieldCSS, ToolbarCSS, TypographyCSS, addTypography, addRoboto, addLayoutStyles, RaisedButtonCSS */
+/***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RaisedButtonCSS", function() { return RaisedButtonCSS; });
+/* harmony import */ var polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! polythene-css-base-spinner */ "../node_modules/polythene-css-base-spinner/dist/polythene-css-base-spinner.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "BaseSpinnerCSS", function() { return polythene_css_base_spinner__WEBPACK_IMPORTED_MODULE_0__; });
+/* harmony import */ var polythene_css_button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-css-button */ "../node_modules/polythene-css-button/dist/polythene-css-button.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "ButtonCSS", function() { return polythene_css_button__WEBPACK_IMPORTED_MODULE_1__; });
+/* harmony import */ var polythene_css_button_group__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-css-button-group */ "../node_modules/polythene-css-button-group/dist/polythene-css-button-group.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "ButtonGroupCSS", function() { return polythene_css_button_group__WEBPACK_IMPORTED_MODULE_2__; });
+/* harmony import */ var polythene_css_card__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! polythene-css-card */ "../node_modules/polythene-css-card/dist/polythene-css-card.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "CardCSS", function() { return polythene_css_card__WEBPACK_IMPORTED_MODULE_3__; });
+/* harmony import */ var polythene_css_checkbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! polythene-css-checkbox */ "../node_modules/polythene-css-checkbox/dist/polythene-css-checkbox.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "CheckboxCSS", function() { return polythene_css_checkbox__WEBPACK_IMPORTED_MODULE_4__; });
+/* harmony import */ var polythene_css_dialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! polythene-css-dialog */ "../node_modules/polythene-css-dialog/dist/polythene-css-dialog.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "DialogCSS", function() { return polythene_css_dialog__WEBPACK_IMPORTED_MODULE_5__; });
+/* harmony import */ var polythene_css_dialog_pane__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! polythene-css-dialog-pane */ "../node_modules/polythene-css-dialog-pane/dist/polythene-css-dialog-pane.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "DialogPaneCSS", function() { return polythene_css_dialog_pane__WEBPACK_IMPORTED_MODULE_6__; });
+/* harmony import */ var polythene_css_drawer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! polythene-css-drawer */ "../node_modules/polythene-css-drawer/dist/polythene-css-drawer.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "DrawerCSS", function() { return polythene_css_drawer__WEBPACK_IMPORTED_MODULE_7__; });
+/* harmony import */ var polythene_css_fab__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! polythene-css-fab */ "../node_modules/polythene-css-fab/dist/polythene-css-fab.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "FABCSS", function() { return polythene_css_fab__WEBPACK_IMPORTED_MODULE_8__; });
+/* harmony import */ var polythene_css_icon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! polythene-css-icon */ "../node_modules/polythene-css-icon/dist/polythene-css-icon.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "IconCSS", function() { return polythene_css_icon__WEBPACK_IMPORTED_MODULE_9__; });
+/* harmony import */ var polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! polythene-css-icon-button */ "../node_modules/polythene-css-icon-button/dist/polythene-css-icon-button.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "IconButtonCSS", function() { return polythene_css_icon_button__WEBPACK_IMPORTED_MODULE_10__; });
+/* harmony import */ var polythene_css_ios_spinner__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! polythene-css-ios-spinner */ "../node_modules/polythene-css-ios-spinner/dist/polythene-css-ios-spinner.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "IOSSpinnerCSS", function() { return polythene_css_ios_spinner__WEBPACK_IMPORTED_MODULE_11__; });
+/* harmony import */ var polythene_css_list__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! polythene-css-list */ "../node_modules/polythene-css-list/dist/polythene-css-list.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "ListCSS", function() { return polythene_css_list__WEBPACK_IMPORTED_MODULE_12__; });
+/* harmony import */ var polythene_css_list_tile__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! polythene-css-list-tile */ "../node_modules/polythene-css-list-tile/dist/polythene-css-list-tile.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "ListTileCSS", function() { return polythene_css_list_tile__WEBPACK_IMPORTED_MODULE_13__; });
+/* harmony import */ var polythene_css_material_design_progress_spinner__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! polythene-css-material-design-progress-spinner */ "../node_modules/polythene-css-material-design-progress-spinner/dist/polythene-css-material-design-progress-spinner.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "MaterialDesignProgressSpinnerCSS", function() { return polythene_css_material_design_progress_spinner__WEBPACK_IMPORTED_MODULE_14__; });
+/* harmony import */ var polythene_css_material_design_spinner__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! polythene-css-material-design-spinner */ "../node_modules/polythene-css-material-design-spinner/dist/polythene-css-material-design-spinner.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "MaterialDesignSpinnerCSS", function() { return polythene_css_material_design_spinner__WEBPACK_IMPORTED_MODULE_15__; });
+/* harmony import */ var polythene_css_menu__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! polythene-css-menu */ "../node_modules/polythene-css-menu/dist/polythene-css-menu.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "MenuCSS", function() { return polythene_css_menu__WEBPACK_IMPORTED_MODULE_16__; });
+/* harmony import */ var polythene_css_notification__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! polythene-css-notification */ "../node_modules/polythene-css-notification/dist/polythene-css-notification.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "NotificationCSS", function() { return polythene_css_notification__WEBPACK_IMPORTED_MODULE_17__; });
+/* harmony import */ var polythene_css_radio_button__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! polythene-css-radio-button */ "../node_modules/polythene-css-radio-button/dist/polythene-css-radio-button.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "RadioButtonCSS", function() { return polythene_css_radio_button__WEBPACK_IMPORTED_MODULE_18__; });
+/* harmony import */ var polythene_css_ripple__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! polythene-css-ripple */ "../node_modules/polythene-css-ripple/dist/polythene-css-ripple.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "RippleCSS", function() { return polythene_css_ripple__WEBPACK_IMPORTED_MODULE_19__; });
+/* harmony import */ var polythene_css_search__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! polythene-css-search */ "../node_modules/polythene-css-search/dist/polythene-css-search.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "SearchCSS", function() { return polythene_css_search__WEBPACK_IMPORTED_MODULE_20__; });
+/* harmony import */ var polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! polythene-css-selection-control */ "../node_modules/polythene-css-selection-control/dist/polythene-css-selection-control.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "SelectionControlCSS", function() { return polythene_css_selection_control__WEBPACK_IMPORTED_MODULE_21__; });
+/* harmony import */ var polythene_css_shadow__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! polythene-css-shadow */ "../node_modules/polythene-css-shadow/dist/polythene-css-shadow.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "ShadowCSS", function() { return polythene_css_shadow__WEBPACK_IMPORTED_MODULE_22__; });
+/* harmony import */ var polythene_css_slider__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! polythene-css-slider */ "../node_modules/polythene-css-slider/dist/polythene-css-slider.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "SliderCSS", function() { return polythene_css_slider__WEBPACK_IMPORTED_MODULE_23__; });
+/* harmony import */ var polythene_css_snackbar__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! polythene-css-snackbar */ "../node_modules/polythene-css-snackbar/dist/polythene-css-snackbar.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "SnackbarCSS", function() { return polythene_css_snackbar__WEBPACK_IMPORTED_MODULE_24__; });
+/* harmony import */ var polythene_css_svg__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! polythene-css-svg */ "../node_modules/polythene-css-svg/dist/polythene-css-svg.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "SVGCSS", function() { return polythene_css_svg__WEBPACK_IMPORTED_MODULE_25__; });
+/* harmony import */ var polythene_css_switch__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! polythene-css-switch */ "../node_modules/polythene-css-switch/dist/polythene-css-switch.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "SwitchCSS", function() { return polythene_css_switch__WEBPACK_IMPORTED_MODULE_26__; });
+/* harmony import */ var polythene_css_tabs__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! polythene-css-tabs */ "../node_modules/polythene-css-tabs/dist/polythene-css-tabs.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "TabsCSS", function() { return polythene_css_tabs__WEBPACK_IMPORTED_MODULE_27__; });
+/* harmony import */ var polythene_css_textfield__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! polythene-css-textfield */ "../node_modules/polythene-css-textfield/dist/polythene-css-textfield.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "TextFieldCSS", function() { return polythene_css_textfield__WEBPACK_IMPORTED_MODULE_28__; });
+/* harmony import */ var polythene_css_toolbar__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! polythene-css-toolbar */ "../node_modules/polythene-css-toolbar/dist/polythene-css-toolbar.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "ToolbarCSS", function() { return polythene_css_toolbar__WEBPACK_IMPORTED_MODULE_29__; });
+/* harmony import */ var polythene_css_typography__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! polythene-css-typography */ "../node_modules/polythene-css-typography/dist/polythene-css-typography.mjs");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "TypographyCSS", function() { return polythene_css_typography__WEBPACK_IMPORTED_MODULE_30__; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "addTypography", function() { return polythene_css_typography__WEBPACK_IMPORTED_MODULE_30__["addTypography"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "addRoboto", function() { return polythene_css_typography__WEBPACK_IMPORTED_MODULE_30__["addRoboto"]; });
+
+/* harmony import */ var polythene_core_css__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! polythene-core-css */ "../node_modules/polythene-core-css/dist/polythene-core-css.mjs");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "addLayoutStyles", function() { return polythene_core_css__WEBPACK_IMPORTED_MODULE_31__["addLayoutStyles"]; });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var RaisedButtonCSS = polythene_css_button__WEBPACK_IMPORTED_MODULE_1__;
+
+
+
+
+/***/ }),
+
 /***/ "../node_modules/polythene-css/dist/polythene-layout-styles.css":
 /*!**********************************************************************!*\
   !*** ../node_modules/polythene-css/dist/polythene-layout-styles.css ***!
@@ -12874,6 +27557,47 @@ var Timer = function Timer() {
 
 /***/ }),
 
+/***/ "./SmallButton.js":
+/*!************************!*\
+  !*** ./SmallButton.js ***!
+  \************************/
+/*! exports provided: SmallButton */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SmallButton", function() { return SmallButton; });
+/* harmony import */ var mithril__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mithril */ "../node_modules/mithril/mithril.js");
+/* harmony import */ var mithril__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mithril__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var polythene_mithril__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! polythene-mithril */ "../node_modules/polythene-mithril/dist/polythene-mithril.mjs");
+/* harmony import */ var polythene_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! polythene-css */ "../node_modules/polythene-css/dist/polythene-css.mjs");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+
+var SmallButton = {
+  view: function view(vnode) {
+    return mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__["Button"], _objectSpread({}, vnode.attrs, {
+      className: "small-button"
+    }));
+  }
+};
+polythene_css__WEBPACK_IMPORTED_MODULE_2__["ButtonCSS"].addStyle(".small-button", {
+  contained: true,
+  border: true,
+  font_size: 13,
+  padding_h: 9,
+  padding_h_border: 9,
+  label_padding_v: 8,
+  color_light_text: "#333",
+  color_dark_text: "#fff"
+});
+
+/***/ }),
+
 /***/ "./examples.js":
 /*!*********************!*\
   !*** ./examples.js ***!
@@ -12883,16 +27607,16 @@ var Timer = function Timer() {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var examples = [// h2
-"<!-- Ruler -->\n<hr />", // 2 divs
-"<!-- 2 divs -->\n<div><p><span>text</span></p></div> <div><p><span>text</span></p></div>", // Bootstrap dialog
-"<!-- Bootstrap dialog -->\n<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\">\n  <div class=\"modal-dialog\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n        <h4 class=\"modal-title\">Modal title</h4>\n      </div>\n      <div class=\"modal-body\">\n        <p>One fine body&hellip;</p>\n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close</button>\n        <button type=\"button\" class=\"btn btn-primary\">Save changes</button>\n      </div>\n    </div><!-- /.modal-content -->\n  </div><!-- /.modal-dialog -->\n</div><!-- /.modal -->", // Bootstrap button
-"<!-- Bootstrap button -->\n<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>", // Table
-"<!-- Table -->\n<table cellpadding=6 rules=groups frame=box> <thead> <tr> <th>  weekday  </th> <th>date</th> <th>manager</th> <th>qty</th> </tr> </thead> <tbody> <tr> <td>mon</td> <td>09/11</td> <td>kelsey</td> <td>639</td> </tr> <tr> <td>tue</td> <td>09/12</td> <td>lindsey</td> <td>596</td> </tr> <tr> <td>wed</td> <td>09/13</td> <td>randy</td> <td>1135</td> </tr> <tr> <td>thu</td> <td>09/14</td> <td>susan</td> <td>1002</td> </tr> <tr> <td>fri</td> <td>09/15</td> <td>randy</td> <td>908</td> </tr> <tr> <td>sat</td> <td>09/16</td> <td>lindsey</td> <td>371</td> </tr> <tr> <td>sun</td> <td>09/17</td> <td>susan</td> <td>272</td> </tr> </tbody> <tfoot> <tr> <th align=left colspan=3>total</th> <th>4923</th> </tr> </tfoot> </table>", // Image
-"<!-- Image -->\n<img src=\"https://raw.githubusercontent.com/ArthurClemens/assets/gh-pages/polythene/examples/avatar-1.png\" alt=\"Movie star\" style=\"width:128px;height:128px;\">", // HTML entities
-"<!-- HTML entities -->\n<h1>&#169;&#174;&#182;&#167;&hellip;</h1>", // SVG
-"<!-- SVG -->\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z\"/></svg>", // Material Design Web: List
-"<!-- Material Design Web: List -->\n<ul class=\"mdc-list mdc-list--two-line\" aria-orientation=\"vertical\">\n  <li class=\"mdc-list-item\">\n    <span class=\"mdc-list-item__text\">\n      First-line text\n      <span class=\"mdc-list-item__secondary-text\">\n        Second-line text\n      </span>\n    </span>\n  </li>\n  <li class=\"mdc-list-item\">\n    <span class=\"mdc-list-item__text\">\n      First-line text\n      <span class=\"mdc-list-item__secondary-text\">\n        Second-line text\n      </span>\n    </span>\n  </li>\n  <li class=\"mdc-list-item\">\n    <span class=\"mdc-list-item__text\">\n      First-line text\n      <span class=\"mdc-list-item__secondary-text\">\n        Second-line text\n      </span>\n    </span>\n  </li>\n</ul>"];
+var examples = [// Style
+"<!-- Style -->\n\n<div style=\"padding: .75rem 1.25rem; border: 1px solid #f5c6cb; border-radius: .25rem; color: #721c24; background-color: #f8d7da;\">Warning</div>", // Simple divs
+"<!-- Simple divs -->\n\n<div><p><span>text</span></p></div> <div><p><span>text</span></p></div>", // Bootstrap button group
+"<!-- Bootstrap button group -->\n\n<div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\">\n  <label class=\"btn btn-secondary active\">\n    <input type=\"radio\" name=\"options\" id=\"option1\" autocomplete=\"off\" checked> Active\n  </label>\n  <label class=\"btn btn-secondary\">\n    <input type=\"radio\" name=\"options\" id=\"option2\" autocomplete=\"off\"> Radio\n  </label>\n  <label class=\"btn btn-secondary\">\n    <input type=\"radio\" name=\"options\" id=\"option3\" autocomplete=\"off\"> Radio\n  </label>\n</div>\n\n<style>\n  @import 'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css'\n</style>", // Fomantic UI Table
+"<!-- Fomantic UI Table -->\n\n<table class=\"ui selectable celled table\">\n  <thead>\n    <tr>\n      <th>Name</th>\n      <th>Status</th>\n      <th>Notes</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>John</td>\n      <td>No Action</td>\n      <td>None</td>\n    </tr>\n    <tr>\n      <td>Jamie</td>\n      <td>Approved</td>\n      <td>Requires call</td>\n    </tr>\n    <tr>\n      <td>Jill</td>\n      <td>Denied</td>\n      <td>None</td>\n    </tr>\n    <tr class=\"warning\">\n      <td>John</td>\n      <td>No Action</td>\n      <td>None</td>\n    </tr>\n    <tr>\n      <td>Jamie</td>\n      <td class=\"positive\">Approved</td>\n      <td class=\"warning\">Requires call</td>\n    </tr>\n    <tr>\n      <td>Jill</td>\n      <td class=\"negative\">Denied</td>\n      <td>None</td>\n    </tr>\n  </tbody>\n</table>\n\n<style>\n  @import 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.1/dist/semantic.css'\n</style>", // Image
+"<!-- Image -->\n\n<img src=\"https://raw.githubusercontent.com/ArthurClemens/assets/gh-pages/polythene/examples/avatar-1.png\" alt=\"Movie star\" style=\"width:128px;height:128px;border-radius:50%;\" />", // HTML entities
+"<!-- HTML entities -->\n\n<h1>&#9730;&#9728;&#9729;&#9757;\uD83D\uDE00</h1>", // SVG
+"<!-- SVG -->\n\n<svg xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:cc=\"http://creativecommons.org/ns#\" xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" id=\"svg2\" viewBox=\"0 0 240 240\" height=\"240\" width=\"240\"><path id=\"path4\" d=\"m 160,60 0,115 c 0,22.1 -17.9,40 -40,40 -22.1,0 -40,-17.9 -40,-40 L 80,50 c 0,-13.8 11.2,-25 25,-25 13.8,0 25,11.2 25,25 l 0,105 c 0,5.5 -4.5,10 -10,10 -5.5,0 -10,-4.5 -10,-10 l 0,-95 -15,0 0,95 c 0,13.8 11.2,25 25,25 13.8,0 25,-11.2 25,-25 L 145,50 C 145,27.9 127.1,10 105,10 82.9,10 65,27.9 65,50 l 0,125 c 0,30.4 24.6,55 55,55 30.4,0 55,-24.6 55,-55 l 0,-115 -15,0 z\" /></svg>", // Material Design Web: List
+"<!-- Material Design Web: List -->\n\n<ul class=\"mdc-list\" style=\"background:#fff\">\n  <li class=\"mdc-list-item\">Line item 1</li>\n  <li class=\"mdc-list-item\">Line item 2</li>\n  <li class=\"mdc-list-item\">Line item 3</li>\n</ul>\n\n<style>\n  @import 'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css'\n</style>", // ui-kit Card
+"<!-- UIKit Card -->\n\n<div class=\"uk-card uk-card-default\">\n  <div class=\"uk-card-header\">\n    <div class=\"uk-grid-small uk-flex-middle uk-grid\" uk-grid=\"\">\n      <div class=\"uk-width-auto uk-first-column\">\n        <img class=\"uk-border-circle\" width=\"40\" height=\"40\" src=\"https://getuikit.com/docs/images/avatar.jpg\">\n      </div>\n      <div class=\"uk-width-expand\">\n        <h3 class=\"uk-card-title uk-margin-remove-bottom\">Title</h3>\n        <p class=\"uk-text-meta uk-margin-remove-top\"><time datetime=\"2016-04-01T19:00\">April 01, 2016</time></p>\n      </div>\n    </div>\n  </div>\n  <div class=\"uk-card-body\">\n    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>\n  </div>\n  <div class=\"uk-card-footer\">\n    <a href=\"#\" class=\"uk-button uk-button-text\">Read more</a>\n  </div>\n</div>\n\n<style>\n  @import 'https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/css/uikit.css'\n</style>"];
 
 var shuffle = function shuffle(array) {
   var currentIndex = array.length,
@@ -12924,7 +27648,7 @@ var shuffle = function shuffle(array) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
-module.exports = {"form":"form","block":"block","editor":"editor","pe-textfield__input-area":"pe-textfield__input-area","pe-textfield__input":"pe-textfield__input","options":"options","selected":"selected","source":"source","result":"result","rendered":"rendered","pe-textfield":"pe-textfield","indents":"indents","viewer":"viewer"};
+module.exports = {"form":"form","block":"block","editor":"editor","pe-textfield__input-area":"pe-textfield__input-area","pe-textfield__input":"pe-textfield__input","options":"options","options-inner":"options-inner","source":"source","result":"result","rendered":"rendered","pe-textfield":"pe-textfield","viewer":"viewer"};
 
 /***/ }),
 
@@ -12945,17 +27669,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mithril_template_builder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! mithril-template-builder */ "../../mithril-template-builder/dist/mithril-template-builder.mjs");
 /* harmony import */ var _examples__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./examples */ "./examples.js");
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils */ "./utils.js");
-/* harmony import */ var polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! polythene-css/dist/polythene.css */ "../node_modules/polythene-css/dist/polythene.css");
-/* harmony import */ var polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! polythene-css/dist/polythene-layout-styles.css */ "../node_modules/polythene-css/dist/polythene-layout-styles.css");
-/* harmony import */ var polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! polythene-css/dist/polythene-typography.css */ "../node_modules/polythene-css/dist/polythene-typography.css");
-/* harmony import */ var polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./index.css */ "./index.css");
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _SmallButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./SmallButton */ "./SmallButton.js");
+/* harmony import */ var polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! polythene-css/dist/polythene.css */ "../node_modules/polythene-css/dist/polythene.css");
+/* harmony import */ var polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_css__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! polythene-css/dist/polythene-layout-styles.css */ "../node_modules/polythene-css/dist/polythene-layout-styles.css");
+/* harmony import */ var polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_layout_styles_css__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! polythene-css/dist/polythene-typography.css */ "../node_modules/polythene-css/dist/polythene-typography.css");
+/* harmony import */ var polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(polythene_css_dist_polythene_typography_css__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./index.css */ "./index.css");
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_10__);
 
 
 window.m = mithril__WEBPACK_IMPORTED_MODULE_0___default.a; // for eval
+
 
 
 
@@ -12968,35 +27694,33 @@ window.m = mithril__WEBPACK_IMPORTED_MODULE_0___default.a; // for eval
  // Default Material Design styles including Roboto font
 
 
-var INDENT_STORAGE_KEY = "mithril-template-converter__indent-index";
-var indentOptions = [{
-  label: "2",
-  id: "2"
+var ATTRS_AS_OBJECT_STORAGE_KEY = "mithril-template-converter__attrs-object";
+var attrsAsObjectOptions = [{
+  label: "Attributes",
+  id: "1"
 }, {
-  label: "4",
-  id: "4"
-}, {
-  label: "Tab",
-  id: "tab"
+  label: "Selectors",
+  id: "0"
 }];
-var DEFAULT_INDENT_ID = "2";
+var DEFAULT_ATTRS_AS_OBJECT = "1";
 
 var App = function App() {
+  var $source = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()("");
+  var $output = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()("");
+  var $attrsAsObject = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()(Object(_utils__WEBPACK_IMPORTED_MODULE_5__["storageAvailable"])("localStorage") ? JSON.parse(localStorage.getItem(ATTRS_AS_OBJECT_STORAGE_KEY)) || DEFAULT_ATTRS_AS_OBJECT : DEFAULT_ATTRS_AS_OBJECT);
+
   var convert = function convert() {
-    var built = Object(mithril_template_builder__WEBPACK_IMPORTED_MODULE_3__["templateBuilder"])({
+    var built = Object(mithril_template_builder__WEBPACK_IMPORTED_MODULE_3__["default"])({
       source: $source(),
-      indent: $indentId()
+      indent: "2",
+      attrsAsObject: parseInt($attrsAsObject(), 10)
     });
     $output(built);
   };
 
-  var $source = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()("");
-  var $output = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()("");
-  var defaultIndentId = Object(_utils__WEBPACK_IMPORTED_MODULE_5__["storageAvailable"])("localStorage") ? localStorage.getItem(INDENT_STORAGE_KEY) : DEFAULT_INDENT_ID;
-  var $indentId = mithril_stream__WEBPACK_IMPORTED_MODULE_1___default()(defaultIndentId);
-  $indentId.map(function (id) {
+  $attrsAsObject.map(function (value) {
     if (Object(_utils__WEBPACK_IMPORTED_MODULE_5__["storageAvailable"])("localStorage")) {
-      localStorage.setItem(INDENT_STORAGE_KEY, id);
+      localStorage.setItem(ATTRS_AS_OBJECT_STORAGE_KEY, value.toString());
     }
 
     convert();
@@ -13012,7 +27736,7 @@ var App = function App() {
   return {
     view: function view() {
       var output = $output();
-      var indentId = $indentId();
+      var attrsAsObject = $attrsAsObject().toString();
       var rendered;
 
       try {
@@ -13021,12 +27745,14 @@ var App = function App() {
         rendered = "Could not render Mithril code - please check the output for any errors.";
       }
 
-      return mithril__WEBPACK_IMPORTED_MODULE_0___default()(".form.layout.justified.horizontal", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.source", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
-        href: "#",
-        onclick: function onclick(e) {
-          return e.preventDefault(), showExample();
+      return mithril__WEBPACK_IMPORTED_MODULE_0___default()(".form.layout.justified.horizontal", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.source", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options-inner.pe-dark-tone", mithril__WEBPACK_IMPORTED_MODULE_0___default()(_SmallButton__WEBPACK_IMPORTED_MODULE_6__["SmallButton"], {
+        label: "Insert random example",
+        events: {
+          onclick: function onclick(e) {
+            return e.preventDefault(), showExample();
+          }
         }
-      }, "Insert random example")), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
+      }))), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
         className: "editor",
         label: "Paste source HTML",
         tone: "dark",
@@ -13045,15 +27771,18 @@ var App = function App() {
         },
         multiLine: true,
         value: $source()
-      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.result", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()(".indents", indentOptions.map(function (o) {
-        return mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
-          href: "#",
-          className: indentId === o.id ? "selected" : null,
-          onclick: function onclick(e) {
-            return e.preventDefault(), $indentId(o.id);
+      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.result", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options-inner", mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["ButtonGroup"], attrsAsObjectOptions.map(function (o) {
+        return mithril__WEBPACK_IMPORTED_MODULE_0___default()(_SmallButton__WEBPACK_IMPORTED_MODULE_6__["SmallButton"], {
+          ink: false,
+          label: o.label,
+          selected: attrsAsObject === o.id,
+          events: {
+            onclick: function onclick(e) {
+              return e.preventDefault(), $attrsAsObject(o.id);
+            }
           }
-        }, o.label);
-      }))), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
+        });
+      })))), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
         className: "editor",
         label: "Mithril template",
         multiLine: true,
@@ -13063,10 +27792,13 @@ var App = function App() {
           var value = _ref2.value;
           return $output(value);
         }
-      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.rendered", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()("a", {
-        href: "https://github.com/ArthurClemens/mithril-template-converter",
-        target: "_blank"
-      }, "Github")), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".editor", rendered ? mithril__WEBPACK_IMPORTED_MODULE_0___default()(".viewer", rendered) : mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
+      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".block.rendered", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options", mithril__WEBPACK_IMPORTED_MODULE_0___default()(".options-inner", mithril__WEBPACK_IMPORTED_MODULE_0___default()(_SmallButton__WEBPACK_IMPORTED_MODULE_6__["SmallButton"], {
+        url: {
+          href: "https://github.com/ArthurClemens/mithril-template-converter",
+          target: "_blank"
+        },
+        label: "Github"
+      }))), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".editor", rendered ? mithril__WEBPACK_IMPORTED_MODULE_0___default()(".viewer", {}, rendered) : mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__["TextField"], {
         className: "editor",
         label: "Rendered HTML",
         multiLine: true,

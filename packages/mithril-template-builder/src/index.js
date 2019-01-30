@@ -8,6 +8,7 @@
  * @type {RegExp} ENTITY_REGEX
  */
 const ENTITY_REGEX = /(&#?\w+;)/;
+const DEFAULT_INDENT = "2";
 
 const svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"];
 
@@ -20,17 +21,17 @@ svgCaseSensitiveTagNames.forEach((term) => {
  * @param {Array} list 
  * @param {function} f 
  */
-function each(list, f) {
+const each = (list, f) => {
   for (let i = 0; i < list.length; i++) {
     f(list[i], i);
   }
-}
+};
 
 /**
  * @param {string} markup 
  * @returns {Array<ChildNode>}
  */
-function createFragment(markup) {
+const createFragment = markup => {
   // escape HTML entities, to be resolved in addVirtualString
   markup = markup.replace(/&/g, "&amp;");
   if (markup.indexOf("<!doctype") >= 0) {
@@ -43,13 +44,13 @@ function createFragment(markup) {
   const container = document.createElement("div");
   container.insertAdjacentHTML("beforeend", markup);
   return [...container.childNodes];
-}
+};
 
 /**
  * @param {Array<Node>|Array<ChildNode>} fragment 
  * @returns {Array<Vnode>}
  */
-function createVirtual(fragment) {
+const createVirtual = fragment => {
   const list = [];
 
   each(fragment, function(el) {
@@ -72,14 +73,43 @@ function createVirtual(fragment) {
     }
   });
   return list;
-}
+};
+
+/**
+ * @param {string} style 
+ * @returns {Array<Array<string>>}
+ */
+const styleToList = style => {
+  let styleAttrs = style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
+  styleAttrs = styleAttrs.replace(/[\n\r]/g, "");     // remove newlines
+  const list = styleAttrs.split(/\s*;\s*/);           // ["color:#f00", "border:1px solid red"]
+  const styleList = list.map(propValue =>
+    propValue.split(/\s*:\s*/)
+  );
+  return styleList;
+};
+
+/**
+ * @param {Array<Array<string>>} styleList 
+ * @returns {object}
+ */
+const styleListToObject = styleList => {
+  const obj = styleList.reduce((acc, [key, value]) => {
+    acc[key] = value;
+    return acc;
+  }, {});
+  return obj;
+};
 
 /**
  * 
  * @param {Array<Vnode>} virtual 
+ * @param {object} opts
+ * @param {boolean} [opts.attrsAsObject]
  */
-function TemplateBuilder(virtual) {
+function TemplateBuilder(virtual, { attrsAsObject } = {}) {
   this.virtual = virtual;
+  this.attrsAsObject = attrsAsObject;
   this.children = []; // each child is an object with attributes: node, children, content
 }
 
@@ -111,47 +141,93 @@ TemplateBuilder.prototype = {
    * @param {object} vnode 
    */
   addVirtualAttrs: function(vnode) {
-    let virtual = vnode.tag === "div" ? "" : vnode.tag;
 
-    if (vnode.attrs.class) {
-      let attrs = vnode.attrs.class.replace(/\s+/g, ".");
-      virtual += `.${attrs}`;
-      vnode.attrs.class = undefined;
+    const template = ({ tag, className, attrsAsString, attrsAsObject, style }) => `"${tag}${className}${attrsAsString}"${attrsAsObject}${style}`;
+    const defaultTag = "div";
+
+    const data = {
+      tag: "",
+      className: "",
+      attrsAsString: "",
+      attrsAsObject: "",
+      style: ""
+    };
+
+    const { class: className = "", style = "", ...attrs } = vnode.attrs;
+    
+    const validAttrs = Object.keys(attrs)
+      .filter(name => attrs[name] !== undefined)
+      .reduce((obj, key) => {
+        obj[key] = attrs[key];
+        return obj;
+      }, {});
+      
+    if (!this.attrsAsObject) {
+      
+      // tag
+      data.tag = vnode.tag === defaultTag
+        ? Object.keys(validAttrs).length === 0
+          ? "div"
+          : ""
+        : vnode.tag;
+      
+      // className
+      data.className = className
+        ? `.${className.replace(/\s+/g, ".")}`
+        : "";
+
+      // attrs
+      data.attrsAsString = Object.keys(validAttrs)
+        .map(name => {
+          const value = vnode.attrs[name]
+            .replace(/[\n\r\t]/g, " ")
+            .replace(/\s+/g, " ")       // clean up redundant spaces we just created
+            .replace(/'/g, "\\'");      // escape quotes
+          return `[${name}='${value}']`;
+        })
+        .join("");
+
+      // style
+      if (style) {
+        const styleList = styleToList(style);
+        const styleAttrs = styleListToObject(styleList);
+        const styleAttrsString = JSON.stringify(styleAttrs);
+        data.style = `, {"style":${styleAttrsString}}`;
+      }
+
+    } else { 
+      const styleAttrs = style
+        ? styleListToObject(styleToList(style))
+        : {};
+      const withStyleAttrs = {
+        // className
+        ...(className.length > 0
+          ? { class: className }
+          : {}
+        ),
+        // attrs
+        ...attrs,
+        // style
+        ...(Object.keys(styleAttrs).length > 0
+          ? { style: styleAttrs}
+          : {}
+        )
+      };
+
+      // tag
+      data.tag = vnode.tag || defaultTag;
+
+      if (Object.keys(withStyleAttrs).length > 0) {
+        data.attrsAsObject = `, ${JSON.stringify(withStyleAttrs)}`;
+      }
     }
 
-    each(Object.keys(vnode.attrs).sort(), function(attrName) {
-      if (attrName === "style") return;
-      if (vnode.attrs[attrName] === undefined) return;
-      let attrs = vnode.attrs[attrName];
-      attrs = attrs.replace(/[\n\r\t]/g, " ");
-      attrs = attrs.replace(/\s+/g, " "); // clean up redundant spaces we just created
-      attrs = attrs.replace(/'/g, "\\'"); // escape quotes
-      virtual += `[${attrName}='${attrs}']`;
-    });
-
-    if (virtual === "") virtual = "div";
-    virtual = `"${virtual}"`; // add quotes
-
-    if (vnode.attrs.style) {
-      let attrs = vnode.attrs.style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
-      attrs = attrs.replace(/[\n\r]/g, ""); // remove newlines
-      attrs = attrs.split(/\s*;\s*/); // ["color:#f00", "border: 1px solid red"]
-      attrs = attrs.map((propValue) => {
-        // "color:#f00"
-        return propValue.split(/\s*:\s*/).map((part) => {
-          return `"${part}"`;
-        }).join(": "); // "\"color\": \"#f00\""
-      });
-      attrs = attrs.join(", ");
-      virtual += `, {style: {${attrs}}}`;
-    }
-
-    const children = (vnode.children.length !== 0) ?
-      new TemplateBuilder(vnode.children).complete() :
-      null;
+    const children = (vnode.children.length !== 0)
+      ? new TemplateBuilder(vnode.children, { attrsAsObject: this.attrsAsObject }).complete()
+      : null;
 
     this.children.push({
-      node: virtual,
+      node: template(data),
       children
     });
   },
@@ -224,40 +300,41 @@ const singleMithrilNodeTemplate = (mithrilNode, whitespace) => (
 
 /**
  * @param {string} mithrilNode 
- * @param {string} children 
+ * @param {Array<string>} children 
  * @param {string} whitespace 
- * @param {string} indent 
+ * @param {string} indentChars
  * @returns {string}
  */
-const mithrilNodeMultipleChildrenTemplate = (mithrilNode, children, whitespace, indent) => (
+const mithrilNodeMultipleChildrenTemplate = (mithrilNode, children, whitespace, indentChars) => (
   `\n${whitespace}m(${mithrilNode},
-${whitespace}${indent}[${children}
-${whitespace}${indent}]
+${whitespace}${indentChars}[${children}
+${whitespace}${indentChars}]
 ${whitespace})`
 );
 
 /**
  * @param {string} mithrilNode 
- * @param {string} child 
+ * @param {Array<string>} children 
  * @param {string} whitespace 
  * @returns {string}
  */
-const mithrilNodeSingleChildTemplate = (mithrilNode, child, whitespace) => (
-  `\n${whitespace}m(${mithrilNode}, ${child}
+const mithrilNodeSingleChildTemplate = (mithrilNode, children, whitespace) => (
+  `\n${whitespace}m(${mithrilNode}, ${children}
 ${whitespace})`
 );
 
 /**
  * @param {string} mithrilNode 
- * @param {string} children 
+ * @param {Array<string>} children 
  * @param {string} whitespace 
- * @param {string} indent 
+ * @param {string} indentChars
  * @returns {string}
  */
-const template = (mithrilNode, children, whitespace, indent) => (
+const template = (mithrilNode, children, whitespace, indentChars) => (
+  console.log("children", children),
   children
     ? children.length > 1
-      ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indent)
+      ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars)
       : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace)
     : singleMithrilNodeTemplate(mithrilNode, whitespace)
 );
@@ -265,21 +342,22 @@ const template = (mithrilNode, children, whitespace, indent) => (
 /**
  * @param {Array} data 
  * @param {number} level 
- * @param {string} indent 
+ * @param {string} indentChars
+ * @returns {Array<string>}
  */
-const formatCode = (data, level, indent) => {
+const formatCode = (data, level, indentChars) => {
   if (!data) {
-    return "";
+    return;
   }
   return data.map((d) => {
-    const space = whitespace(level, indent);
+    const space = whitespace(level, indentChars);
     if (d.content) {
       return contentTemplate(d.content, space);
     }
     const node = d.node || "";
     const newLevel = level + (d.children && d.children.length > 1 ? 2 : 1);
-    const children = formatCode(d.children, newLevel, indent) || "";
-    return template(node, children, space, indent);
+    const children = formatCode(d.children, newLevel, indentChars);
+    return template(node, children, space, indentChars);
   });
 };
 
@@ -292,17 +370,18 @@ const indentCharsMap = {
 /**
  * @param {object} opts 
  * @param {string} opts.source - String containing HTML markup
- * @param {"2" | "4" | "tab"} opts.indent
+ * @param {("2" | "4" | "tab")} [opts.indent]
+ * @param {boolean} [opts.attrsAsObject]
  * @returns {string}
  */
-export const templateBuilder = opts => {
+const templateBuilder = opts => {
   const fragment = createFragment(opts.source);
   const source = createVirtual(fragment);
-  const parsed = new TemplateBuilder(source).complete();
+  const parsed = new TemplateBuilder(source, { attrsAsObject: opts.attrsAsObject }).complete();
   const indentLevel = parsed.length > 1 ?
     1 :
     0;
-  const indentChars = indentCharsMap[opts.indent || "4"];
+  const indentChars = indentCharsMap[opts.indent || DEFAULT_INDENT];
   const formatted = formatCode(parsed, indentLevel, indentChars);
 
   // only wrap output in brackets when it is a list
@@ -311,3 +390,5 @@ export const templateBuilder = opts => {
     formatted.join("").trim();
   return wrapped;
 };
+
+export default templateBuilder;

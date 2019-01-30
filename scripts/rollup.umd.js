@@ -5,7 +5,7 @@ import { pkg, createConfig } from "./rollup.base";
 import { terser } from "rollup-plugin-terser";
 
 const env = process.env; // eslint-disable-line no-undef
-const name = env.MODULE_NAME || "polythene";
+const name = env.MODULE_NAME || "templateBuilder";
   
 const baseConfig = createConfig();
 const targetConfig = Object.assign({}, baseConfig, {

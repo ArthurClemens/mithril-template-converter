@@ -1,81 +1,137 @@
 
 const examples = [
-  // h2
-  `<!-- Ruler -->
-<hr />`,
+  // Style
+  `<!-- Style -->
 
-  // 2 divs
-  `<!-- 2 divs -->
+<div style="padding: .75rem 1.25rem; border: 1px solid #f5c6cb; border-radius: .25rem; color: #721c24; background-color: #f8d7da;">Warning</div>`,
+
+  // Simple divs
+  `<!-- Simple divs -->
+
 <div><p><span>text</span></p></div> <div><p><span>text</span></p></div>`,
 
-  // Bootstrap dialog
-  `<!-- Bootstrap dialog -->
-<div class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        <p>One fine body&hellip;</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->`,
+  // Bootstrap button group
+  `<!-- Bootstrap button group -->
 
-  // Bootstrap button
-  `<!-- Bootstrap button -->
-<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>`,
+<div class="btn-group btn-group-toggle" data-toggle="buttons">
+  <label class="btn btn-secondary active">
+    <input type="radio" name="options" id="option1" autocomplete="off" checked> Active
+  </label>
+  <label class="btn btn-secondary">
+    <input type="radio" name="options" id="option2" autocomplete="off"> Radio
+  </label>
+  <label class="btn btn-secondary">
+    <input type="radio" name="options" id="option3" autocomplete="off"> Radio
+  </label>
+</div>
 
-  // Table
-  `<!-- Table -->
-<table cellpadding=6 rules=groups frame=box> <thead> <tr> <th>  weekday  </th> <th>date</th> <th>manager</th> <th>qty</th> </tr> </thead> <tbody> <tr> <td>mon</td> <td>09/11</td> <td>kelsey</td> <td>639</td> </tr> <tr> <td>tue</td> <td>09/12</td> <td>lindsey</td> <td>596</td> </tr> <tr> <td>wed</td> <td>09/13</td> <td>randy</td> <td>1135</td> </tr> <tr> <td>thu</td> <td>09/14</td> <td>susan</td> <td>1002</td> </tr> <tr> <td>fri</td> <td>09/15</td> <td>randy</td> <td>908</td> </tr> <tr> <td>sat</td> <td>09/16</td> <td>lindsey</td> <td>371</td> </tr> <tr> <td>sun</td> <td>09/17</td> <td>susan</td> <td>272</td> </tr> </tbody> <tfoot> <tr> <th align=left colspan=3>total</th> <th>4923</th> </tr> </tfoot> </table>`,
+<style>
+  @import 'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css'
+</style>`,
+
+  // Fomantic UI Table
+  `<!-- Fomantic UI Table -->
+
+<table class="ui selectable celled table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>John</td>
+      <td>No Action</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>Jamie</td>
+      <td>Approved</td>
+      <td>Requires call</td>
+    </tr>
+    <tr>
+      <td>Jill</td>
+      <td>Denied</td>
+      <td>None</td>
+    </tr>
+    <tr class="warning">
+      <td>John</td>
+      <td>No Action</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>Jamie</td>
+      <td class="positive">Approved</td>
+      <td class="warning">Requires call</td>
+    </tr>
+    <tr>
+      <td>Jill</td>
+      <td class="negative">Denied</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+
+<style>
+  @import 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.1/dist/semantic.css'
+</style>`,
 
   // Image
   `<!-- Image -->
-<img src="https://raw.githubusercontent.com/ArthurClemens/assets/gh-pages/polythene/examples/avatar-1.png" alt="Movie star" style="width:128px;height:128px;">`,
+
+<img src="https://raw.githubusercontent.com/ArthurClemens/assets/gh-pages/polythene/examples/avatar-1.png" alt="Movie star" style="width:128px;height:128px;border-radius:50%;" />`,
 
   // HTML entities
   `<!-- HTML entities -->
-<h1>&#169;&#174;&#182;&#167;&hellip;</h1>`,
+
+<h1>&#9730;&#9728;&#9729;&#9757;😀</h1>`,
 
   // SVG
   `<!-- SVG -->
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg>`,
+
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg2" viewBox="0 0 240 240" height="240" width="240"><path id="path4" d="m 160,60 0,115 c 0,22.1 -17.9,40 -40,40 -22.1,0 -40,-17.9 -40,-40 L 80,50 c 0,-13.8 11.2,-25 25,-25 13.8,0 25,11.2 25,25 l 0,105 c 0,5.5 -4.5,10 -10,10 -5.5,0 -10,-4.5 -10,-10 l 0,-95 -15,0 0,95 c 0,13.8 11.2,25 25,25 13.8,0 25,-11.2 25,-25 L 145,50 C 145,27.9 127.1,10 105,10 82.9,10 65,27.9 65,50 l 0,125 c 0,30.4 24.6,55 55,55 30.4,0 55,-24.6 55,-55 l 0,-115 -15,0 z" /></svg>`,
 
   // Material Design Web: List
   `<!-- Material Design Web: List -->
-<ul class="mdc-list mdc-list--two-line" aria-orientation="vertical">
-  <li class="mdc-list-item">
-    <span class="mdc-list-item__text">
-      First-line text
-      <span class="mdc-list-item__secondary-text">
-        Second-line text
-      </span>
-    </span>
-  </li>
-  <li class="mdc-list-item">
-    <span class="mdc-list-item__text">
-      First-line text
-      <span class="mdc-list-item__secondary-text">
-        Second-line text
-      </span>
-    </span>
-  </li>
-  <li class="mdc-list-item">
-    <span class="mdc-list-item__text">
-      First-line text
-      <span class="mdc-list-item__secondary-text">
-        Second-line text
-      </span>
-    </span>
-  </li>
-</ul>` 
+
+<ul class="mdc-list" style="background:#fff">
+  <li class="mdc-list-item">Line item 1</li>
+  <li class="mdc-list-item">Line item 2</li>
+  <li class="mdc-list-item">Line item 3</li>
+</ul>
+
+<style>
+  @import 'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css'
+</style>`,
+
+  // ui-kit Card
+  `<!-- UIKit Card -->
+
+<div class="uk-card uk-card-default">
+  <div class="uk-card-header">
+    <div class="uk-grid-small uk-flex-middle uk-grid" uk-grid="">
+      <div class="uk-width-auto uk-first-column">
+        <img class="uk-border-circle" width="40" height="40" src="https://getuikit.com/docs/images/avatar.jpg">
+      </div>
+      <div class="uk-width-expand">
+        <h3 class="uk-card-title uk-margin-remove-bottom">Title</h3>
+        <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00">April 01, 2016</time></p>
+      </div>
+    </div>
+  </div>
+  <div class="uk-card-body">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+  </div>
+  <div class="uk-card-footer">
+    <a href="#" class="uk-button uk-button-text">Read more</a>
+  </div>
+</div>
+
+<style>
+  @import 'https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/css/uikit.css'
+</style>`,
 ];
 
 const shuffle = array => {
