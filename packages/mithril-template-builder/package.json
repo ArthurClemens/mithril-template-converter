@@ -3,7 +3,7 @@
   "description": "Builder for Mithril HTML to JavaScript converter",
   "main": "dist/mithril-template-builder",
   "module": "dist/mithril-template-builder.mjs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "repository": {
     "type": "git",

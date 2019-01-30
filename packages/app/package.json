@@ -1,7 +1,7 @@
 {
   "name": "mithril-template-converter-app",
   "description": "Mithril HTML to JavaScript converter webpage",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "mithril": "^1.1.6",
-    "mithril-template-builder": "^1.0.1",
+    "mithril-template-builder": "^1.1.1",
     "polythene-core": "^1.5.1",
     "polythene-css": "^1.5.1",
     "polythene-mithril": "^1.5.1"
