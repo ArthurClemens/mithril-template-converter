@@ -126,22 +126,78 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance");
 }
 
-// @ts-check
-
-/**
- * @typedef {{tag: string, attrs: object, children: Array<Vnode>}} Vnode
- */
+var booleans = {
+  allowfullscreen: 1,
+  allowpaymentrequest: 1,
+  async: 1,
+  autofocus: 1,
+  autoplay: 1,
+  checked: 1,
+  controls: 1,
+  default: 1,
+  defer: 1,
+  disabled: 1,
+  formnovalidate: 1,
+  hidden: 1,
+  ismap: 1,
+  itemscope: 1,
+  loop: 1,
+  multiple: 1,
+  muted: 1,
+  nomodule: 1,
+  novalidate: 1,
+  open: 1,
+  readonly: 1,
+  required: 1,
+  reversed: 1,
+  selected: 1,
+  typemustmatch: 1
+};
+var svgCaseSensitiveTagNames = {
+  "altglyph": "altGlyph",
+  "altglyphdef": "altGlyphDef",
+  "altglyphitem": "altGlyphItem",
+  "animatecolor": "animateColor",
+  "animatemotion": "animateMotion",
+  "animatetransform": "animateTransform",
+  "clippath": "clipPath",
+  "feblend": "feBlend",
+  "fecolormatrix": "feColorMatrix",
+  "fecomponenttransfer": "feComponentTransfer",
+  "fecomposite": "feComposite",
+  "feconvolvematrix": "feConvolveMatrix",
+  "fediffuselighting": "feDiffuseLighting",
+  "fedisplacementmap": "feDisplacementMap",
+  "fedistantlight": "feDistantLight",
+  "feflood": "feFlood",
+  "fefunca": "feFuncA",
+  "fefuncb": "feFuncB",
+  "fefuncg": "feFuncG",
+  "fefuncr": "feFuncR",
+  "fegaussianblur": "feGaussianBlur",
+  "feimage": "feImage",
+  "femerge": "feMerge",
+  "femergenode": "feMergeNode",
+  "femorphology": "feMorphology",
+  "feoffset": "feOffset",
+  "fepointlight": "fePointLight",
+  "fespecularlighting": "feSpecularLighting",
+  "fespotlight": "feSpotLight",
+  "fetile": "feTile",
+  "feturbulence": "feTurbulence",
+  "foreignobject": "foreignObject",
+  "glyphref": "glyphRef",
+  "lineargradient": "linearGradient",
+  "radialgradient": "radialGradient",
+  "textpath": "textPath"
+};
 
 /**
  * @type {RegExp} ENTITY_REGEX
  */
+
 var ENTITY_REGEX = /(&#?\w+;)/;
 var DEFAULT_INDENT = "2";
-var svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"];
-var svgCaseSensitiveTagNamesMap = {};
-svgCaseSensitiveTagNames.forEach(function (term) {
-  svgCaseSensitiveTagNamesMap[term.toLowerCase()] = term;
-});
 /**
  * @param {Array} list 
  * @param {function} f 
@@ -183,11 +239,19 @@ var createVirtual = function createVirtual(fragment) {
       list.push(el.nodeValue);
     } else if (el.nodeType === 1) {
       var attrs = {};
-      each(el.attributes, function (attr) {
-        attrs[attr.name] = attr.value;
+      each(el.attributes, function (_ref) {
+        var name = _ref.name,
+            value = _ref.value;
+
+        if (booleans[name]) {
+          attrs[name] = name;
+        } else {
+          attrs[name] = value;
+        }
       });
-      var tag = el.nodeName.toLowerCase();
-      var caseTag = svgCaseSensitiveTagNamesMap[tag] ? svgCaseSensitiveTagNamesMap[tag] : tag;
+      var tag = el.nodeName.toLowerCase(); // restore proper tag in case of SVG
+
+      var caseTag = svgCaseSensitiveTagNames[tag] || tag;
       list.push({
         tag: caseTag,
         attrs: attrs,
@@ -222,10 +286,10 @@ var styleToList = function styleToList(style) {
 
 
 var styleListToObject = function styleListToObject(styleList) {
-  var obj = styleList.reduce(function (acc, _ref) {
-    var _ref2 = _slicedToArray(_ref, 2),
-        key = _ref2[0],
-        value = _ref2[1];
+  var obj = styleList.reduce(function (acc, _ref2) {
+    var _ref3 = _slicedToArray(_ref2, 2),
+        key = _ref3[0],
+        value = _ref3[1];
 
     acc[key] = value;
     return acc;
@@ -241,8 +305,8 @@ var styleListToObject = function styleListToObject(styleList) {
 
 
 function TemplateBuilder(virtual) {
-  var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-      attrsAsObject = _ref3.attrsAsObject;
+  var _ref4 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      attrsAsObject = _ref4.attrsAsObject;
 
   this.virtual = virtual;
   this.attrsAsObject = attrsAsObject;
@@ -280,12 +344,12 @@ TemplateBuilder.prototype = {
    * @param {object} vnode 
    */
   addVirtualAttrs: function addVirtualAttrs(vnode) {
-    var template = function template(_ref4) {
-      var tag = _ref4.tag,
-          className = _ref4.className,
-          attrsAsString = _ref4.attrsAsString,
-          attrsAsObject = _ref4.attrsAsObject,
-          style = _ref4.style;
+    var template = function template(_ref5) {
+      var tag = _ref5.tag,
+          className = _ref5.className,
+          attrsAsString = _ref5.attrsAsString,
+          attrsAsObject = _ref5.attrsAsObject,
+          style = _ref5.style;
       return "\"".concat(tag).concat(className).concat(attrsAsString, "\"").concat(attrsAsObject).concat(style);
     };
 
@@ -319,7 +383,7 @@ TemplateBuilder.prototype = {
       data.className = className ? ".".concat(className.replace(/\s+/g, ".")) : ""; // attrs
 
       data.attrsAsString = Object.keys(validAttrs).map(function (name) {
-        var value = vnode.attrs[name].replace(/[\n\r\t]/g, " ").replace(/\s+/g, " ") // clean up redundant spaces we just created
+        var value = validAttrs[name].replace(/[\n\r\t]/g, " ").replace(/\s+/g, " ") // clean up redundant spaces we just created
         .replace(/'/g, "\\'"); // escape quotes
 
         return "[".concat(name, "='").concat(value, "']");
@@ -336,7 +400,7 @@ TemplateBuilder.prototype = {
 
       var withStyleAttrs = _objectSpread({}, className.length > 0 ? {
         class: className
-      } : {}, attrs, Object.keys(_styleAttrs).length > 0 ? {
+      } : {}, validAttrs, Object.keys(_styleAttrs).length > 0 ? {
         style: _styleAttrs
       } : {}); // tag
 

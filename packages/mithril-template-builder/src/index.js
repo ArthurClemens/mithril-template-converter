@@ -4,18 +4,13 @@
  * @typedef {{tag: string, attrs: object, children: Array<Vnode>}} Vnode
  */
 
+import { booleans, svgCaseSensitiveTagNames } from "./html-properties";
+
 /**
  * @type {RegExp} ENTITY_REGEX
  */
 const ENTITY_REGEX = /(&#?\w+;)/;
 const DEFAULT_INDENT = "2";
-
-const svgCaseSensitiveTagNames = ["altGlyph", "altGlyphDef", "altGlyphItem", "animateColor", "animateMotion", "animateTransform", "clipPath", "feBlend", "feColorMatrix", "feComponentTransfer", "feComposite", "feConvolveMatrix", "feDiffuseLighting", "feDisplacementMap", "feDistantLight", "feFlood", "feFuncA", "feFuncB", "feFuncG", "feFuncR", "feGaussianBlur", "feImage", "feMerge", "feMergeNode", "feMorphology", "feOffset", "fePointLight", "feSpecularLighting", "feSpotLight", "feTile", "feTurbulence", "foreignObject", "glyphRef", "linearGradient", "radialGradient", "textPath"];
-
-const svgCaseSensitiveTagNamesMap = {};
-svgCaseSensitiveTagNames.forEach((term) => {
-  svgCaseSensitiveTagNamesMap[term.toLowerCase()] = term;
-});
 
 /**
  * @param {Array} list 
@@ -54,17 +49,23 @@ const createVirtual = fragment => {
   const list = [];
 
   each(fragment, function(el) {
+
     if (el.nodeType === 3) {
       list.push(el.nodeValue);
     } else if (el.nodeType === 1) {
       const attrs = {};
-      each(el.attributes, function(attr) {
-        attrs[attr.name] = attr.value;
+      each(el.attributes, function({ name, value }) {
+        if (booleans[name]) {
+          attrs[name] = name;
+        } else {
+          attrs[name] = value;
+        }
       });
 
       const tag = el.nodeName.toLowerCase();
-      const caseTag = svgCaseSensitiveTagNamesMap[tag] ? svgCaseSensitiveTagNamesMap[tag] : tag;
-
+      // restore proper tag in case of SVG
+      const caseTag = svgCaseSensitiveTagNames[tag] || tag;
+      
       list.push({
         tag: caseTag,
         attrs,
@@ -161,7 +162,7 @@ TemplateBuilder.prototype = {
         obj[key] = attrs[key];
         return obj;
       }, {});
-      
+
     if (!this.attrsAsObject) {
       
       // tag
@@ -179,7 +180,7 @@ TemplateBuilder.prototype = {
       // attrs
       data.attrsAsString = Object.keys(validAttrs)
         .map(name => {
-          const value = vnode.attrs[name]
+          const value = validAttrs[name]
             .replace(/[\n\r\t]/g, " ")
             .replace(/\s+/g, " ")       // clean up redundant spaces we just created
             .replace(/'/g, "\\'");      // escape quotes
@@ -206,7 +207,7 @@ TemplateBuilder.prototype = {
           : {}
         ),
         // attrs
-        ...attrs,
+        ...validAttrs,
         // style
         ...(Object.keys(styleAttrs).length > 0
           ? { style: styleAttrs}
@@ -234,6 +235,7 @@ TemplateBuilder.prototype = {
 
   complete: function() {
     each(this.virtual, function(vnode) {
+
       if (typeof vnode === "string") {
         const trimmed = vnode.trim();
         const charCode = trimmed.charCodeAt(0);

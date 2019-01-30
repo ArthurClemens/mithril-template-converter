@@ -53,6 +53,8 @@ body {
   font-size: 16px;
   border-style: none none solid none;
   border-width: 1px;
+  position: relative;
+  z-index: 1;
 }
 
 .mtc-form .mtc-options-inner {
@@ -99,6 +101,7 @@ body {
 .mtc-form .mtc-viewer {
   padding: 18px 20px;
   overflow-y: auto;
+  height: inherit;
 }
 
 @media (max-width: 460px) {
@@ -132,21 +135,25 @@ body {
   }
   .mtc-form .mtc-block {
     width: calc(100% / 2);
-    height: 70vh;
+    height: 60vh;
   }
   .mtc-form .mtc-block.mtc-rendered {
     width: 100vw;
-    height: 30vh;
+    height: 40vh;
     flex-direction: column-reverse;
   }
   .mtc-form .mtc-rendered .mtc-options {
     border-style: solid none none none;
   }
   .mtc-form .mtc-editor textarea {
-    height: calc(70vh - 48px);
+    height: calc(60vh - 48px);
   }
   .mtc-form .mtc-block.mtc-rendered .mtc-editor {
-    height: calc(30vh - 48px);
+    height: calc(40vh - 48px);
+  }
+  .mtc-form .mtc-block.mtc-rendered .mtc-viewer {
+    width: 80%;
+    margin: 0 auto;
   }
 }
 
@@ -164,5 +171,8 @@ body {
   }
   .mtc-form .mtc-block.mtc-rendered {
     border-left: 1px solid #eee;
+  }
+  .mtc-form .mtc-block.mtc-rendered .mtc-viewer {
+    width: 100%;
   }
 }

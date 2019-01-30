@@ -154,7 +154,31 @@ const examples = [
   // SVG
   `<!-- SVG -->
 
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" id="svg2" viewBox="0 0 240 240" height="240" width="240"><path id="path4" d="m 160,60 0,115 c 0,22.1 -17.9,40 -40,40 -22.1,0 -40,-17.9 -40,-40 L 80,50 c 0,-13.8 11.2,-25 25,-25 13.8,0 25,11.2 25,25 l 0,105 c 0,5.5 -4.5,10 -10,10 -5.5,0 -10,-4.5 -10,-10 l 0,-95 -15,0 0,95 c 0,13.8 11.2,25 25,25 13.8,0 25,-11.2 25,-25 L 145,50 C 145,27.9 127.1,10 105,10 82.9,10 65,27.9 65,50 l 0,125 c 0,30.4 24.6,55 55,55 30.4,0 55,-24.6 55,-55 l 0,-115 -15,0 z" /></svg>`,
+<svg viewBox="0 0 100 100">
+  <clipPath id="myClip">
+    <!--
+      Everything outside the circle will be
+      clipped and therefore invisible.
+    -->
+    <circle cx="40" cy="35" r="35" />
+  </clipPath>
+ 
+  <!-- The original black heart for reference -->
+  <path id="heart" d="M10,30 A20,20,0,0,1,50,30 A20,20,0,0,1,90,30 Q90,60,50,90 Q10,60,10,30 Z" />
+ 
+  <!--
+    Only the portion of the red heart
+    inside the clip circle is visible.
+  -->
+  <use clip-path="url(#myClip)" xlink:href="#heart" fill="red" />
+</svg>
+
+<style>
+@keyframes openYourHeart {from {r: 0} to {r: 60px}}
+#myClip circle {
+  animation: openYourHeart 15s infinite;
+}
+</style>`,
 
   // Material Design Web: List
   `<!-- Material Design Web: List -->

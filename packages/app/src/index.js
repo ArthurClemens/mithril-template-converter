@@ -147,7 +147,7 @@ const App = () => {
           ),
           m(".mtc-editor",
             rendered
-              ? m(".mtc-viewer", {}, rendered)
+              ? m(".mtc-viewer", { key: attrsAsObject + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)}, rendered)
               : m(TextField, {
                 className: "mtc-editor",
                 label: "Rendered HTML",
