@@ -331,7 +331,6 @@ ${whitespace})`
  * @returns {string}
  */
 const template = (mithrilNode, children, whitespace, indentChars) => (
-  console.log("children", children),
   children
     ? children.length > 1
       ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars)

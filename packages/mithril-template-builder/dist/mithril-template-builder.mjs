@@ -454,7 +454,7 @@ var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mit
 
 
 var template = function template(mithrilNode, children, whitespace, indentChars) {
-  return console.log("children", children), children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) : singleMithrilNodeTemplate(mithrilNode, whitespace);
+  return children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) : singleMithrilNodeTemplate(mithrilNode, whitespace);
 };
 /**
  * @param {Array} data 
