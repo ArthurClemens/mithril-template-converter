@@ -72,10 +72,10 @@ const App = () => {
       catch (e) {
         rendered = "Could not render Mithril code - please check the output for any errors.";
       }
-      return m(".form.layout.justified.horizontal", [
-        m(".block.source", [
-          m(".options",
-            m(".options-inner.pe-dark-tone",
+      return m(".mtc-form.layout.justified.horizontal", [
+        m(".mtc-block.mtc-source", [
+          m(".mtc-options",
+            m(".mtc-options-inner.pe-dark-tone",
               m(SmallButton, {
                 label: "Insert random example",
                 events: {
@@ -88,7 +88,7 @@ const App = () => {
             )
           ),
           m(TextField, {
-            className: "editor",
+            className: "mtc-editor",
             label: "Paste source HTML",
             tone: "dark",
             fullWidth: true,
@@ -106,9 +106,9 @@ const App = () => {
             value: $source()
           }),
         ]),
-        m(".block.result", [
-          m(".options",
-            m(".options-inner", 
+        m(".mtc-block.mtc-result", [
+          m(".mtc-options",
+            m(".mtc-options-inner", 
               m(ButtonGroup, attrsAsObjectOptions.map(o =>
                 m(SmallButton, {
                   ink: false,
@@ -125,7 +125,7 @@ const App = () => {
             )
           ),
           m(TextField, {
-            className: "editor",
+            className: "mtc-editor",
             label: "Mithril template",
             multiLine: true,
             fullWidth: true,
@@ -133,9 +133,9 @@ const App = () => {
             onChange: ({ value }) => $output(value)
           }),
         ]),
-        m(".block.rendered", [
-          m(".options",
-            m(".options-inner", 
+        m(".mtc-block.mtc-rendered", [
+          m(".mtc-options",
+            m(".mtc-options-inner", 
               m(SmallButton, {
                 url: {
                   href: "https://github.com/ArthurClemens/mithril-template-converter",
@@ -145,11 +145,11 @@ const App = () => {
               }),
             ),
           ),
-          m(".editor",
+          m(".mtc-editor",
             rendered
-              ? m(".viewer", {}, rendered)
+              ? m(".mtc-viewer", {}, rendered)
               : m(TextField, {
-                className: "editor",
+                className: "mtc-editor",
                 label: "Rendered HTML",
                 multiLine: true,
                 fullWidth: true,

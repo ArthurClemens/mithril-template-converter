@@ -7,11 +7,11 @@ export const SmallButton = {
   view: vnode =>
     m(Button, {
       ...vnode.attrs,
-      className: "small-button",
+      className: "mtc-small-button",
     })
 };
 
-ButtonCSS.addStyle(".small-button", {
+ButtonCSS.addStyle(".mtc-small-button", {
   contained: true,
   border: true,
   font_size: 13,
