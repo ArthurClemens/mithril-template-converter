@@ -5,7 +5,7 @@ window.m = m; // for eval
 import { ButtonGroup, TextField } from "polythene-mithril";
 import templateBuilder from "mithril-template-builder";
 import examples from "./examples";
-import { storageAvailable } from "./utils";
+import { getStoredValue, setStoredValue } from "./storage";
 import { SmallButton } from "./SmallButton";
 
 import "polythene-css/dist/polythene.css";               // Component CSS
@@ -32,11 +32,10 @@ const App = () => {
   const $source = stream("");
   const $output = stream("");
 
-  const $attrsAsObject = stream(
-    storageAvailable("localStorage")
-      ? JSON.parse(localStorage.getItem(ATTRS_AS_OBJECT_STORAGE_KEY)) || DEFAULT_ATTRS_AS_OBJECT
-      : DEFAULT_ATTRS_AS_OBJECT
-  );
+  const $attrsAsObject = stream(getStoredValue({
+    key: ATTRS_AS_OBJECT_STORAGE_KEY,
+    defaultValue: DEFAULT_ATTRS_AS_OBJECT
+  }));
 
   const convert = () => {
     const built = templateBuilder({
@@ -48,9 +47,10 @@ const App = () => {
   };
 
   $attrsAsObject.map(value => {
-    if (storageAvailable("localStorage")) {
-      localStorage.setItem(ATTRS_AS_OBJECT_STORAGE_KEY, value.toString());
-    }
+    setStoredValue({
+      key: ATTRS_AS_OBJECT_STORAGE_KEY,
+      value
+    });
     convert();
   });
 
