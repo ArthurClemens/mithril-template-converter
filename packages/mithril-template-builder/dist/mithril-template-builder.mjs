@@ -347,18 +347,18 @@ TemplateBuilder.prototype = {
     var template = function template(_ref5) {
       var tag = _ref5.tag,
           className = _ref5.className,
-          attrsAsString = _ref5.attrsAsString,
-          attrsAsObject = _ref5.attrsAsObject,
+          attrsAsSelectorString = _ref5.attrsAsSelectorString,
+          attrsAsObjectString = _ref5.attrsAsObjectString,
           style = _ref5.style;
-      return "\"".concat(tag).concat(className).concat(attrsAsString, "\"").concat(attrsAsObject).concat(style);
+      return "\"".concat(tag).concat(className).concat(attrsAsSelectorString, "\"").concat(attrsAsObjectString).concat(style);
     };
 
     var defaultTag = "div";
     var data = {
       tag: "",
       className: "",
-      attrsAsString: "",
-      attrsAsObject: "",
+      attrsAsSelectorString: "",
+      attrsAsObjectString: "",
       style: ""
     };
 
@@ -382,11 +382,11 @@ TemplateBuilder.prototype = {
 
       data.className = className ? ".".concat(className.replace(/\s+/g, ".")) : ""; // attrs
 
-      data.attrsAsString = Object.keys(validAttrs).map(function (name) {
+      data.attrsAsSelectorString = Object.keys(validAttrs).map(function (name) {
         var value = validAttrs[name].replace(/[\n\r\t]/g, " ").replace(/\s+/g, " ") // clean up redundant spaces we just created
         .replace(/'/g, "\\'"); // escape quotes
 
-        return "[".concat(name, "='").concat(value, "']");
+        return booleans[name] && name === value ? "[".concat(name, "]") : "[".concat(name, "='").concat(value, "']");
       }).join(""); // style
 
       if (style) {
@@ -408,7 +408,7 @@ TemplateBuilder.prototype = {
       data.tag = vnode.tag || defaultTag;
 
       if (Object.keys(withStyleAttrs).length > 0) {
-        data.attrsAsObject = ", ".concat(JSON.stringify(withStyleAttrs));
+        data.attrsAsObjectString = ", ".concat(JSON.stringify(withStyleAttrs));
       }
     }
 

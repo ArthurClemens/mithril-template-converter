@@ -143,14 +143,14 @@ TemplateBuilder.prototype = {
    */
   addVirtualAttrs: function(vnode) {
 
-    const template = ({ tag, className, attrsAsString, attrsAsObject, style }) => `"${tag}${className}${attrsAsString}"${attrsAsObject}${style}`;
+    const template = ({ tag, className, attrsAsSelectorString, attrsAsObjectString, style }) => `"${tag}${className}${attrsAsSelectorString}"${attrsAsObjectString}${style}`;
     const defaultTag = "div";
 
     const data = {
       tag: "",
       className: "",
-      attrsAsString: "",
-      attrsAsObject: "",
+      attrsAsSelectorString: "",
+      attrsAsObjectString: "",
       style: ""
     };
 
@@ -178,13 +178,15 @@ TemplateBuilder.prototype = {
         : "";
 
       // attrs
-      data.attrsAsString = Object.keys(validAttrs)
+      data.attrsAsSelectorString = Object.keys(validAttrs)
         .map(name => {
           const value = validAttrs[name]
             .replace(/[\n\r\t]/g, " ")
             .replace(/\s+/g, " ")       // clean up redundant spaces we just created
             .replace(/'/g, "\\'");      // escape quotes
-          return `[${name}='${value}']`;
+          return booleans[name] && name === value
+            ? `[${name}]`
+            : `[${name}='${value}']`;
         })
         .join("");
 
@@ -219,7 +221,7 @@ TemplateBuilder.prototype = {
       data.tag = vnode.tag || defaultTag;
 
       if (Object.keys(withStyleAttrs).length > 0) {
-        data.attrsAsObject = `, ${JSON.stringify(withStyleAttrs)}`;
+        data.attrsAsObjectString = `, ${JSON.stringify(withStyleAttrs)}`;
       }
     }
 
