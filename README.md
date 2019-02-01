@@ -35,8 +35,12 @@ const output = templateBuilder({
 ~~~
 
 
-
-
 ## App
 
 Contains source code for the [online converter](http://arthurclemens.github.io/mithril-template-converter/index.html).
+
+Helper patterns and libraries:
+* [Meiosis](http://meiosis.js.org)
+* [Patchinko](https://github.com/barneycarroll/patchinko)
+* [Polythene](http://polythene.js.org)
+

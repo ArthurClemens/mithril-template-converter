@@ -1,73 +1,70 @@
 import m from "mithril";
-import stream from "mithril/stream";
-window.m = m; // for eval
 
 import { ButtonGroup, TextField } from "polythene-mithril";
 import templateBuilder from "mithril-template-builder";
 import examples from "./examples";
 import { getStoredValue, setStoredValue } from "./storage";
 import { SmallButton } from "./SmallButton";
+import { states, actions } from "./state";
 
 import "polythene-css/dist/polythene.css";               // Component CSS
 import "polythene-css/dist/polythene-layout-styles.css"; // Help classes
 import "polythene-css/dist/polythene-typography.css";    // Default Material Design styles including Roboto font
 import "./index.css"; 
 
+window.m = m; // for eval
 const ATTRS_AS_OBJECT_STORAGE_KEY = "mithril-template-converter__attrs-object";
 
 const attrsAsObjectOptions = [
   {
     label: "Attributes",
-    id: "1"
+    id: 1
   },
   {
     label: "Selectors",
-    id: "0"
+    id: 0
   },
 ];
 const DEFAULT_ATTRS_AS_OBJECT = "1";
 
-const App = () => {
+const App = ({ attrs: { state, actions } }) => {
 
-  const $source = stream("");
-  const $output = stream("");
-
-  const $attrsAsObject = stream(getStoredValue({
+  const storedRenderAttrsAsObject = parseInt(getStoredValue({
     key: ATTRS_AS_OBJECT_STORAGE_KEY,
     defaultValue: DEFAULT_ATTRS_AS_OBJECT
-  }));
+  }), 10);
+  actions.setRenderAttrsAsObject(storedRenderAttrsAsObject);
 
   const convert = () => {
     const built = templateBuilder({
-      source: $source(),
+      source: state.source,
       indent: "2",
-      attrsAsObject: parseInt($attrsAsObject(), 10)
+      attrsAsObject: state.renderAttrsAsObject
     });
-    $output(built);
+    actions.setOutput(built);
   };
 
-  $attrsAsObject.map(value => {
+  const setRenderAttrsAsObject = value => {
+    actions.setRenderAttrsAsObject(value);
     setStoredValue({
       key: ATTRS_AS_OBJECT_STORAGE_KEY,
       value
     });
     convert();
-  });
+  };
 
   let exampleIndex = 0;
   const showExample = () => {
     const index = exampleIndex++ % examples.length;
-    $source(examples[index]);
+    actions.setSource(examples[index]);
     convert();
   };
 
   return {
     view: () => {
-      const output = $output();
-      const attrsAsObject = $attrsAsObject().toString();
       let rendered;
       try {
-        rendered = eval(output);
+        rendered = eval(state.output);
       }
       catch (e) {
         rendered = "Could not render Mithril code - please check the output for any errors.";
@@ -94,16 +91,16 @@ const App = () => {
             fullWidth: true,
             autofocus: true,
             onChange: ({ value }) => {
-              const needsConvert = !!($source() || value);
-              $source(value);
+              const needsConvert = !!(state.source || value);
+              actions.setSource(value);
               if (value === "") {
-                $output("");
+                actions.setOutput("");
               } else if (needsConvert) {
                 convert();
               }
             },
             multiLine: true,
-            value: $source()
+            value: state.source
           }),
         ]),
         m(".mtc-block.mtc-result", [
@@ -113,11 +110,11 @@ const App = () => {
                 m(SmallButton, {
                   ink: false,
                   label: o.label,
-                  selected: attrsAsObject === o.id,
+                  selected: state.renderAttrsAsObject === o.id,
                   events: {
                     onclick: e => (
                       e.preventDefault(),
-                      $attrsAsObject(o.id)
+                      setRenderAttrsAsObject(o.id)
                     )
                   }
                 })
@@ -129,8 +126,8 @@ const App = () => {
             label: "Mithril template",
             multiLine: true,
             fullWidth: true,
-            value: $output(),
-            onChange: ({ value }) => $output(value)
+            value: state.output,
+            onChange: ({ value }) => actions.setOutput(value)
           }),
         ]),
         m(".mtc-block.mtc-rendered", [
@@ -147,7 +144,7 @@ const App = () => {
           ),
           m(".mtc-editor",
             rendered
-              ? m(".mtc-viewer", { key: attrsAsObject + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)}, rendered)
+              ? m(".mtc-viewer", { key: state.renderAttrsAsObject + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)}, rendered)
               : m(TextField, {
                 className: "mtc-editor",
                 label: "Rendered HTML",
@@ -162,4 +159,6 @@ const App = () => {
   };
 };
 
-m.mount(document.body, App);
+m.mount(document.body, {
+  view: () => m(App, { state: states(), actions })
+});
