@@ -5,7 +5,7 @@ import { pkg, createConfig } from "./rollup.base";
 import { terser } from "rollup-plugin-terser";
 
 const env = process.env; // eslint-disable-line no-undef
-const name = env.MODULE_NAME || "templateBuilder";
+const name = env.MODULE_NAME || "mithrilTemplateBuilder";
   
 const baseConfig = createConfig();
 const targetConfig = Object.assign({}, baseConfig, {
@@ -17,6 +17,7 @@ const targetConfig = Object.assign({}, baseConfig, {
       format: "umd",
       file: `${env.DEST || pkg.main}.js`,
       sourcemap: true,
+      extend: true,
     }
   )
 });

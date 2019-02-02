@@ -197,11 +197,52 @@ var svgCaseSensitiveTagNames = {
  */
 
 var ENTITY_REGEX = /(&#?\w+;)/;
-var DEFAULT_INDENT = "2";
+var indentOptions = {
+  "2": {
+    label: "2 spaces",
+    value: "  "
+  },
+  "4": {
+    label: "4 spaces",
+    value: "    "
+  },
+  "tab": {
+    label: "Tabs",
+    value: "\t"
+  }
+};
+var defaultIndentOption = indentOptions["2"];
+var attrsOptions = {
+  "attributes": {
+    label: "Attributes",
+    value: "attributes"
+  },
+  "selectors": {
+    label: "Selectors",
+    value: "selectors"
+  }
+};
+var defaultAttrsOption = attrsOptions["attributes"];
+var quotesOptions = {
+  "double": {
+    label: "Double",
+    value: "\""
+  },
+  "single": {
+    label: "Single",
+    value: "'"
+  }
+};
+var defaultQuotesOption = quotesOptions["double"];
+
+var normaliseDoubleQuotes = function normaliseDoubleQuotes(str, quoteChar) {
+  return str.replace(new RegExp("\"", "g"), quoteChar);
+};
 /**
  * @param {Array} list 
  * @param {function} f 
  */
+
 
 var each = function each(list, f) {
   for (var i = 0; i < list.length; i++) {
@@ -300,16 +341,18 @@ var styleListToObject = function styleListToObject(styleList) {
  * 
  * @param {Array<Vnode>} virtual 
  * @param {object} opts
- * @param {boolean} [opts.attrsAsObject]
+ * @param {string} opts.attrs
+ * @param {string} opts.quoteChar
  */
 
 
-function TemplateBuilder(virtual) {
-  var _ref4 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-      attrsAsObject = _ref4.attrsAsObject;
-
+function TemplateBuilder(virtual, _ref4) {
+  var attrs = _ref4.attrs,
+      quoteChar = _ref4.quoteChar;
   this.virtual = virtual;
-  this.attrsAsObject = attrsAsObject;
+  this.attrs = attrs;
+  this.quoteChar = quoteChar;
+  this.embeddedQuoteChar = quoteChar === "\"" ? "'" : "\"";
   this.children = []; // each child is an object with attributes: node, children, content
 }
 
@@ -325,17 +368,17 @@ TemplateBuilder.prototype = {
       contentWithEntities.forEach(function (part) {
         if (part.match(ENTITY_REGEX)) {
           _this.children.push({
-            content: "m.trust(\"".concat(part, "\")")
+            content: "m.trust(".concat(_this.quoteChar).concat(part).concat(_this.quoteChar, ")")
           });
         } else if (part) {
           _this.children.push({
-            content: "\"".concat(part, "\"")
+            content: "".concat(_this.quoteChar).concat(part).concat(_this.quoteChar)
           });
         }
       });
     } else {
       this.children.push({
-        content: "\"".concat(content, "\"")
+        content: "".concat(this.quoteChar).concat(content).concat(this.quoteChar)
       });
     }
   },
@@ -344,13 +387,15 @@ TemplateBuilder.prototype = {
    * @param {object} vnode 
    */
   addVirtualAttrs: function addVirtualAttrs(vnode) {
+    var _this2 = this;
+
     var template = function template(_ref5) {
       var tag = _ref5.tag,
           className = _ref5.className,
           attrsAsSelectorString = _ref5.attrsAsSelectorString,
           attrsAsObjectString = _ref5.attrsAsObjectString,
           style = _ref5.style;
-      return "\"".concat(tag).concat(className).concat(attrsAsSelectorString, "\"").concat(attrsAsObjectString).concat(style);
+      return "".concat(_this2.quoteChar).concat(tag).concat(className).concat(attrsAsSelectorString).concat(_this2.quoteChar).concat(attrsAsObjectString).concat(style);
     };
 
     var defaultTag = "div";
@@ -376,7 +421,7 @@ TemplateBuilder.prototype = {
       return obj;
     }, {});
 
-    if (!this.attrsAsObject) {
+    if (this.attrs === attrsOptions["selectors"].value) {
       // tag
       data.tag = vnode.tag === defaultTag ? Object.keys(validAttrs).length === 0 ? "div" : "" : vnode.tag; // className
 
@@ -384,22 +429,22 @@ TemplateBuilder.prototype = {
 
       data.attrsAsSelectorString = Object.keys(validAttrs).map(function (name) {
         var value = validAttrs[name].replace(/[\n\r\t]/g, " ").replace(/\s+/g, " ") // clean up redundant spaces we just created
-        .replace(/'/g, "\\'"); // escape quotes
+        .replace(new RegExp(_this2.embeddedQuoteChar, "g"), _this2.quoteChar); // escape quotes
 
-        return booleans[name] && name === value ? "[".concat(name, "]") : "[".concat(name, "='").concat(value, "']");
+        return booleans[name] && name === value ? "[".concat(name, "]") : "[".concat(name, "=").concat(_this2.embeddedQuoteChar).concat(value).concat(_this2.embeddedQuoteChar, "]");
       }).join(""); // style
 
       if (style) {
         var styleList = styleToList(style);
         var styleAttrs = styleListToObject(styleList);
-        var styleAttrsString = JSON.stringify(styleAttrs);
-        data.style = ", {\"style\":".concat(styleAttrsString, "}");
+        var styleAttrsString = normaliseDoubleQuotes(JSON.stringify(styleAttrs), this.quoteChar);
+        data.style = ", {".concat(this.quoteChar, "style").concat(this.quoteChar, ":").concat(styleAttrsString, "}");
       }
     } else {
       var _styleAttrs = style ? styleListToObject(styleToList(style)) : {};
 
       var withStyleAttrs = _objectSpread({}, className.length > 0 ? {
-        class: className
+        class: normaliseDoubleQuotes(className, this.quoteChar)
       } : {}, validAttrs, Object.keys(_styleAttrs).length > 0 ? {
         style: _styleAttrs
       } : {}); // tag
@@ -408,12 +453,13 @@ TemplateBuilder.prototype = {
       data.tag = vnode.tag || defaultTag;
 
       if (Object.keys(withStyleAttrs).length > 0) {
-        data.attrsAsObjectString = ", ".concat(JSON.stringify(withStyleAttrs));
+        data.attrsAsObjectString = ", ".concat(normaliseDoubleQuotes(JSON.stringify(withStyleAttrs), this.quoteChar));
       }
     }
 
     var children = vnode.children.length !== 0 ? new TemplateBuilder(vnode.children, {
-      attrsAsObject: this.attrsAsObject
+      attrs: this.attrs,
+      quoteChar: this.quoteChar
     }).complete() : null;
     this.children.push({
       node: template(data),
@@ -546,32 +592,31 @@ var formatCode = function formatCode(data, level, indentChars) {
     return template(node, children, space, indentChars);
   });
 };
-
-var indentCharsMap = {
-  "2": "  ",
-  "4": "    ",
-  "tab": "\t"
-};
 /**
  * @param {object} opts 
  * @param {string} opts.source - String containing HTML markup
- * @param {("2" | "4" | "tab")} [opts.indent]
- * @param {boolean} [opts.attrsAsObject]
+ * @param {("2" | "4" | "tab")} [opts.indent] - Indent; default "2"
+ * @param {("double" | "single")} [opts.quotes] - Quotes; default "double"
+ * @param {("attributes" | "selectors")} [opts.attrs] - Display attributes; default "attributes"
  * @returns {string}
  */
+
 
 var templateBuilder = function templateBuilder(opts) {
   var fragment = createFragment(opts.source);
   var source = createVirtual(fragment);
+  var attrs = attrsOptions[opts.attrs] ? attrsOptions[opts.attrs].value : defaultAttrsOption.value;
+  var quoteChar = quotesOptions[opts.quotes] ? quotesOptions[opts.quotes].value : defaultQuotesOption.value;
   var parsed = new TemplateBuilder(source, {
-    attrsAsObject: opts.attrsAsObject
+    attrs: attrs,
+    quoteChar: quoteChar
   }).complete();
   var indentLevel = parsed.length > 1 ? 1 : 0;
-  var indentChars = indentCharsMap[opts.indent || DEFAULT_INDENT];
+  var indentChars = indentOptions[opts.indent] ? indentOptions[opts.indent].value : defaultIndentOption.value;
   var formatted = formatCode(parsed, indentLevel, indentChars); // only wrap output in brackets when it is a list
 
   var wrapped = formatted.length > 1 ? wrapperTemplate(formatted.join(", ")) : formatted.join("").trim();
   return wrapped;
 };
 
-export default templateBuilder;
+export { indentOptions, attrsOptions, quotesOptions, templateBuilder };

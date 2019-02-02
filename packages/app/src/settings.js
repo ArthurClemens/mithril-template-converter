@@ -3,12 +3,12 @@ import { Dialog, ToolbarTitle, List } from "polythene-mithril";
 import { radioButtonCheckedSVG, radioButtonUncheckedSVG } from "./svg";
 import { DialogFooter } from "./components/DialogFooter";
 
-export default ({ indent, setIndent }) => {
-
-  const tileOptions = ({ title, value, update }) => ({
+export default ({ indent, setIndent, quotes, setQuotes }) => {
+  
+  const tileOptions = ({ title, value, test, update }) => ({
     title,
     key: value,
-    secondary: indent === value
+    secondary: test(value)
       ? {
         icon: {
           svg: { content: m.trust(radioButtonCheckedSVG) }
@@ -39,45 +39,44 @@ export default ({ indent, setIndent }) => {
           tileOptions({
             title: "2 spaces",
             value: "2",
+            test: value => indent === value,
             update: setIndent,
           }),
           tileOptions({
             title: "4 spaces",
             value: "4",
+            test: value => indent === value,
             update: setIndent,
           }),
           tileOptions({
             title: "Tabs",
             value: "tab",
+            test: value => indent === value,
             update: setIndent,
           })
         ]
       }),
-      // m(List, {
-      //   compact: true,
-      //   header: { title: "Quotes" },
-      //   all: {
-      //     hoverable: true,
-      //   },
-      //   tiles: [
-      //     {
-      //       title: "Single quotes",
-      //       secondary: {
-      //         icon: {
-      //           svg: { content: m.trust(radioButtonUncheckedSVG) }
-      //         },
-      //       }
-      //     },
-      //     {
-      //       title: "Double quotes",
-      //       secondary: {
-      //         icon: {
-      //           svg: { content: m.trust(radioButtonUncheckedSVG) }
-      //         },
-      //       }
-      //     },
-      //   ]
-      // }),
+      m(List, {
+        compact: true,
+        header: { title: "Quotes" },
+        all: {
+          hoverable: true,
+        },
+        tiles: [
+          tileOptions({
+            title: "Double",
+            value: "double",
+            test: value => quotes === value,
+            update: setQuotes,
+          }),
+          tileOptions({
+            title: "Single",
+            value: "single",
+            test: value => quotes === value,
+            update: setQuotes,
+          }),
+        ]
+      }),
     ], 
     footer: m(DialogFooter, {
       events: {

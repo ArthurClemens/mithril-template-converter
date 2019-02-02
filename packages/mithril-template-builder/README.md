@@ -3,7 +3,7 @@
 Helper function to create Mithril templates from HTML.
 
 ~~~javascript
-import templateBuilder from "mithril-template-builder"
+import { templateBuilder } from "mithril-template-builder"
 
 const source = "<hr/>"
 const output = templateBuilder({

@@ -70,7 +70,7 @@ const exampleData = [
 </form>
 
 <style>
-  @import 'https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css'
+  @import "https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
 </style>`,
 
 
@@ -90,7 +90,7 @@ const exampleData = [
 </div>
 
 <style>
-  @import 'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css'
+  @import "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
 </style>`,
 
   // Fomantic UI Table
@@ -139,7 +139,7 @@ const exampleData = [
 </table>
 
 <style>
-  @import 'https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.1/dist/semantic.css'
+  @import "https://cdn.jsdelivr.net/npm/fomantic-ui@2.7.1/dist/semantic.css"
 </style>`,
 
   // Image
@@ -191,7 +191,7 @@ const exampleData = [
 </ul>
 
 <style>
-  @import 'https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css'
+  @import "https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
 </style>`,
 
   // ui-kit Card
@@ -218,7 +218,7 @@ const exampleData = [
 </div>
 
 <style>
-  @import 'https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/css/uikit.css'
+  @import "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/css/uikit.css"
 </style>`,
 ];
 

@@ -18,7 +18,7 @@ export const getStoredValue = ({ key, defaultValue }) => {
     return defaultValue;
   }
   const storeValue = localStorage.getItem(key);
-  return storeValue === "null"
+  return storeValue === null
     ? defaultValue
     : storeValue;
 };

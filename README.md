@@ -10,29 +10,60 @@
 Helper function to create Mithril templates from HTML. Use the output text to copy-paste into your source code.
 
 
-~~~javascript
+```javascript
 /**
  * @param {object} opts 
  * @param {string} opts.source - String containing HTML markup
  * @param {("2" | "4" | "tab")} opts.indent - Indent spacing
+ * @param {("double" | "single")} opts.quotes - Quotes
+ * @param {("attributes" | "selectors")} opts.attrs - Display of attributes
  * @returns {string}
  */
 const resultString = templateBuilder(opts)
-~~~
+```
 
-Usage:
+### Usage in modules
 
-~~~javascript
-import templateBuilder from "mithril-template-builder"
+```javascript
+import { templateBuilder } from "mithril-template-builder"
 
-const source = "<hr/>"
+const source = `
+<a href="http://mithril.js.org">Mithril</a>
+`
 const output = templateBuilder({
   source
 })
+```
 
-// output:
-// m("hr")
-~~~
+Output:
+```javascript
+m("a", {"href":"http://mithril.js.org"}, 
+  "Mithril"
+)
+```
+
+```javascript
+import { templateBuilder } from "mithril-template-builder"
+
+const source = `
+<a href="http://mithril.js.org">Mithril</a>
+`
+const output = templateBuilder({
+  source,
+  indent: "4",
+  attrs: "selectors",
+  quotes: "single",
+})
+```
+
+Output:
+
+```javascript
+m('a[href="http://mithril.js.org"]', 
+    'Mithril'
+)
+```
+
 
 
 ## App

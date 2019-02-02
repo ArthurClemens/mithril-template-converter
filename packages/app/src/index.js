@@ -1,12 +1,11 @@
 import m from "mithril";
 
-import templateBuilder from "mithril-template-builder";
+import { templateBuilder, attrsOptions } from "mithril-template-builder";
 import { ButtonGroup, TextField, Dialog, IconButton } from "polythene-mithril";
 import { settingsSVG } from "./svg";
 import { SmallButton } from "./components/SmallButton";
 import { states, actions } from "./state";
 import settings from "./settings";
-import { attrsAsObjectOptions } from "./state/attrsAsObject";
 
 import "polythene-css/dist/polythene.css";               // Component CSS
 import "polythene-css/dist/polythene-layout-styles.css"; // Help classes
@@ -21,18 +20,24 @@ const App = ({ state, actions }) => {
     const template = templateBuilder({
       source: state.source,
       indent: state.indent,
-      attrsAsObject: state.attrsAsObject
+      quotes: state.quotes,
+      attrs: state.attrs
     });
     actions.setOutput(template);
   };
 
-  const setAttrsAsObject = value => {
-    actions.setAttrsAsObject(value);
+  const setAttrs = value => {
+    actions.setAttrs(value);
     update();
   };
 
   const setIndent = value => {
     actions.setIndent(value);
+    update();
+  };
+
+  const setQuotes = value => {
+    actions.setQuotes(value);
     update();
   };
 
@@ -89,24 +94,25 @@ const App = ({ state, actions }) => {
           m(".mtc-block.mtc-result", [
             m(".mtc-options",
               m(".mtc-options-inner", 
-                m(ButtonGroup, attrsAsObjectOptions.map(o =>
-                  m(SmallButton, {
+                m(ButtonGroup, Object.keys(attrsOptions).map(key => {
+                  const { value, label } = attrsOptions[key];
+                  return m(SmallButton, {
                     ink: false,
-                    label: o.label,
-                    selected: state.attrsAsObject === o.id,
+                    label,
+                    selected: state.attrs === value,
                     events: {
                       onclick: e => (
                         e.preventDefault(),
-                        setAttrsAsObject(o.id)
+                        setAttrs(value)
                       )
                     }
-                  })
-                )),
+                  });
+                })),
                 m(IconButton, {
                   className: "mtc-settings",
                   icon: { svg: { content: m.trust(settingsSVG) } },
                   events: {
-                    onclick: () => Dialog.show(() => settings({ indent: state.indent, setIndent }))
+                    onclick: () => Dialog.show(() => settings({ indent: state.indent, setIndent, quotes: state.quotes, setQuotes }))
                   }
                 })
               )
@@ -134,7 +140,7 @@ const App = ({ state, actions }) => {
             ),
             m(".mtc-editor",
               rendered
-                ? m(".mtc-viewer", { key: state.attrsAsObject + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)}, rendered)
+                ? m(".mtc-viewer", { key: state.attrs + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)}, rendered)
                 : m(TextField, {
                   className: "mtc-editor",
                   label: "Rendered HTML",

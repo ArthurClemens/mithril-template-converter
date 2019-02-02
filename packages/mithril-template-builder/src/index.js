@@ -10,8 +10,50 @@ import { booleans, svgCaseSensitiveTagNames } from "./html-properties";
  * @type {RegExp} ENTITY_REGEX
  */
 const ENTITY_REGEX = /(&#?\w+;)/;
-const DEFAULT_INDENT = "2";
 
+export const indentOptions = {
+  "2": {
+    label: "2 spaces",
+    value: "  ",
+  },
+  "4": {
+    label: "4 spaces",
+    value: "    ",
+  },
+  "tab": {
+    label: "Tabs",
+    value: "\t"
+  }
+};
+const defaultIndentOption = indentOptions["2"];
+
+export const attrsOptions = {
+  "attributes": {
+    label: "Attributes",
+    value: "attributes",
+  },
+  "selectors" : {
+    label: "Selectors",
+    value: "selectors",
+  }
+};
+const defaultAttrsOption = attrsOptions["attributes"];
+
+export const quotesOptions = {
+  "double": {
+    label: "Double",
+    value: "\""
+  },
+  "single": {
+    label: "Single",
+    value: "'"
+  }
+};
+const defaultQuotesOption = quotesOptions["double"];
+
+const normaliseDoubleQuotes = (str, quoteChar) =>
+  str.replace(new RegExp("\"", "g"), quoteChar);
+  
 /**
  * @param {Array} list 
  * @param {function} f 
@@ -106,11 +148,16 @@ const styleListToObject = styleList => {
  * 
  * @param {Array<Vnode>} virtual 
  * @param {object} opts
- * @param {boolean} [opts.attrsAsObject]
+ * @param {string} opts.attrs
+ * @param {string} opts.quoteChar
  */
-function TemplateBuilder(virtual, { attrsAsObject } = {}) {
+function TemplateBuilder(virtual, { attrs, quoteChar }) {
   this.virtual = virtual;
-  this.attrsAsObject = attrsAsObject;
+  this.attrs = attrs;
+  this.quoteChar = quoteChar;
+  this.embeddedQuoteChar = quoteChar === "\""
+    ? "'"
+    : "\"";
   this.children = []; // each child is an object with attributes: node, children, content
 }
 
@@ -123,17 +170,17 @@ TemplateBuilder.prototype = {
       contentWithEntities.forEach((part) => {
         if (part.match(ENTITY_REGEX)) {
           this.children.push({
-            content: `m.trust("${part}")`
+            content: `m.trust(${this.quoteChar}${part}${this.quoteChar})`
           });
         } else if (part) {
           this.children.push({
-            content: `"${part}"`
+            content: `${this.quoteChar}${part}${this.quoteChar}`
           });
         }
       });
     } else {
       this.children.push({
-        content: `"${content}"`
+        content: `${this.quoteChar}${content}${this.quoteChar}`
       });
     }
   },
@@ -143,7 +190,7 @@ TemplateBuilder.prototype = {
    */
   addVirtualAttrs: function(vnode) {
 
-    const template = ({ tag, className, attrsAsSelectorString, attrsAsObjectString, style }) => `"${tag}${className}${attrsAsSelectorString}"${attrsAsObjectString}${style}`;
+    const template = ({ tag, className, attrsAsSelectorString, attrsAsObjectString, style }) => `${this.quoteChar}${tag}${className}${attrsAsSelectorString}${this.quoteChar}${attrsAsObjectString}${style}`;
     const defaultTag = "div";
 
     const data = {
@@ -163,7 +210,7 @@ TemplateBuilder.prototype = {
         return obj;
       }, {});
 
-    if (!this.attrsAsObject) {
+    if (this.attrs === attrsOptions["selectors"].value) {
       
       // tag
       data.tag = vnode.tag === defaultTag
@@ -182,11 +229,11 @@ TemplateBuilder.prototype = {
         .map(name => {
           const value = validAttrs[name]
             .replace(/[\n\r\t]/g, " ")
-            .replace(/\s+/g, " ")       // clean up redundant spaces we just created
-            .replace(/'/g, "\\'");      // escape quotes
+            .replace(/\s+/g, " ") // clean up redundant spaces we just created
+            .replace(new RegExp(this.embeddedQuoteChar, "g"), this.quoteChar); // escape quotes
           return booleans[name] && name === value
             ? `[${name}]`
-            : `[${name}='${value}']`;
+            : `[${name}=${this.embeddedQuoteChar}${value}${this.embeddedQuoteChar}]`;
         })
         .join("");
 
@@ -194,8 +241,11 @@ TemplateBuilder.prototype = {
       if (style) {
         const styleList = styleToList(style);
         const styleAttrs = styleListToObject(styleList);
-        const styleAttrsString = JSON.stringify(styleAttrs);
-        data.style = `, {"style":${styleAttrsString}}`;
+        const styleAttrsString = normaliseDoubleQuotes(
+          JSON.stringify(styleAttrs),
+          this.quoteChar
+        );
+        data.style = `, {${this.quoteChar}style${this.quoteChar}:${styleAttrsString}}`;
       }
 
     } else { 
@@ -205,7 +255,10 @@ TemplateBuilder.prototype = {
       const withStyleAttrs = {
         // className
         ...(className.length > 0
-          ? { class: className }
+          ? { class: normaliseDoubleQuotes(
+            className,
+            this.quoteChar
+          )}
           : {}
         ),
         // attrs
@@ -221,12 +274,15 @@ TemplateBuilder.prototype = {
       data.tag = vnode.tag || defaultTag;
 
       if (Object.keys(withStyleAttrs).length > 0) {
-        data.attrsAsObjectString = `, ${JSON.stringify(withStyleAttrs)}`;
+        data.attrsAsObjectString = `, ${normaliseDoubleQuotes(
+          JSON.stringify(withStyleAttrs),
+          this.quoteChar
+        )}`;
       }
     }
 
     const children = (vnode.children.length !== 0)
-      ? new TemplateBuilder(vnode.children, { attrsAsObject: this.attrsAsObject }).complete()
+      ? new TemplateBuilder(vnode.children, { attrs: this.attrs, quoteChar: this.quoteChar }).complete()
       : null;
 
     this.children.push({
@@ -364,27 +420,30 @@ const formatCode = (data, level, indentChars) => {
   });
 };
 
-const indentCharsMap = {
-  "2": "  ",
-  "4": "    ",
-  "tab": "\t"
-};
-
 /**
  * @param {object} opts 
  * @param {string} opts.source - String containing HTML markup
- * @param {("2" | "4" | "tab")} [opts.indent]
- * @param {boolean} [opts.attrsAsObject]
+ * @param {("2" | "4" | "tab")} [opts.indent] - Indent; default "2"
+ * @param {("double" | "single")} [opts.quotes] - Quotes; default "double"
+ * @param {("attributes" | "selectors")} [opts.attrs] - Display attributes; default "attributes"
  * @returns {string}
  */
-const templateBuilder = opts => {
+export const templateBuilder = opts => {
   const fragment = createFragment(opts.source);
   const source = createVirtual(fragment);
-  const parsed = new TemplateBuilder(source, { attrsAsObject: opts.attrsAsObject }).complete();
-  const indentLevel = parsed.length > 1 ?
-    1 :
-    0;
-  const indentChars = indentCharsMap[opts.indent || DEFAULT_INDENT];
+  const attrs = attrsOptions[opts.attrs]
+    ? attrsOptions[opts.attrs].value
+    : defaultAttrsOption.value;
+  const quoteChar = quotesOptions[opts.quotes]
+    ? quotesOptions[opts.quotes].value
+    : defaultQuotesOption.value;
+  const parsed = new TemplateBuilder(source, { attrs, quoteChar }).complete();
+  const indentLevel = parsed.length > 1
+    ? 1
+    : 0;
+  const indentChars = indentOptions[opts.indent]
+    ? indentOptions[opts.indent].value
+    : defaultIndentOption.value;
   const formatted = formatCode(parsed, indentLevel, indentChars);
 
   // only wrap output in brackets when it is a list
@@ -393,5 +452,3 @@ const templateBuilder = opts => {
     formatted.join("").trim();
   return wrapped;
 };
-
-export default templateBuilder;

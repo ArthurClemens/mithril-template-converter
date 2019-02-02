@@ -1,11 +1,11 @@
 import { getStoredValue, setStoredValue } from "../storage";
+import { indentOptions } from "mithril-template-builder";
 
-const INDENT_STORAGE_KEY = "mithril-template-converter__indent";
-const DEFAULT_INDENT = "2";
+const storageKey = "mithril-template-converter__indent";
 
 const initialIndent = getStoredValue({
-  key: INDENT_STORAGE_KEY,
-  defaultValue: DEFAULT_INDENT
+  key: storageKey,
+  defaultValue: indentOptions["2"].value
 });
 
 export const indent = {
@@ -16,7 +16,7 @@ export const indent = {
     return {
       setIndent: value => {
         setStoredValue({
-          key: INDENT_STORAGE_KEY,
+          key: storageKey,
           value
         });
         update({
