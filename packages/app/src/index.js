@@ -95,15 +95,15 @@ const App = ({ state, actions }) => {
             m(".mtc-options",
               m(".mtc-options-inner", 
                 m(ButtonGroup, Object.keys(attrsOptions).map(key => {
-                  const { value, label } = attrsOptions[key];
+                  const { label } = attrsOptions[key];
                   return m(SmallButton, {
                     ink: false,
                     label,
-                    selected: state.attrs === value,
+                    selected: state.attrs === key,
                     events: {
                       onclick: e => (
                         e.preventDefault(),
-                        setAttrs(value)
+                        setAttrs(key)
                       )
                     }
                   });

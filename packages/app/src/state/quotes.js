@@ -5,7 +5,7 @@ const storageKey = "mithril-template-converter__quotes";
 
 const initialQuotes = getStoredValue({
   key: storageKey,
-  defaultValue: quotesOptions["double"].value
+  defaultValue: Object.keys(quotesOptions)[0]
 });
 
 export const quotes = {

@@ -5,7 +5,7 @@ const storageKey = "mithril-template-converter__indent";
 
 const initialIndent = getStoredValue({
   key: storageKey,
-  defaultValue: indentOptions["2"].value
+  defaultValue: Object.keys(indentOptions)[0]
 });
 
 export const indent = {
