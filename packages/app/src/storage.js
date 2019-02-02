@@ -4,7 +4,7 @@ export const getStoredValue = ({ key, defaultValue }) => {
   if (!storageAvailable("localStorage")) {
     return defaultValue;
   }
-  const storeValue = JSON.parse(localStorage.getItem(key));
+  const storeValue = localStorage.getItem(key);
   return storeValue === null
     ? defaultValue
     : storeValue;

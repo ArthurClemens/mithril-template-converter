@@ -46,18 +46,35 @@ const renderAttrsAsObject = {
   }
 };
 
+const indent = {
+  initialState: {
+    indent: "2"
+  },
+  actions: update => {
+    return {
+      setIndent: value => {
+        update({
+          indent: value
+        });
+      },
+    };
+  }
+};
+
 const update = stream();
 
 export const states = stream.scan(P, {
   ...source.initialState,
-  ...output.initialState.output,
-  ...renderAttrsAsObject.initialState.output,
+  ...output.initialState,
+  ...renderAttrsAsObject.initialState,
+  ...indent.initialState,
 }, update);
 
 export const actions = {
   ...source.actions(update),
   ...output.actions(update),
   ...renderAttrsAsObject.actions(update),
+  ...indent.actions(update),
 };
 
 // states.map(state => 

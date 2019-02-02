@@ -60,11 +60,7 @@ body {
 .mtc-form .mtc-options-inner {
   display: flex;
   align-items: center;
-}
-
-.mtc-form .mtc-options a {
-  text-decoration: none;
-  color: #2196f3;
+  justify-content: space-between;
 }
 
 .mtc-form .mtc-source {
