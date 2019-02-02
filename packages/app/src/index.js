@@ -1,13 +1,12 @@
 import m from "mithril";
 
-import { ButtonGroup, TextField, Dialog, IconButton } from "polythene-mithril";
 import templateBuilder from "mithril-template-builder";
-import examples from "./examples";
-import { getStoredValue, setStoredValue } from "./storage";
+import { ButtonGroup, TextField, Dialog, IconButton } from "polythene-mithril";
+import { settingsSVG } from "./svg";
 import { SmallButton } from "./components/SmallButton";
 import { states, actions } from "./state";
 import settings from "./settings";
-import { settingsSVG } from "./svg";
+import { attrsAsObjectOptions } from "./state/attrsAsObject";
 
 import "polythene-css/dist/polythene.css";               // Component CSS
 import "polythene-css/dist/polythene-layout-styles.css"; // Help classes
@@ -15,68 +14,31 @@ import "polythene-css/dist/polythene-typography.css";    // Default Material Des
 import "./index.css";
 
 window.m = m; // for eval
-const ATTRS_AS_OBJECT_STORAGE_KEY = "mithril-template-converter__attrs-object";
-const INDENT_STORAGE_KEY = "mithril-template-converter__indent";
 
-const attrsAsObjectOptions = [
-  {
-    label: "Attributes",
-    id: 1
-  },
-  {
-    label: "Selectors",
-    id: 0
-  },
-];
-const DEFAULT_ATTRS_AS_OBJECT = "1";
-
-const DEFAULT_INDENT = "2";
-
-const App = ({ attrs: { state, actions } }) => {
-
-  const storedRenderAttrsAsObject = parseInt(getStoredValue({
-    key: ATTRS_AS_OBJECT_STORAGE_KEY,
-    defaultValue: DEFAULT_ATTRS_AS_OBJECT
-  }), 10);
-  actions.setRenderAttrsAsObject(storedRenderAttrsAsObject);
-
-  const storedIndent = getStoredValue({
-    key: INDENT_STORAGE_KEY,
-    defaultValue: DEFAULT_INDENT
-  });
-  actions.setIndent(storedIndent);
-
+const App = ({ state, actions }) => {
+  
   const update = () => {
-    const output = templateBuilder({
+    const template = templateBuilder({
       source: state.source,
       indent: state.indent,
-      attrsAsObject: state.renderAttrsAsObject
+      attrsAsObject: state.attrsAsObject
     });
-    actions.setOutput(output);
+    actions.setOutput(template);
   };
 
-  const setRenderAttrsAsObject = value => {
-    actions.setRenderAttrsAsObject(value);
-    setStoredValue({
-      key: ATTRS_AS_OBJECT_STORAGE_KEY,
-      value
-    });
+  const setAttrsAsObject = value => {
+    actions.setAttrsAsObject(value);
     update();
   };
 
   const setIndent = value => {
     actions.setIndent(value);
-    setStoredValue({
-      key: INDENT_STORAGE_KEY,
-      value
-    });
     update();
   };
 
-  let exampleIndex = 0;
   const showExample = () => {
-    const index = exampleIndex++ % examples.length;
-    actions.setSource(examples[index]);
+    actions.nextExample();
+    actions.setSource(state.example.code);
     update();
   };
 
@@ -131,16 +93,17 @@ const App = ({ attrs: { state, actions } }) => {
                   m(SmallButton, {
                     ink: false,
                     label: o.label,
-                    selected: state.renderAttrsAsObject === o.id,
+                    selected: state.attrsAsObject === o.id,
                     events: {
                       onclick: e => (
                         e.preventDefault(),
-                        setRenderAttrsAsObject(o.id)
+                        setAttrsAsObject(o.id)
                       )
                     }
                   })
                 )),
                 m(IconButton, {
+                  className: "mtc-settings",
                   icon: { svg: { content: m.trust(settingsSVG) } },
                   events: {
                     onclick: () => Dialog.show(() => settings({ indent: state.indent, setIndent }))
@@ -171,7 +134,7 @@ const App = ({ attrs: { state, actions } }) => {
             ),
             m(".mtc-editor",
               rendered
-                ? m(".mtc-viewer", { key: state.renderAttrsAsObject + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)}, rendered)
+                ? m(".mtc-viewer", { key: state.attrsAsObject + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)}, rendered)
                 : m(TextField, {
                   className: "mtc-editor",
                   label: "Rendered HTML",
@@ -188,6 +151,4 @@ const App = ({ attrs: { state, actions } }) => {
   };
 };
 
-m.mount(document.body, {
-  view: () => m(App, { state: states(), actions })
-});
+m.mount(document.body, App({ state: states(), actions }));

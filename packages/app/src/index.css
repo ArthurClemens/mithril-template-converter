@@ -63,6 +63,10 @@ body {
   justify-content: space-between;
 }
 
+.mtc-settings {
+  margin-right: -12px;
+}
+
 .mtc-form .mtc-source {
   background: #333;
   color: #aaa;
