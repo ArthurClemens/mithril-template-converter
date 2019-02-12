@@ -1,7 +1,9 @@
 import m from "mithril";
-import { Dialog, ToolbarTitle, List } from "polythene-mithril";
+import { Dialog, ToolbarTitle, List, SVG } from "polythene-mithril";
 import { radioButtonCheckedSVG, radioButtonUncheckedSVG } from "./svg";
 import { DialogFooter } from "./components/DialogFooter";
+
+const CloseSVG = m.trust("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\"/></svg>");
 
 export default ({ indent, setIndent, quotes, setQuotes }) => {
   
@@ -85,7 +87,7 @@ export default ({ indent, setIndent, quotes, setQuotes }) => {
       content: [
         m(ToolbarTitle, {
           center: true,
-          text: "Close"
+          content: m(SVG, { content: CloseSVG })
         })
       ]
     })

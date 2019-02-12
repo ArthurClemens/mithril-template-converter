@@ -9,6 +9,7 @@ export const DialogFooter = {
     m(Toolbar, {
       ...vnode.attrs,
       tone: "dark",
+      compact: true,
       className: "mtc-dialog-footer",
     })
 };
