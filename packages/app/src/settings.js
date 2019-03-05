@@ -7,24 +7,22 @@ const CloseSVG = m.trust("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\"
 
 export default ({ indent, setIndent, quotes, setQuotes }) => {
   
-  const tileOptions = ({ title, value, test, update }) => ({
-    title,
-    key: value,
-    secondary: test(value)
-      ? {
-        icon: {
-          svg: { content: m.trust(radioButtonCheckedSVG) }
-        },
-      }
-      : {
-        icon: {
-          svg: { content: m.trust(radioButtonUncheckedSVG) }
-        },
-      },
-    events: {
+  const tileOptions = ({ title, value, test, update }) => {
+    const events = {
       onclick: () => update(value)
-    }
-  });
+    };
+    return ({
+      title,
+      key: value,
+      events,
+      secondary: {
+        icon: {
+          svg: { content: m.trust(test(value) ? radioButtonCheckedSVG : radioButtonUncheckedSVG) }
+        },
+        events
+      }
+    });
+  };
 
   return {
     fullBleed: true,
