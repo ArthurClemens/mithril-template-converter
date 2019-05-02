@@ -134,7 +134,7 @@ var booleans = {
   autoplay: 1,
   checked: 1,
   controls: 1,
-  default: 1,
+  "default": 1,
   defer: 1,
   disabled: 1,
   formnovalidate: 1,
@@ -408,7 +408,7 @@ TemplateBuilder.prototype = {
     };
 
     var _vnode$attrs = vnode.attrs,
-        _vnode$attrs$class = _vnode$attrs.class,
+        _vnode$attrs$class = _vnode$attrs["class"],
         className = _vnode$attrs$class === void 0 ? "" : _vnode$attrs$class,
         _vnode$attrs$style = _vnode$attrs.style,
         style = _vnode$attrs$style === void 0 ? "" : _vnode$attrs$style,
@@ -444,7 +444,7 @@ TemplateBuilder.prototype = {
       var _styleAttrs = style ? styleListToObject(styleToList(style)) : {};
 
       var withStyleAttrs = _objectSpread({}, className.length > 0 ? {
-        class: normaliseDoubleQuotes(className, this.quoteChar)
+        "class": normaliseDoubleQuotes(className, this.quoteChar)
       } : {}, validAttrs, Object.keys(_styleAttrs).length > 0 ? {
         style: _styleAttrs
       } : {}); // tag
@@ -619,4 +619,4 @@ var templateBuilder = function templateBuilder(opts) {
   return wrapped;
 };
 
-export { indentOptions, attrsOptions, quotesOptions, templateBuilder };
+export { attrsOptions, indentOptions, quotesOptions, templateBuilder };

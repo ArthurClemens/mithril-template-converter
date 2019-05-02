@@ -589,13 +589,13 @@ module.exports = g;
 /*!************************************************************************************************************************************************!*\
   !*** /Users/arthur/code/Github Projects/mithril-template-converter/master/packages/mithril-template-builder/dist/mithril-template-builder.mjs ***!
   \************************************************************************************************************************************************/
-/*! exports provided: indentOptions, attrsOptions, quotesOptions, templateBuilder */
+/*! exports provided: attrsOptions, indentOptions, quotesOptions, templateBuilder */
 /***/ (function(__webpack_module__, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "indentOptions", function() { return indentOptions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "attrsOptions", function() { return attrsOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "indentOptions", function() { return indentOptions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "quotesOptions", function() { return quotesOptions; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "templateBuilder", function() { return templateBuilder; });
 function _defineProperty(obj, key, value) {
@@ -736,7 +736,7 @@ var booleans = {
   autoplay: 1,
   checked: 1,
   controls: 1,
-  default: 1,
+  "default": 1,
   defer: 1,
   disabled: 1,
   formnovalidate: 1,
@@ -1009,7 +1009,7 @@ TemplateBuilder.prototype = {
     };
 
     var _vnode$attrs = vnode.attrs,
-        _vnode$attrs$class = _vnode$attrs.class,
+        _vnode$attrs$class = _vnode$attrs["class"],
         className = _vnode$attrs$class === void 0 ? "" : _vnode$attrs$class,
         _vnode$attrs$style = _vnode$attrs.style,
         style = _vnode$attrs$style === void 0 ? "" : _vnode$attrs$style,
@@ -1045,7 +1045,7 @@ TemplateBuilder.prototype = {
       var _styleAttrs = style ? styleListToObject(styleToList(style)) : {};
 
       var withStyleAttrs = _objectSpread({}, className.length > 0 ? {
-        class: normaliseDoubleQuotes(className, this.quoteChar)
+        "class": normaliseDoubleQuotes(className, this.quoteChar)
       } : {}, validAttrs, Object.keys(_styleAttrs).length > 0 ? {
         style: _styleAttrs
       } : {}); // tag
