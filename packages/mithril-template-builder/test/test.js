@@ -68,7 +68,7 @@ m('h1',
       var output = templateBuilder({ source: input, indent: "4" });
       expect(output).to.equal(`
 m("h1", 
-    "Title"
+    " Title "
 )`.trim());
     });
 
@@ -241,7 +241,7 @@ m("table", {"cellpadding":"6","rules":"groups","frame":"box"},
       m("tr",
         [
           m("th", 
-            "weekday"
+            " weekday "
           ),
           m("th", 
             "date"

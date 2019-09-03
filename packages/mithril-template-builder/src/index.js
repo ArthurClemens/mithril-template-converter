@@ -295,8 +295,9 @@ TemplateBuilder.prototype = {
     each(this.virtual, function(vnode) {
 
       if (typeof vnode === "string") {
+        // First test which characters are left when performing a trim
         const trimmed = vnode.trim();
-        const charCode = trimmed.charCodeAt(0);
+        const charCode = vnode.charCodeAt(0);
         // dimiss:
         // - empty strings
         // - single escaped quotes
@@ -308,7 +309,12 @@ TemplateBuilder.prototype = {
           && !(trimmed.length === 1 && charCode === 10)
           && (charCode === 10 || charCode >= 32)
         ) {
-          this.addVirtualString(trimmed);
+          // We don't use the actual trimmed string because we need to preserve whitespace.
+          // But we do want to get rid of newlines and tabs.
+          const safeStr = vnode
+            .replace(/[\n\r\t]/g, " ")
+            .replace(/\s+/g, " ") // clean up redundant spaces we just created
+          this.addVirtualString(safeStr);
         }
       } else {
         this.addVirtualAttrs(vnode);
@@ -432,8 +438,8 @@ export const templateBuilder = opts => {
   const fragment = createFragment(opts.source);
   const source = createVirtual(fragment);
   const attrs = attrsOptions[opts.attrs]
-    ? attrsOptions[opts.attrs].value
-    : defaultAttrsOption.value;
+  ? attrsOptions[opts.attrs].value
+  : defaultAttrsOption.value;
   const quoteChar = quotesOptions[opts.quotes]
     ? quotesOptions[opts.quotes].value
     : defaultQuotesOption.value;

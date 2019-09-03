@@ -28,7 +28,7 @@ const resultString = templateBuilder(opts)
 import { templateBuilder } from "mithril-template-builder"
 
 const source = `
-<a href="http://mithril.js.org">Mithril</a>
+<p>Mithril website: <a href="http://mithril.js.org">Mithril website</a></p>
 `
 const output = templateBuilder({
   source
@@ -37,8 +37,13 @@ const output = templateBuilder({
 
 Output:
 ```javascript
-m("a", {"href":"http://mithril.js.org"}, 
-  "Mithril"
+m("p",
+  [
+    "Mithril website: ",
+    m("a", {"href":"http://mithril.js.org"}, 
+      "Mithril website"
+    )
+  ]
 )
 ```
 

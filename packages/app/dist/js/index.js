@@ -1070,15 +1070,20 @@ TemplateBuilder.prototype = {
   complete: function complete() {
     each(this.virtual, function (vnode) {
       if (typeof vnode === "string") {
+        // First test which characters are left when performing a trim
         var trimmed = vnode.trim();
-        var charCode = trimmed.charCodeAt(0); // dimiss:
+        var charCode = vnode.charCodeAt(0); // dimiss:
         // - empty strings
         // - single escaped quotes
         // - single newlines
         // - characters with char code lower than SPACE, but allow newlines in multiline text
 
         if (trimmed.length !== 0 && trimmed !== "\"" && !(trimmed.length === 1 && charCode === 10) && (charCode === 10 || charCode >= 32)) {
-          this.addVirtualString(trimmed);
+          // We don't use the actual trimmed string because we need to preserve whitespace.
+          // But we do want to get rid of newlines and tabs.
+          var safeStr = vnode.replace(/[\n\r\t]/g, " ").replace(/\s+/g, " "); // clean up redundant spaces we just created
+
+          this.addVirtualString(safeStr);
         }
       } else {
         this.addVirtualAttrs(vnode);
