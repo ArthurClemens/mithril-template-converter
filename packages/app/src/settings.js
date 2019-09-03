@@ -13,7 +13,6 @@ export default ({ indent, setIndent, quotes, setQuotes }) => {
     };
     return ({
       title,
-      key: value,
       events,
       secondary: {
         icon: {

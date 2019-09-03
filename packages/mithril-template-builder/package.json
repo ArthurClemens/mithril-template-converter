@@ -19,11 +19,11 @@
     "README.md"
   ],
   "peerDependencies": {
-    "mithril": "^1.1.6"
+    "mithril": "^2.0.4"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mithril": "^1.1.6",
-    "mocha": "^6.1.4"
+    "mithril": "^2.0.4",
+    "mocha": "^6.2.0"
   }
 }
