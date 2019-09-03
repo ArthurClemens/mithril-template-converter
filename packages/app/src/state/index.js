@@ -27,6 +27,7 @@ export const actions = {
   ...source.actions(update),
 };
 
-// states.map(state => 
-//   console.log(JSON.stringify(state, null, 2))
-// );
+states.map(state => 
+  // console.log(JSON.stringify(state, null, 2))
+  m.redraw()
+);
