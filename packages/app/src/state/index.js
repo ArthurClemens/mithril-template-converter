@@ -1,3 +1,4 @@
+import m from "mithril";
 import stream from "mithril/stream";
 import { P } from "patchinko/explicit";
 import { attrs } from "./attrs";

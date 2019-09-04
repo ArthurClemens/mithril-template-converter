@@ -51,7 +51,9 @@ const App = ({ state, actions }) => {
     view: () => {
       let rendered;
       try {
-        rendered = eval(state.output);
+        if (state.output.length > 0) {
+          rendered = eval(state.output);
+        }
       }
       catch (e) {
         rendered = "Could not render Mithril code - please check the output for any errors.";
@@ -140,7 +142,10 @@ const App = ({ state, actions }) => {
             ),
             m(".mtc-editor",
               rendered
-                ? m(".mtc-viewer", { key: state.attrs + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)}, rendered)
+                ? m(".mtc-viewer",
+                  { key: state.attrs + rendered.toString().replace(/[\s\W]/g, "").substr(0,100)},
+                  rendered
+                )
                 : m(TextField, {
                   className: "mtc-editor",
                   label: "Rendered HTML",

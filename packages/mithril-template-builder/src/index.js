@@ -11,6 +11,8 @@ import { booleans, svgCaseSensitiveTagNames } from "./html-properties";
  */
 const ENTITY_REGEX = /(&#?\w+;)/;
 
+const TAG_REGEX = /^[a-zA-Z][a-zA-Z0-9\-\:]*$/;
+
 export const indentOptions = {
   "2": {
     label: "2 spaces",
@@ -97,22 +99,27 @@ const createVirtual = fragment => {
     } else if (el.nodeType === 1) {
       const attrs = {};
       each(el.attributes, function({ name, value }) {
-        if (booleans[name]) {
-          attrs[name] = name;
-        } else {
-          attrs[name] = value;
+        const hasValidName = !!name.match(TAG_REGEX);
+        if (hasValidName) {
+          if (booleans[name]) {
+            attrs[name] = name;
+          } else {
+            attrs[name] = value;
+          }
         }
       });
 
       const tag = el.nodeName.toLowerCase();
-      // restore proper tag in case of SVG
-      const caseTag = svgCaseSensitiveTagNames[tag] || tag;
-      
-      list.push({
-        tag: caseTag,
-        attrs,
-        children: createVirtual(el.childNodes)
-      });
+      const hasValidTag = !!tag.match(TAG_REGEX);
+      if (hasValidTag) {
+        // restore proper tag in case of SVG
+        const caseTag = svgCaseSensitiveTagNames[tag] || tag;
+        list.push({
+          tag: caseTag,
+          attrs,
+          children: createVirtual(el.childNodes)
+        });
+      }
     }
   });
   return list;

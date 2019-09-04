@@ -12,9 +12,6 @@ const name = env.MODULE_NAME || "mithril-template-builder";
 const globals = {};
 external.forEach(ext => {
   switch (ext) {
-  case "mithril":
-    globals["mithril"] = "m";
-    break;
   default:
     globals[ext] = ext;
   }

@@ -197,6 +197,7 @@ var svgCaseSensitiveTagNames = {
  */
 
 var ENTITY_REGEX = /(&#?\w+;)/;
+var TAG_REGEX = /^[a-zA-Z][a-zA-Z0-9\-\:]*$/;
 var indentOptions = {
   "2": {
     label: "2 spaces",
@@ -283,21 +284,28 @@ var createVirtual = function createVirtual(fragment) {
       each(el.attributes, function (_ref) {
         var name = _ref.name,
             value = _ref.value;
+        var hasValidName = !!name.match(TAG_REGEX);
 
-        if (booleans[name]) {
-          attrs[name] = name;
-        } else {
-          attrs[name] = value;
+        if (hasValidName) {
+          if (booleans[name]) {
+            attrs[name] = name;
+          } else {
+            attrs[name] = value;
+          }
         }
       });
-      var tag = el.nodeName.toLowerCase(); // restore proper tag in case of SVG
+      var tag = el.nodeName.toLowerCase();
+      var hasValidTag = !!tag.match(TAG_REGEX);
 
-      var caseTag = svgCaseSensitiveTagNames[tag] || tag;
-      list.push({
-        tag: caseTag,
-        attrs: attrs,
-        children: createVirtual(el.childNodes)
-      });
+      if (hasValidTag) {
+        // restore proper tag in case of SVG
+        var caseTag = svgCaseSensitiveTagNames[tag] || tag;
+        list.push({
+          tag: caseTag,
+          attrs: attrs,
+          children: createVirtual(el.childNodes)
+        });
+      }
     }
   });
   return list;
