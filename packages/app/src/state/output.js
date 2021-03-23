@@ -1,15 +1,14 @@
-
 export const output = {
   initialState: {
-    output: ""
+    output: '',
   },
   actions: update => {
     return {
       setOutput: value => {
         update({
-          output: value
+          output: value,
         });
       },
     };
-  }
+  },
 };

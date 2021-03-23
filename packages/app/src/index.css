@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
 
-body, html {
+body,
+html {
   padding: 0;
   margin: 0;
 }
@@ -82,7 +83,7 @@ body {
 
 .mtc-form .mtc-result .mtc-options,
 .mtc-form .mtc-rendered .mtc-options {
-  border-color: rgba(170, 170, 170, .25);
+  border-color: rgba(170, 170, 170, 0.25);
 }
 
 .mtc-form .mtc-rendered .mtc-options {

@@ -1,4 +1,4 @@
-import { S } from "patchinko/explicit";
+import { S } from 'patchinko/explicit';
 
 const exampleData = [
   // Style
@@ -72,7 +72,6 @@ const exampleData = [
 <style>
   @import "https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css"
 </style>`,
-
 
   // Bootstrap button group
   `<!-- Bootstrap button group -->
@@ -240,8 +239,8 @@ export const examples = {
   initialState: {
     example: {
       index: 0,
-      code: data[0]
-    }
+      code: data[0],
+    },
   },
   actions: update => {
     return {
@@ -251,11 +250,11 @@ export const examples = {
             const nextIndex = (example.index + 1) % data.length;
             return {
               index: nextIndex,
-              code: data[nextIndex]
+              code: data[nextIndex],
             };
-          })
+          }),
         });
       },
     };
-  }
+  },
 };

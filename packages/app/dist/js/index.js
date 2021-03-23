@@ -30,14 +30,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var DialogFooter = {
   view: function view(vnode) {
     return mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__.Toolbar, _objectSpread(_objectSpread({}, vnode.attrs), {}, {
-      tone: "dark",
+      tone: 'dark',
       compact: true,
-      className: "mtc-dialog-footer"
+      className: 'mtc-dialog-footer'
     }));
   }
 };
-polythene_css__WEBPACK_IMPORTED_MODULE_2__.ToolbarCSS.addStyle(".mtc-dialog-footer", {
-  color_dark_background: "#2196f3"
+polythene_css__WEBPACK_IMPORTED_MODULE_2__.ToolbarCSS.addStyle('.mtc-dialog-footer', {
+  color_dark_background: '#2196f3'
 });
 
 /***/ }),
@@ -69,19 +69,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var SmallButton = {
   view: function view(vnode) {
     return mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__.Button, _objectSpread(_objectSpread({}, vnode.attrs), {}, {
-      className: "mtc-small-button"
+      className: 'mtc-small-button'
     }));
   }
 };
-polythene_css__WEBPACK_IMPORTED_MODULE_2__.ButtonCSS.addStyle(".mtc-small-button", {
+polythene_css__WEBPACK_IMPORTED_MODULE_2__.ButtonCSS.addStyle('.mtc-small-button', {
   contained: true,
   border: true,
   font_size: 13,
   padding_h: 8,
   padding_h_border: 8,
   label_padding_v: 8,
-  color_light_text: "#333",
-  color_dark_text: "#fff"
+  color_light_text: '#333',
+  color_dark_text: '#fff'
 });
 
 /***/ }),
@@ -106,7 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var CloseSVG = mithril__WEBPACK_IMPORTED_MODULE_0___default().trust("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z\"/></svg>");
+var CloseSVG = mithril__WEBPACK_IMPORTED_MODULE_0___default().trust('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>');
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (function (_ref) {
   var indent = _ref.indent,
       setIndent = _ref.setIndent,
@@ -140,32 +140,32 @@ var CloseSVG = mithril__WEBPACK_IMPORTED_MODULE_0___default().trust("<svg xmlns=
   return {
     fullBleed: true,
     backdrop: true,
-    borders: "always",
+    borders: 'always',
     body: [mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__.List, {
       compact: true,
       header: {
-        title: "Indent"
+        title: 'Indent'
       },
       all: {
         hoverable: true
       },
       tiles: [tileOptions({
-        title: "2 spaces",
-        value: "2",
+        title: '2 spaces',
+        value: '2',
         test: function test(value) {
           return indent === value;
         },
         update: setIndent
       }), tileOptions({
-        title: "4 spaces",
-        value: "4",
+        title: '4 spaces',
+        value: '4',
         test: function test(value) {
           return indent === value;
         },
         update: setIndent
       }), tileOptions({
-        title: "Tabs",
-        value: "tab",
+        title: 'Tabs',
+        value: 'tab',
         test: function test(value) {
           return indent === value;
         },
@@ -174,21 +174,21 @@ var CloseSVG = mithril__WEBPACK_IMPORTED_MODULE_0___default().trust("<svg xmlns=
     }), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_1__.List, {
       compact: true,
       header: {
-        title: "Quotes"
+        title: 'Quotes'
       },
       all: {
         hoverable: true
       },
       tiles: [tileOptions({
-        title: "Double",
-        value: "double",
+        title: 'Double',
+        value: 'double',
         test: function test(value) {
           return quotes === value;
         },
         update: setQuotes
       }), tileOptions({
-        title: "Single",
-        value: "single",
+        title: 'Single',
+        value: 'single',
         test: function test(value) {
           return quotes === value;
         },
@@ -226,7 +226,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mithril-template-builder */ "../../mithril-template-builder/dist/mithril-template-builder.mjs");
 
 
-var storageKey = "mithril-template-converter__attrs";
+var storageKey = 'mithril-template-converter__attrs';
 var initialAttrs = (0,_storage__WEBPACK_IMPORTED_MODULE_0__.getStoredValue)({
   key: storageKey,
   defaultValue: mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__.attrsOptions.attributes.value
@@ -335,7 +335,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mithril-template-builder */ "../../mithril-template-builder/dist/mithril-template-builder.mjs");
 
 
-var storageKey = "mithril-template-converter__indent";
+var storageKey = 'mithril-template-converter__indent';
 var initialIndent = (0,_storage__WEBPACK_IMPORTED_MODULE_0__.getStoredValue)({
   key: storageKey,
   defaultValue: Object.keys(mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__.indentOptions)[0]
@@ -423,7 +423,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var output = {
   initialState: {
-    output: ""
+    output: ''
   },
   actions: function actions(update) {
     return {
@@ -453,7 +453,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mithril-template-builder */ "../../mithril-template-builder/dist/mithril-template-builder.mjs");
 
 
-var storageKey = "mithril-template-converter__quotes";
+var storageKey = 'mithril-template-converter__quotes';
 var initialQuotes = (0,_storage__WEBPACK_IMPORTED_MODULE_0__.getStoredValue)({
   key: storageKey,
   defaultValue: Object.keys(mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__.quotesOptions)[0]
@@ -492,7 +492,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var source = {
   initialState: {
-    source: ""
+    source: ''
   },
   actions: function actions(update) {
     return {
@@ -522,7 +522,7 @@ __webpack_require__.r(__webpack_exports__);
 var testStorage = function testStorage(type) {
   try {
     var storage = window[type],
-        x = "__storage_test__";
+        x = '__storage_test__';
     storage.setItem(x, x);
     storage.removeItem(x);
     return true;
@@ -531,7 +531,7 @@ var testStorage = function testStorage(type) {
   }
 };
 
-var hasStorage = testStorage("localStorage");
+var hasStorage = testStorage('localStorage');
 var getStoredValue = function getStoredValue(_ref) {
   var key = _ref.key,
       defaultValue = _ref.defaultValue;
@@ -571,8 +571,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "radioButtonCheckedSVG": () => (/* binding */ radioButtonCheckedSVG)
 /* harmony export */ });
 var settingsSVG = "<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"7.22mm\" height=\"7.41mm\" viewBox=\"0 0 20.45 21\">\n<defs>\n  <style>\n    .cls-1 {\n      fill: none;\n      stroke: #000;\n      stroke-miterlimit: 10;\n    }\n  </style>\n</defs>\n<title>settings</title>\n<path fill=\"none\" class=\"cls-1\" d=\"M19.43,13a7.79,7.79,0,0,0,.07-1,7.79,7.79,0,0,0-.07-1l2.11-1.65a.5.5,0,0,0,.12-.64l-2-3.46a.5.5,0,0,0-.61-.22l-2.49,1a7.31,7.31,0,0,0-1.69-1l-.38-2.65A.49.49,0,0,0,14,2H10a.49.49,0,0,0-.49.42L9.13,5.07a7.68,7.68,0,0,0-1.69,1L5,5.05a.49.49,0,0,0-.61.22l-2,3.46a.49.49,0,0,0,.12.64L4.57,11a7.93,7.93,0,0,0-.07,1,7.93,7.93,0,0,0,.07,1L2.46,14.63a.5.5,0,0,0-.12.64l2,3.46A.5.5,0,0,0,5,19l2.49-1a7.31,7.31,0,0,0,1.69,1l.38,2.65A.49.49,0,0,0,10,22h4a.49.49,0,0,0,.49-.42l.38-2.65a7.68,7.68,0,0,0,1.69-1l2.49,1a.49.49,0,0,0,.61-.22l2-3.46a.5.5,0,0,0-.12-.64ZM12,15.5A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z\" transform=\"translate(-1.77 -1.5)\"/>\n</svg>";
-var radioButtonUncheckedSVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path fill=\"none\" d=\"M0 0h24v24H0V0z\"/><path d=\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z\"/></svg>";
-var radioButtonCheckedSVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path fill=\"none\" d=\"M0 0h24v24H0V0z\"/><path d=\"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/></svg>";
+var radioButtonUncheckedSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>';
+var radioButtonCheckedSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><circle cx="12" cy="12" r="5"/></svg>';
 
 /***/ }),
 
@@ -777,42 +777,42 @@ var booleans = {
   typemustmatch: 1
 };
 var svgCaseSensitiveTagNames = {
-  "altglyph": "altGlyph",
-  "altglyphdef": "altGlyphDef",
-  "altglyphitem": "altGlyphItem",
-  "animatecolor": "animateColor",
-  "animatemotion": "animateMotion",
-  "animatetransform": "animateTransform",
-  "clippath": "clipPath",
-  "feblend": "feBlend",
-  "fecolormatrix": "feColorMatrix",
-  "fecomponenttransfer": "feComponentTransfer",
-  "fecomposite": "feComposite",
-  "feconvolvematrix": "feConvolveMatrix",
-  "fediffuselighting": "feDiffuseLighting",
-  "fedisplacementmap": "feDisplacementMap",
-  "fedistantlight": "feDistantLight",
-  "feflood": "feFlood",
-  "fefunca": "feFuncA",
-  "fefuncb": "feFuncB",
-  "fefuncg": "feFuncG",
-  "fefuncr": "feFuncR",
-  "fegaussianblur": "feGaussianBlur",
-  "feimage": "feImage",
-  "femerge": "feMerge",
-  "femergenode": "feMergeNode",
-  "femorphology": "feMorphology",
-  "feoffset": "feOffset",
-  "fepointlight": "fePointLight",
-  "fespecularlighting": "feSpecularLighting",
-  "fespotlight": "feSpotLight",
-  "fetile": "feTile",
-  "feturbulence": "feTurbulence",
-  "foreignobject": "foreignObject",
-  "glyphref": "glyphRef",
-  "lineargradient": "linearGradient",
-  "radialgradient": "radialGradient",
-  "textpath": "textPath"
+  altglyph: 'altGlyph',
+  altglyphdef: 'altGlyphDef',
+  altglyphitem: 'altGlyphItem',
+  animatecolor: 'animateColor',
+  animatemotion: 'animateMotion',
+  animatetransform: 'animateTransform',
+  clippath: 'clipPath',
+  feblend: 'feBlend',
+  fecolormatrix: 'feColorMatrix',
+  fecomponenttransfer: 'feComponentTransfer',
+  fecomposite: 'feComposite',
+  feconvolvematrix: 'feConvolveMatrix',
+  fediffuselighting: 'feDiffuseLighting',
+  fedisplacementmap: 'feDisplacementMap',
+  fedistantlight: 'feDistantLight',
+  feflood: 'feFlood',
+  fefunca: 'feFuncA',
+  fefuncb: 'feFuncB',
+  fefuncg: 'feFuncG',
+  fefuncr: 'feFuncR',
+  fegaussianblur: 'feGaussianBlur',
+  feimage: 'feImage',
+  femerge: 'feMerge',
+  femergenode: 'feMergeNode',
+  femorphology: 'feMorphology',
+  feoffset: 'feOffset',
+  fepointlight: 'fePointLight',
+  fespecularlighting: 'feSpecularLighting',
+  fespotlight: 'feSpotLight',
+  fetile: 'feTile',
+  feturbulence: 'feTurbulence',
+  foreignobject: 'foreignObject',
+  glyphref: 'glyphRef',
+  lineargradient: 'linearGradient',
+  radialgradient: 'radialGradient',
+  textpath: 'textPath'
 };
 /**
  * @type {RegExp} ENTITY_REGEX
@@ -821,49 +821,49 @@ var svgCaseSensitiveTagNames = {
 var ENTITY_REGEX = /(&#?\w+;)/;
 var TAG_REGEX = /^[a-zA-Z][a-zA-Z0-9\-\:]*$/;
 var indentOptions = {
-  "2": {
-    label: "2 spaces",
-    value: "  "
+  2: {
+    label: '2 spaces',
+    value: '  '
   },
-  "4": {
-    label: "4 spaces",
-    value: "    "
+  4: {
+    label: '4 spaces',
+    value: '    '
   },
-  "tab": {
-    label: "Tabs",
-    value: "\t"
+  tab: {
+    label: 'Tabs',
+    value: '\t'
   }
 };
-var defaultIndentOption = indentOptions["2"];
+var defaultIndentOption = indentOptions['2'];
 var attrsOptions = {
-  "attributes": {
-    label: "Attributes",
-    value: "attributes"
+  attributes: {
+    label: 'Attributes',
+    value: 'attributes'
   },
-  "selectors": {
-    label: "Selectors",
-    value: "selectors"
+  selectors: {
+    label: 'Selectors',
+    value: 'selectors'
   }
 };
-var defaultAttrsOption = attrsOptions["attributes"];
+var defaultAttrsOption = attrsOptions['attributes'];
 var quotesOptions = {
   "double": {
-    label: "Double",
-    value: "\""
+    label: 'Double',
+    value: '"'
   },
-  "single": {
-    label: "Single",
+  single: {
+    label: 'Single',
     value: "'"
   }
 };
-var defaultQuotesOption = quotesOptions["double"];
+var defaultQuotesOption = quotesOptions['double'];
 
 var normaliseDoubleQuotes = function normaliseDoubleQuotes(str, quoteChar) {
-  return str.replace(new RegExp("\"", "g"), quoteChar);
+  return str.replace(new RegExp('"', 'g'), quoteChar);
 };
 /**
- * @param {Array} list 
- * @param {function} f 
+ * @param {Array} list
+ * @param {function} f
  */
 
 
@@ -873,25 +873,25 @@ var each = function each(list, f) {
   }
 };
 /**
- * @param {string} markup 
+ * @param {string} markup
  * @returns {Array<ChildNode>}
  */
 
 
 var createFragment = function createFragment(markup) {
   // escape HTML entities, to be resolved in addVirtualString
-  markup = markup.replace(/&/g, "&amp;");
+  markup = markup.replace(/&/g, '&amp;');
 
-  if (markup.indexOf("<!doctype") >= 0) {
-    return [new DOMParser().parseFromString(markup, "text/html").childNodes[1]];
+  if (markup.indexOf('<!doctype') >= 0) {
+    return [new DOMParser().parseFromString(markup, 'text/html').childNodes[1]];
   }
 
-  var container = document.createElement("div");
-  container.insertAdjacentHTML("beforeend", markup);
+  var container = document.createElement('div');
+  container.insertAdjacentHTML('beforeend', markup);
   return _toConsumableArray(container.childNodes);
 };
 /**
- * @param {Array<Node>|Array<ChildNode>} fragment 
+ * @param {Array<Node>|Array<ChildNode>} fragment
  * @returns {Array<Vnode>}
  */
 
@@ -933,15 +933,15 @@ var createVirtual = function createVirtual(fragment) {
   return list;
 };
 /**
- * @param {string} style 
+ * @param {string} style
  * @returns {Array<Array<string>>}
  */
 
 
 var styleToList = function styleToList(style) {
-  var styleAttrs = style.replace(/(^.*);\s*$/, "$1"); // trim trailing semi-colon
+  var styleAttrs = style.replace(/(^.*);\s*$/, '$1'); // trim trailing semi-colon
 
-  styleAttrs = styleAttrs.replace(/[\n\r]/g, ""); // remove newlines
+  styleAttrs = styleAttrs.replace(/[\n\r]/g, ''); // remove newlines
 
   var list = styleAttrs.split(/\s*;\s*/); // ["color:#f00", "border:1px solid red"]
 
@@ -951,7 +951,7 @@ var styleToList = function styleToList(style) {
   return styleList;
 };
 /**
- * @param {Array<Array<string>>} styleList 
+ * @param {Array<Array<string>>} styleList
  * @returns {object}
  */
 
@@ -968,8 +968,8 @@ var styleListToObject = function styleListToObject(styleList) {
   return obj;
 };
 /**
- * 
- * @param {Array<Vnode>} virtual 
+ *
+ * @param {Array<Vnode>} virtual
  * @param {object} opts
  * @param {string} opts.attrs
  * @param {string} opts.quoteChar
@@ -982,7 +982,7 @@ function TemplateBuilder(virtual, _ref4) {
   this.virtual = virtual;
   this.attrs = attrs;
   this.quoteChar = quoteChar;
-  this.embeddedQuoteChar = quoteChar === "\"" ? "'" : "\"";
+  this.embeddedQuoteChar = quoteChar === '"' ? "'" : '"';
   this.children = []; // each child is an object with attributes: node, children, content
 }
 
@@ -990,7 +990,7 @@ TemplateBuilder.prototype = {
   addVirtualString: function addVirtualString(el) {
     var _this = this;
 
-    var content = el.replace(/(["\r\n])/g, "\\$1"); // handle HTML entities
+    var content = el.replace(/(["\r\n])/g, '\\$1'); // handle HTML entities
 
     var contentWithEntities = content.split(ENTITY_REGEX);
 
@@ -1014,7 +1014,7 @@ TemplateBuilder.prototype = {
   },
 
   /**
-   * @param {object} vnode 
+   * @param {object} vnode
    */
   addVirtualAttrs: function addVirtualAttrs(vnode) {
     var _this2 = this;
@@ -1028,20 +1028,20 @@ TemplateBuilder.prototype = {
       return "".concat(_this2.quoteChar).concat(tag).concat(className).concat(attrsAsSelectorString).concat(_this2.quoteChar).concat(attrsAsObjectString).concat(style);
     };
 
-    var defaultTag = "div";
+    var defaultTag = 'div';
     var data = {
-      tag: "",
-      className: "",
-      attrsAsSelectorString: "",
-      attrsAsObjectString: "",
-      style: ""
+      tag: '',
+      className: '',
+      attrsAsSelectorString: '',
+      attrsAsObjectString: '',
+      style: ''
     };
 
     var _vnode$attrs = vnode.attrs,
         _vnode$attrs$class = _vnode$attrs["class"],
-        className = _vnode$attrs$class === void 0 ? "" : _vnode$attrs$class,
+        className = _vnode$attrs$class === void 0 ? '' : _vnode$attrs$class,
         _vnode$attrs$style = _vnode$attrs.style,
-        style = _vnode$attrs$style === void 0 ? "" : _vnode$attrs$style,
+        style = _vnode$attrs$style === void 0 ? '' : _vnode$attrs$style,
         attrs = _objectWithoutProperties(_vnode$attrs, ["class", "style"]);
 
     var validAttrs = Object.keys(attrs).filter(function (name) {
@@ -1051,18 +1051,18 @@ TemplateBuilder.prototype = {
       return obj;
     }, {});
 
-    if (this.attrs === attrsOptions["selectors"].value) {
+    if (this.attrs === attrsOptions['selectors'].value) {
       // tag
-      data.tag = vnode.tag === defaultTag ? Object.keys(validAttrs).length === 0 ? "div" : "" : vnode.tag; // className
+      data.tag = vnode.tag === defaultTag ? Object.keys(validAttrs).length === 0 ? 'div' : '' : vnode.tag; // className
 
-      data.className = className ? ".".concat(className.replace(/\s+/g, ".")) : ""; // attrs
+      data.className = className ? ".".concat(className.replace(/\s+/g, '.')) : ''; // attrs
 
       data.attrsAsSelectorString = Object.keys(validAttrs).map(function (name) {
-        var value = validAttrs[name].replace(/[\n\r\t]/g, " ").replace(/\s+/g, " ") // clean up redundant spaces we just created
-        .replace(new RegExp(_this2.embeddedQuoteChar, "g"), _this2.quoteChar); // escape quotes
+        var value = validAttrs[name].replace(/[\n\r\t]/g, ' ').replace(/\s+/g, ' ') // clean up redundant spaces we just created
+        .replace(new RegExp(_this2.embeddedQuoteChar, 'g'), _this2.quoteChar); // escape quotes
 
         return booleans[name] && name === value ? "[".concat(name, "]") : "[".concat(name, "=").concat(_this2.embeddedQuoteChar).concat(value).concat(_this2.embeddedQuoteChar, "]");
-      }).join(""); // style
+      }).join(''); // style
 
       if (style) {
         var styleList = styleToList(style);
@@ -1098,7 +1098,7 @@ TemplateBuilder.prototype = {
   },
   complete: function complete() {
     each(this.virtual, function (vnode) {
-      if (typeof vnode === "string") {
+      if (typeof vnode === 'string') {
         // First test which characters are left when performing a trim
         var trimmed = vnode.trim();
         var charCode = vnode.charCodeAt(0); // dimiss:
@@ -1107,10 +1107,10 @@ TemplateBuilder.prototype = {
         // - single newlines
         // - characters with char code lower than SPACE, but allow newlines in multiline text
 
-        if (trimmed.length !== 0 && trimmed !== "\"" && !(trimmed.length === 1 && charCode === 10) && (charCode === 10 || charCode >= 32)) {
+        if (trimmed.length !== 0 && trimmed !== '"' && !(trimmed.length === 1 && charCode === 10) && (charCode === 10 || charCode >= 32)) {
           // We don't use the actual trimmed string because we need to preserve whitespace.
           // But we do want to get rid of newlines and tabs.
-          var safeStr = vnode.replace(/[\n\r\t]/g, " ").replace(/\s+/g, " "); // clean up redundant spaces we just created
+          var safeStr = vnode.replace(/[\n\r\t]/g, ' ').replace(/\s+/g, ' '); // clean up redundant spaces we just created
 
           this.addVirtualString(safeStr);
         }
@@ -1122,14 +1122,14 @@ TemplateBuilder.prototype = {
   }
 };
 /**
- * @param {number} level 
- * @param {string} indent 
+ * @param {number} level
+ * @param {string} indent
  * @returns {string}
  */
 
 var whitespace = function whitespace(level, indent) {
-  if (level < 0) return "";
-  var whitespace = "";
+  if (level < 0) return '';
+  var whitespace = '';
 
   for (var i = 0; i < level; i++) {
     whitespace += indent;
@@ -1138,7 +1138,7 @@ var whitespace = function whitespace(level, indent) {
   return whitespace;
 };
 /**
- * @param {string} content 
+ * @param {string} content
  * @returns {string}
  */
 
@@ -1147,8 +1147,8 @@ var wrapperTemplate = function wrapperTemplate(content) {
   return "[".concat(content, "\n]");
 };
 /**
- * @param {string} content 
- * @param {string} whitespace 
+ * @param {string} content
+ * @param {string} whitespace
  * @returns {string}
  */
 
@@ -1157,8 +1157,8 @@ var contentTemplate = function contentTemplate(content, whitespace) {
   return "\n".concat(whitespace).concat(content);
 };
 /**
- * @param {string} mithrilNode 
- * @param {string} whitespace 
+ * @param {string} mithrilNode
+ * @param {string} whitespace
  * @returns {string}
  */
 
@@ -1167,9 +1167,9 @@ var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, 
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ")");
 };
 /**
- * @param {string} mithrilNode 
- * @param {Array<string>} children 
- * @param {string} whitespace 
+ * @param {string} mithrilNode
+ * @param {Array<string>} children
+ * @param {string} whitespace
  * @param {string} indentChars
  * @returns {string}
  */
@@ -1179,9 +1179,9 @@ var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTe
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n").concat(whitespace).concat(indentChars, "[").concat(children, "\n").concat(whitespace).concat(indentChars, "]\n").concat(whitespace, ")");
 };
 /**
- * @param {string} mithrilNode 
- * @param {Array<string>} children 
- * @param {string} whitespace 
+ * @param {string} mithrilNode
+ * @param {Array<string>} children
+ * @param {string} whitespace
  * @returns {string}
  */
 
@@ -1190,9 +1190,9 @@ var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mit
   return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(children, "\n").concat(whitespace, ")");
 };
 /**
- * @param {string} mithrilNode 
- * @param {Array<string>} children 
- * @param {string} whitespace 
+ * @param {string} mithrilNode
+ * @param {Array<string>} children
+ * @param {string} whitespace
  * @param {string} indentChars
  * @returns {string}
  */
@@ -1202,8 +1202,8 @@ var template = function template(mithrilNode, children, whitespace, indentChars)
   return children ? children.length > 1 ? mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars) : mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) : singleMithrilNodeTemplate(mithrilNode, whitespace);
 };
 /**
- * @param {Array} data 
- * @param {number} level 
+ * @param {Array} data
+ * @param {number} level
  * @param {string} indentChars
  * @returns {Array<string>}
  */
@@ -1221,14 +1221,14 @@ var formatCode = function formatCode(data, level, indentChars) {
       return contentTemplate(d.content, space);
     }
 
-    var node = d.node || "";
+    var node = d.node || '';
     var newLevel = level + (d.children && d.children.length > 1 ? 2 : 1);
     var children = formatCode(d.children, newLevel, indentChars);
     return template(node, children, space, indentChars);
   });
 };
 /**
- * @param {object} opts 
+ * @param {object} opts
  * @param {string} opts.source - String containing HTML markup
  * @param {("2" | "4" | "tab")} [opts.indent] - Indent; default "2"
  * @param {("double" | "single")} [opts.quotes] - Quotes; default "double"
@@ -1250,7 +1250,7 @@ var templateBuilder = function templateBuilder(opts) {
   var indentChars = indentOptions[opts.indent] ? indentOptions[opts.indent].value : defaultIndentOption.value;
   var formatted = formatCode(parsed, indentLevel, indentChars); // only wrap output in brackets when it is a list
 
-  var wrapped = formatted.length > 1 ? wrapperTemplate(formatted.join(", ")) : formatted.join("").trim();
+  var wrapped = formatted.length > 1 ? wrapperTemplate(formatted.join(', ')) : formatted.join('').trim();
   return wrapped;
 };
 
@@ -30107,20 +30107,20 @@ var App = function App(_ref) {
           rendered = eval(state.output);
         }
       } catch (e) {
-        rendered = "Could not render Mithril code - please check the output for any errors.";
+        rendered = 'Could not render Mithril code - please check the output for any errors.';
       }
 
-      return [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-form.layout.justified.horizontal", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-block.mtc-source", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-options", mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-options-inner.pe-dark-tone", mithril__WEBPACK_IMPORTED_MODULE_0___default()(_components_SmallButton__WEBPACK_IMPORTED_MODULE_4__.SmallButton, {
-        label: "Insert random example",
+      return [mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-form.layout.justified.horizontal', [mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-block.mtc-source', [mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-options', mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-options-inner.pe-dark-tone', mithril__WEBPACK_IMPORTED_MODULE_0___default()(_components_SmallButton__WEBPACK_IMPORTED_MODULE_4__.SmallButton, {
+        label: 'Insert random example',
         events: {
           onclick: function onclick(e) {
             return e.preventDefault(), showExample();
           }
         }
       }))), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__.TextField, {
-        className: "mtc-editor",
-        label: "Paste source HTML",
-        tone: "dark",
+        className: 'mtc-editor',
+        label: 'Paste source HTML',
+        tone: 'dark',
         fullWidth: true,
         autofocus: true,
         onChange: function onChange(_ref2) {
@@ -30128,15 +30128,15 @@ var App = function App(_ref) {
           var needsConvert = !!(state.source || value);
           actions.setSource(value);
 
-          if (value === "") {
-            actions.setOutput("");
+          if (value === '') {
+            actions.setOutput('');
           } else if (needsConvert) {
             update();
           }
         },
         multiLine: true,
         value: state.source
-      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-block.mtc-result", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-options", mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-options-inner", mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__.ButtonGroup, Object.keys(mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__.attrsOptions).map(function (key) {
+      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-block.mtc-result', [mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-options', mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-options-inner', mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__.ButtonGroup, Object.keys(mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__.attrsOptions).map(function (key) {
         var label = mithril_template_builder__WEBPACK_IMPORTED_MODULE_1__.attrsOptions[key].label;
         return mithril__WEBPACK_IMPORTED_MODULE_0___default()(_components_SmallButton__WEBPACK_IMPORTED_MODULE_4__.SmallButton, {
           ink: false,
@@ -30149,7 +30149,7 @@ var App = function App(_ref) {
           }
         });
       })), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__.IconButton, {
-        className: "mtc-settings",
+        className: 'mtc-settings',
         icon: {
           svg: {
             content: mithril__WEBPACK_IMPORTED_MODULE_0___default().trust(_svg__WEBPACK_IMPORTED_MODULE_3__.settingsSVG)
@@ -30168,8 +30168,8 @@ var App = function App(_ref) {
           }
         }
       }))), mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__.TextField, {
-        className: "mtc-editor",
-        label: "Mithril template",
+        className: 'mtc-editor',
+        label: 'Mithril template',
         multiLine: true,
         fullWidth: true,
         value: state.output,
@@ -30177,17 +30177,17 @@ var App = function App(_ref) {
           var value = _ref3.value;
           return actions.setOutput(value);
         }
-      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-block.mtc-rendered", [mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-options", mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-options-inner", mithril__WEBPACK_IMPORTED_MODULE_0___default()(_components_SmallButton__WEBPACK_IMPORTED_MODULE_4__.SmallButton, {
+      })]), mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-block.mtc-rendered', [mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-options', mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-options-inner', mithril__WEBPACK_IMPORTED_MODULE_0___default()(_components_SmallButton__WEBPACK_IMPORTED_MODULE_4__.SmallButton, {
         url: {
-          href: "https://github.com/ArthurClemens/mithril-template-converter",
-          target: "_blank"
+          href: 'https://github.com/ArthurClemens/mithril-template-converter',
+          target: '_blank'
         },
-        label: "Github"
-      }))), mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-editor", rendered ? mithril__WEBPACK_IMPORTED_MODULE_0___default()(".mtc-viewer", {
-        key: state.attrs + rendered.toString().replace(/[\s\W]/g, "").substr(0, 100)
+        label: 'Github'
+      }))), mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-editor', rendered ? mithril__WEBPACK_IMPORTED_MODULE_0___default()('.mtc-viewer', {
+        key: state.attrs + rendered.toString().replace(/[\s\W]/g, '').substr(0, 100)
       }, rendered) : mithril__WEBPACK_IMPORTED_MODULE_0___default()(polythene_mithril__WEBPACK_IMPORTED_MODULE_2__.TextField, {
-        className: "mtc-editor",
-        label: "Rendered HTML",
+        className: 'mtc-editor',
+        label: 'Rendered HTML',
         multiLine: true,
         fullWidth: true,
         readonly: true

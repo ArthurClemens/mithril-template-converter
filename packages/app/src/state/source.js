@@ -1,15 +1,14 @@
-
 export const source = {
   initialState: {
-    source: ""
+    source: '',
   },
   actions: update => {
     return {
       setSource: value => {
         update({
-          source: value
+          source: value,
         });
       },
     };
-  }
+  },
 };

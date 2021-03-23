@@ -13,6 +13,9 @@
     "rollup": "../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.umd.js && ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.es.js",
     "build": "npm run rollup",
     "test": "open ./test/testrunner.html",
+    "lint": "eslint --ext .js ./src",
+    "prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./src/**/*.{js,css}\"",
+    "fix": "npm run lint --fix && npm run prettier",
     "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
   },
   "files": [
