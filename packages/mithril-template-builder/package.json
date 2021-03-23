@@ -10,9 +10,10 @@
     "url": "https://github.com/ArthurClemens/mithril-template-converter.git"
   },
   "scripts": {
-    "rollup": "../../node_modules/rollup/bin/rollup -c ../../scripts/rollup.umd.js && ../../node_modules/rollup/bin/rollup -c ../../scripts/rollup.es.js",
-    "build": "yarn run rollup",
-    "test": "open ./test/testrunner.html"
+    "rollup": "../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.umd.js && ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.es.js",
+    "build": "npm run rollup",
+    "test": "open ./test/testrunner.html",
+    "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
   },
   "files": [
     "dist",
@@ -22,8 +23,8 @@
     "mithril": "^2.0.4"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.4",
     "mithril": "^2.0.4",
-    "mocha": "^6.2.0"
+    "mocha": "^8.3.2"
   }
 }
