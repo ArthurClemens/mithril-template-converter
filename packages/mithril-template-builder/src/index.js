@@ -184,9 +184,9 @@ TemplateBuilder.prototype = {
   },
 
   /**
-   * @param {object} vnode
+   * @param {Vnode} vnode
    */
-  addVirtualAttrs: function (vnode) {
+  addVnode: function (vnode) {
     const template = ({
       tag,
       className,
@@ -314,7 +314,7 @@ TemplateBuilder.prototype = {
             this.addVirtualString(safeStr);
           }
         } else {
-          this.addVirtualAttrs(vnode);
+          this.addVnode(vnode);
         }
       }.bind(this),
     );
@@ -371,9 +371,9 @@ const mithrilNodeMultipleChildrenTemplate = (
   indentChars,
 ) =>
   `\n${whitespace}m(${mithrilNode},
-${whitespace}${indentChars}[${children}
-${whitespace}${indentChars}]
-${whitespace})`;
+ ${whitespace}${indentChars}[${children}
+ ${whitespace}${indentChars}]
+ ${whitespace})`;
 
 /**
  * @param {string} mithrilNode
@@ -383,7 +383,7 @@ ${whitespace})`;
  */
 const mithrilNodeSingleChildTemplate = (mithrilNode, children, whitespace) =>
   `\n${whitespace}m(${mithrilNode}, ${children}
-${whitespace})`;
+ ${whitespace})`;
 
 /**
  * @param {string} mithrilNode

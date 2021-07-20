@@ -429,9 +429,9 @@ TemplateBuilder.prototype = {
   },
 
   /**
-   * @param {object} vnode
+   * @param {Vnode} vnode
    */
-  addVirtualAttrs: function addVirtualAttrs(vnode) {
+  addVnode: function addVnode(vnode) {
     var _this2 = this;
 
     var template = function template(_ref5) {
@@ -530,7 +530,7 @@ TemplateBuilder.prototype = {
           this.addVirtualString(safeStr);
         }
       } else {
-        this.addVirtualAttrs(vnode);
+        this.addVnode(vnode);
       }
     }.bind(this));
     return this.children;
@@ -591,7 +591,7 @@ var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, 
 
 
 var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars) {
-  return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n").concat(whitespace).concat(indentChars, "[").concat(children, "\n").concat(whitespace).concat(indentChars, "]\n").concat(whitespace, ")");
+  return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n ").concat(whitespace).concat(indentChars, "[").concat(children, "\n ").concat(whitespace).concat(indentChars, "]\n ").concat(whitespace, ")");
 };
 /**
  * @param {string} mithrilNode
@@ -602,7 +602,7 @@ var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTe
 
 
 var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) {
-  return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(children, "\n").concat(whitespace, ")");
+  return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(children, "\n ").concat(whitespace, ")");
 };
 /**
  * @param {string} mithrilNode

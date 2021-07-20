@@ -21,5 +21,10 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  rules: {} 
+  rules: {
+    'prettier/prettier': ERROR,
+    "linebreak-style": ["error", "unix"],
+    "no-console": WARN,
+    "arrow-parens": [ERROR, "as-needed"],
+  },
 };
