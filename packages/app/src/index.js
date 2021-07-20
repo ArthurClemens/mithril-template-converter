@@ -143,8 +143,7 @@ const App = ({ state, actions }) => {
                 '.mtc-options-inner',
                 m(SmallButton, {
                   url: {
-                    href:
-                      'https://github.com/ArthurClemens/mithril-template-converter',
+                    href: 'https://github.com/ArthurClemens/mithril-template-converter',
                     target: '_blank',
                   },
                   label: 'Github',

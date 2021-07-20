@@ -13,9 +13,9 @@
     "rollup": "../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.umd.js && ../../node_modules/rollup/dist/bin/rollup -c ../../scripts/rollup.es.js",
     "build": "npm run rollup",
     "test": "open ./test/testrunner.html",
-    "lint": "eslint --ext .js ./src",
+    "lint": "../../node_modules/eslint/bin/eslint.js --ext .js ./src --fix",
     "prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./src/**/*.{js,css}\"",
-    "fix": "npm run lint --fix && npm run prettier",
+    "fix": "npm run lint && npm run prettier",
     "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u"
   },
   "files": [
@@ -28,6 +28,6 @@
   "devDependencies": {
     "chai": "^4.3.4",
     "mithril": "^2.0.4",
-    "mocha": "^8.3.2"
+    "mocha": "^9.0.2"
   }
 }

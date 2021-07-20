@@ -445,7 +445,7 @@ body {
 }
 
 .mtc-form .mtc-block {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 14px;
   display: flex;
   flex-direction: column;
@@ -458,7 +458,7 @@ body {
 }
 
 .mtc-form .mtc-editor textarea {
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
   font-size: 13px;
   resize: none;
 }

@@ -15,7 +15,7 @@
     "webpack": "../../node_modules/webpack/bin/webpack.js --config ../../scripts/webpack.config.prod.js",
     "build": "npm run clean && npm run webpack",
     "serve": "http-server -p 5000 dist",
-    "lint": "eslint --ext .js ./src",
+    "lint": "../../node_modules/eslint/bin/eslint.js --ext .js ./src --fix",
     "prettier": "../../node_modules/prettier/bin-prettier.js --config ../../.prettierrc.json --write \"./src/**/*.{js,css}\"",
     "fix": "npm run lint --fix && npm run prettier",
     "npm-check-updates": "../../node_modules/npm-check-updates/bin/cli.js -u",

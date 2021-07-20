@@ -4,5 +4,13 @@
   "singleQuote": true,
   "trailingComma": "all",
   "arrowParens": "avoid",
-  "bracketSpacing": true
+  "bracketSpacing": true,
+  "overrides": [
+    {
+      "files": "*.css",
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
 }

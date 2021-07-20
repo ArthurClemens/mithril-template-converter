@@ -1,26 +1,15 @@
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
 function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
 
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
+
+    if (enumerableOnly) {
+      symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    }
+
     keys.push.apply(keys, symbols);
   }
 
@@ -45,6 +34,21 @@ function _objectSpread2(target) {
   }
 
   return target;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
 }
 
 function _objectWithoutPropertiesLoose(source, excluded) {
@@ -100,18 +104,21 @@ function _arrayWithHoles(arr) {
 }
 
 function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
 
 function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+  if (_i == null) return;
   var _arr = [];
   var _n = true;
   var _d = false;
-  var _e = undefined;
+
+  var _s, _e;
 
   try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
       _arr.push(_s.value);
 
       if (i && _arr.length === i) break;
@@ -221,12 +228,13 @@ var svgCaseSensitiveTagNames = {
   textpath: 'textPath'
 };
 
+var _excluded = ["class", "style"];
 /**
  * @type {RegExp} ENTITY_REGEX
  */
 
 var ENTITY_REGEX = /(&#?\w+;)/;
-var TAG_REGEX = /^[a-zA-Z][a-zA-Z0-9\-\:]*$/;
+var TAG_REGEX = /^[a-zA-Z][a-zA-Z0-9\-:]*$/;
 var indentOptions = {
   2: {
     label: '2 spaces',
@@ -449,7 +457,7 @@ TemplateBuilder.prototype = {
         className = _vnode$attrs$class === void 0 ? '' : _vnode$attrs$class,
         _vnode$attrs$style = _vnode$attrs.style,
         style = _vnode$attrs$style === void 0 ? '' : _vnode$attrs$style,
-        attrs = _objectWithoutProperties(_vnode$attrs, ["class", "style"]);
+        attrs = _objectWithoutProperties(_vnode$attrs, _excluded);
 
     var validAttrs = Object.keys(attrs).filter(function (name) {
       return attrs[name] !== undefined;

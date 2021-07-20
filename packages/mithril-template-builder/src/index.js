@@ -11,7 +11,7 @@ import { booleans, svgCaseSensitiveTagNames } from './html-properties';
  */
 const ENTITY_REGEX = /(&#?\w+;)/;
 
-const TAG_REGEX = /^[a-zA-Z][a-zA-Z0-9\-\:]*$/;
+const TAG_REGEX = /^[a-zA-Z][a-zA-Z0-9\-:]*$/;
 
 export const indentOptions = {
   2: {
