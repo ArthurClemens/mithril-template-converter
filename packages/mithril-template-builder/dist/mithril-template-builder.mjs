@@ -387,15 +387,18 @@ var styleListToObject = function styleListToObject(styleList) {
  * @param {Array<Vnode>} virtual
  * @param {object} opts
  * @param {string} opts.attrs
+ * @param {string[]} opts.tags
  * @param {string} opts.quoteChar
  */
 
 
 function TemplateBuilder(virtual, _ref4) {
   var attrs = _ref4.attrs,
+      tags = _ref4.tags,
       quoteChar = _ref4.quoteChar;
   this.virtual = virtual;
   this.attrs = attrs;
+  this.tags = tags;
   this.quoteChar = quoteChar;
   this.embeddedQuoteChar = quoteChar === '"' ? "'" : '"';
   this.children = []; // each child is an object with attributes: node, children, content
@@ -426,6 +429,8 @@ TemplateBuilder.prototype = {
         content: "".concat(this.quoteChar).concat(content).concat(this.quoteChar)
       });
     }
+
+    this.tags.pop();
   },
 
   /**
@@ -500,10 +505,36 @@ TemplateBuilder.prototype = {
       if (Object.keys(withStyleAttrs).length > 0) {
         data.attrsAsObjectString = ", ".concat(normaliseDoubleQuotes(JSON.stringify(withStyleAttrs), this.quoteChar));
       }
-    }
+    } // Handle text inside pre
 
+
+    vnode.children = vnode.children.map(function (child) {
+      if (typeof child === 'string') {
+        var isInPre = data.tag === 'pre' || _this2.tags.find(function (tag) {
+          return tag === 'pre';
+        }) !== undefined;
+        var lines = child.trim().split(/[\n\r]/g);
+
+        if (isInPre && lines.length > 1) {
+          return {
+            tag: 'div',
+            attrs: {},
+            children: lines.map(function (line) {
+              return {
+                tag: 'div',
+                attrs: {},
+                children: [line]
+              };
+            })
+          };
+        }
+      }
+
+      return child;
+    });
     var children = vnode.children.length !== 0 ? new TemplateBuilder(vnode.children, {
       attrs: this.attrs,
+      tags: [].concat(_toConsumableArray(this.tags), [vnode.tag]),
       quoteChar: this.quoteChar
     }).complete() : null;
     this.children.push({
@@ -591,7 +622,7 @@ var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, 
 
 
 var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars) {
-  return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n ").concat(whitespace).concat(indentChars, "[").concat(children, "\n ").concat(whitespace).concat(indentChars, "]\n ").concat(whitespace, ")");
+  return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n").concat(whitespace).concat(indentChars, "[").concat(children, "\n").concat(whitespace).concat(indentChars, "]\n").concat(whitespace, ")");
 };
 /**
  * @param {string} mithrilNode
@@ -602,7 +633,7 @@ var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTe
 
 
 var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) {
-  return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(children, "\n ").concat(whitespace, ")");
+  return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(children, "\n").concat(whitespace, ")");
 };
 /**
  * @param {string} mithrilNode
@@ -659,7 +690,8 @@ var templateBuilder = function templateBuilder(opts) {
   var quoteChar = quotesOptions[opts.quotes] ? quotesOptions[opts.quotes].value : defaultQuotesOption.value;
   var parsed = new TemplateBuilder(source, {
     attrs: attrs,
-    quoteChar: quoteChar
+    quoteChar: quoteChar,
+    tags: []
   }).complete();
   var indentLevel = parsed.length > 1 ? 1 : 0;
   var indentChars = indentOptions[opts.indent] ? indentOptions[opts.indent].value : defaultIndentOption.value;

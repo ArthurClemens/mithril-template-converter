@@ -219,6 +219,16 @@ const exampleData = [
 <style>
   @import "https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/css/uikit.css"
 </style>`,
+
+  // pre
+  `<!-- pre -->
+
+<pre><code>if (condition) {
+  doThis();
+} else {
+  doThat();
+}
+</code></pre>`,
 ];
 
 /**

@@ -149,11 +149,13 @@ const styleListToObject = styleList => {
  * @param {Array<Vnode>} virtual
  * @param {object} opts
  * @param {string} opts.attrs
+ * @param {string[]} opts.tags
  * @param {string} opts.quoteChar
  */
-function TemplateBuilder(virtual, { attrs, quoteChar }) {
+function TemplateBuilder(virtual, { attrs, tags, quoteChar }) {
   this.virtual = virtual;
   this.attrs = attrs;
+  this.tags = tags;
   this.quoteChar = quoteChar;
   this.embeddedQuoteChar = quoteChar === '"' ? "'" : '"';
   this.children = []; // each child is an object with attributes: node, children, content
@@ -181,6 +183,7 @@ TemplateBuilder.prototype = {
         content: `${this.quoteChar}${content}${this.quoteChar}`,
       });
     }
+    this.tags.pop();
   },
 
   /**
@@ -273,10 +276,33 @@ TemplateBuilder.prototype = {
       }
     }
 
+    // Handle text inside pre
+    vnode.children = vnode.children.map(child => {
+      if (typeof child === 'string') {
+        const isInPre =
+          data.tag === 'pre' ||
+          this.tags.find(tag => tag === 'pre') !== undefined;
+        const lines = child.trim().split(/[\n\r]/g);
+        if (isInPre && lines.length > 1) {
+          return {
+            tag: 'div',
+            attrs: {},
+            children: lines.map(line => ({
+              tag: 'div',
+              attrs: {},
+              children: [line],
+            })),
+          };
+        }
+      }
+      return child;
+    });
+
     const children =
       vnode.children.length !== 0
         ? new TemplateBuilder(vnode.children, {
             attrs: this.attrs,
+            tags: [...this.tags, vnode.tag],
             quoteChar: this.quoteChar,
           }).complete()
         : null;
@@ -371,9 +397,9 @@ const mithrilNodeMultipleChildrenTemplate = (
   indentChars,
 ) =>
   `\n${whitespace}m(${mithrilNode},
- ${whitespace}${indentChars}[${children}
- ${whitespace}${indentChars}]
- ${whitespace})`;
+${whitespace}${indentChars}[${children}
+${whitespace}${indentChars}]
+${whitespace})`;
 
 /**
  * @param {string} mithrilNode
@@ -383,7 +409,7 @@ const mithrilNodeMultipleChildrenTemplate = (
  */
 const mithrilNodeSingleChildTemplate = (mithrilNode, children, whitespace) =>
   `\n${whitespace}m(${mithrilNode}, ${children}
- ${whitespace})`;
+${whitespace})`;
 
 /**
  * @param {string} mithrilNode
@@ -443,7 +469,11 @@ export const templateBuilder = opts => {
   const quoteChar = quotesOptions[opts.quotes]
     ? quotesOptions[opts.quotes].value
     : defaultQuotesOption.value;
-  const parsed = new TemplateBuilder(source, { attrs, quoteChar }).complete();
+  const parsed = new TemplateBuilder(source, {
+    attrs,
+    quoteChar,
+    tags: [],
+  }).complete();
   const indentLevel = parsed.length > 1 ? 1 : 0;
   const indentChars = indentOptions[opts.indent]
     ? indentOptions[opts.indent].value

@@ -2,33 +2,35 @@
 
 const templateBuilder = window.mithrilTemplateBuilder.templateBuilder;
 
-describe("Template Builder", function () {
-  describe("Single tags", function () {
-
-    it("Unclosed single tag", function () {
-      var input = "<p>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+describe('Template Builder', function () {
+  describe('Single tags', function () {
+    it('Unclosed single tag', function () {
+      var input = '<p>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("p")
-`.trim());
+`.trim(),
+      );
     });
 
-    it("Self-closing single tag", function () {
-      var input = "<hr/>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+    it('Self-closing single tag', function () {
+      var input = '<hr/>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("hr")
-`.trim());
+`.trim(),
+      );
     });
-
   });
 
-  describe("Multiple tags", function () {
-
-    it("Multiple spans", function () {
-      var input = "<span>One</span> <span>Two</span> <span>Three</span>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+  describe('Multiple tags', function () {
+    it('Multiple spans', function () {
+      var input = '<span>One</span> <span>Two</span> <span>Three</span>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 [
     m("span", 
         "One"
@@ -39,80 +41,96 @@ m("hr")
     m("span", 
         "Three"
     )
-]`.trim());
+]`.trim(),
+      );
     });
   });
 
-  describe("Text content", function () {
-
-    it("Text content", function () {
-      var input = "<h1>Title</h1>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+  describe('Text content', function () {
+    it('Text content', function () {
+      var input = '<h1>Title</h1>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("h1", 
     "Title"
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Text content single quotes", function () {
-      var input = "<h1>Title</h1>";
-      var output = templateBuilder({ source: input, indent: "4", quotes: "single" });
-      expect(output).to.equal(`
+    it('Text content single quotes', function () {
+      var input = '<h1>Title</h1>';
+      var output = templateBuilder({
+        source: input,
+        indent: '4',
+        quotes: 'single',
+      });
+      expect(output).to.equal(
+        `
 m('h1', 
     'Title'
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Text content with spacing", function () {
-      var input = "<h1>  Title  </h1>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+    it('Text content with spacing', function () {
+      var input = '<h1>  Title  </h1>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("h1", 
     " Title "
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Text content with spacing around tag", function () {
-      var input = "  <h1>Title</h1>  ";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+    it('Text content with spacing around tag', function () {
+      var input = '  <h1>Title</h1>  ';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("h1", 
     "Title"
-)`.trim());
+)`.trim(),
+      );
     });
-
   });
 
-  describe("Nested tags", function () {
-
-    it("Nested tag, 1 level", function () {
-      var input = "<div><p>text</p></div>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+  describe('Nested tags', function () {
+    it('Nested tag, 1 level', function () {
+      var input = '<div><p>text</p></div>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("div", 
     m("p", 
         "text"
     )
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Nested tag, 2 levels", function () {
-      var input = "<div><p><span>text</span></p></div>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+    it('Nested tag, 2 levels', function () {
+      var input = '<div><p><span>text</span></p></div>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("div", 
     m("p", 
         m("span", 
             "text"
         )
     )
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Multiple nested tag, 2 levels", function () {
-      var input = "<div><p><span>text</span></p></div> <div><p><span>text</span></p></div>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+    it('Multiple nested tag, 2 levels', function () {
+      var input =
+        '<div><p><span>text</span></p></div> <div><p><span>text</span></p></div>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 [
     m("div", 
         m("p", 
@@ -128,95 +146,125 @@ m("div",
             )
         )
     )
-]`.trim());
+]`.trim(),
+      );
     });
   });
 
-  describe("Attributes", function () {
-
-    it("href selectors", function () {
-      var input = "<a href=\"http://mithril.js.org\">Mithril</a>";
-      var output = templateBuilder({ source: input, indent: "4", attrs: "selectors" });
-      expect(output).to.equal(`
+  describe('Attributes', function () {
+    it('href selectors', function () {
+      var input = '<a href="http://mithril.js.org">Mithril</a>';
+      var output = templateBuilder({
+        source: input,
+        indent: '4',
+        attrs: 'selectors',
+      });
+      expect(output).to.equal(
+        `
 m("a[href='http://mithril.js.org']", 
     "Mithril"
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("href attributes", function () {
-      var input = "<a href=\"http://mithril.js.org\">Mithril</a>";
-      var output = templateBuilder({ source: input, indent: "4", attrs: "attributes" });
-      expect(output).to.equal(`
+    it('href attributes', function () {
+      var input = '<a href="http://mithril.js.org">Mithril</a>';
+      var output = templateBuilder({
+        source: input,
+        indent: '4',
+        attrs: 'attributes',
+      });
+      expect(output).to.equal(
+        `
 m("a", {"href":"http://mithril.js.org"}, 
     "Mithril"
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("href selectors single quotes", function () {
+    it('href selectors single quotes', function () {
       var input = `
 <a href="http://mithril.js.org">Mithril</a>
 `;
-      var output = templateBuilder({ source: input, indent: "4", attrs: "selectors", quotes: "single" });
-      expect(output).to.equal(`
+      var output = templateBuilder({
+        source: input,
+        indent: '4',
+        attrs: 'selectors',
+        quotes: 'single',
+      });
+      expect(output).to.equal(
+        `
 m('a[href="http://mithril.js.org"]', 
     'Mithril'
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Single style attribute", function () {
+    it('Single style attribute', function () {
       var input = "<div style='color:#f00'>text</div>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("div", {"style":{"color":"#f00"}}, 
     "text"
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Multiple style attributes", function () {
+    it('Multiple style attributes', function () {
       var input = "<div style='color:#f00; border: 1px solid red'>text</div>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 m("div", {"style":{"color":"#f00","border":"1px solid red"}}, 
     "text"
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Multiple other attributes", function () {
+    it('Multiple other attributes', function () {
       var input = `
 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 `;
-      var output = templateBuilder({ source: input, indent: "4", attrs: "selectors" });
-      expect(output).to.equal(`
+      var output = templateBuilder({
+        source: input,
+        indent: '4',
+        attrs: 'selectors',
+      });
+      expect(output).to.equal(
+        `
 m("button.close[type='button'][data-dismiss='modal'][aria-label='Close']", 
     m("span[aria-hidden='true']", 
         m.trust("&times;")
     )
-)`.trim());
+)`.trim(),
+      );
     });
-
   });
 
-  describe("Tables", function () {
-
-    it("Table tags without closing nodes", function () {
-      var input = "<table><tr><td>";
-      var output = templateBuilder({ source: input, indent: "2" });
-      expect(output).to.equal(`
+  describe('Tables', function () {
+    it('Table tags without closing nodes', function () {
+      var input = '<table><tr><td>';
+      var output = templateBuilder({ source: input, indent: '2' });
+      expect(output).to.equal(
+        `
 m("table", 
   m("tbody", 
     m("tr", 
       m("td")
     )
   )
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Simple table with attributes", function () {
+    it('Simple table with attributes', function () {
       var input = `
 <table style="border: 1px solid black"><tr><td>Test</td></tr></table>
 `;
-      var output = templateBuilder({ source: input, indent: "2" });
-      expect(output).to.equal(`
+      var output = templateBuilder({ source: input, indent: '2' });
+      expect(output).to.equal(
+        `
 m("table", {"style":{"border":"1px solid black"}}, 
   m("tbody", 
     m("tr", 
@@ -225,16 +273,18 @@ m("table", {"style":{"border":"1px solid black"}},
       )
     )
   )
-)`.trim());
+)`.trim(),
+      );
     });
 
-    it("Table with thead and tfoot", function () {
+    it('Table with thead and tfoot', function () {
       // Note the extra spacing around "weekday" text content
       var input = `
 <table cellpadding=6 rules=groups frame=box> <thead> <tr> <th>  weekday  </th> <th>date</th> <th>manager</th> <th>qty</th> </tr> </thead> <tbody> <tr> <td>mon</td> <td>09/11</td> <td>kelsey</td> <td>639</td> </tr> <tr> <td>tue</td> <td>09/12</td> <td>lindsey</td> <td>596</td> </tr> <tr> <td>wed</td> <td>09/13</td> <td>randy</td> <td>1135</td> </tr> <tr> <td>thu</td> <td>09/14</td> <td>susan</td> <td>1002</td> </tr> <tr> <td>fri</td> <td>09/15</td> <td>randy</td> <td>908</td> </tr> <tr> <td>sat</td> <td>09/16</td> <td>lindsey</td> <td>371</td> </tr> <tr> <td>sun</td> <td>09/17</td> <td>susan</td> <td>272</td> </tr> </tbody> <tfoot> <tr> <th align=left colspan=3>total</th> <th>4923</th> </tr> </tfoot> </table>
 `;
-      var output = templateBuilder({ source: input, attributes: "selectors" });
-      expect(output).to.equal(`
+      var output = templateBuilder({ source: input, attributes: 'selectors' });
+      expect(output).to.equal(
+        `
 m("table", {"cellpadding":"6","rules":"groups","frame":"box"},
   [
     m("thead", 
@@ -384,51 +434,53 @@ m("table", {"cellpadding":"6","rules":"groups","frame":"box"},
       )
     )
   ]
-)`.trim());
+)`.trim(),
+      );
     });
   });
 
-  describe("Images", function () {
-
-    it("Image with attributes", function () {
+  describe('Images', function () {
+    it('Image with attributes', function () {
       var input = `
 <img src="https://raw.githubusercontent.com/ArthurClemens/assets/gh-pages/polythene/examples/avatar-1.png" alt="Movie star" style="width:128px;height:128px;">
 `;
       var output = templateBuilder({ source: input });
-      expect(output).to.equal(`
+      expect(output).to.equal(
+        `
 m("img", {"src":"https://raw.githubusercontent.com/ArthurClemens/assets/gh-pages/polythene/examples/avatar-1.png","alt":"Movie star","style":{"width":"128px","height":"128px"}})
-`.trim());
+`.trim(),
+      );
     });
   });
 
-  describe("SVGs", function () {
-
-    it("Simple svg", function () {
-      var input =
-        `<?xml version="1.0" encoding="utf-8"?>
+  describe('SVGs', function () {
+    it('Simple svg', function () {
+      var input = `<?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
    viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
 <path d="M12,2c1.1,0,2,0.9,2,2s-0.9,2-2,2s-2-0.9-2-2S10.9,2,12,2z M21,9h-6v13h-2v-6h-2v6H9V9H3V7h18V9z"/>
 </svg>`;
-      var output = templateBuilder({ source: input, attributes: "selectors" });
-      expect(output).to.equal(`
+      var output = templateBuilder({ source: input, attributes: 'selectors' });
+      expect(output).to.equal(
+        `
 m("svg", {"version":"1.1","id":"Layer_1","xmlns":"http://www.w3.org/2000/svg","xmlns:xlink":"http://www.w3.org/1999/xlink","x":"0px","y":"0px","viewBox":"0 0 24 24","xml:space":"preserve","style":{"enable-background":"new 0 0 24 24"}}, 
   m("path", {"d":"M12,2c1.1,0,2,0.9,2,2s-0.9,2-2,2s-2-0.9-2-2S10.9,2,12,2z M21,9h-6v13h-2v-6h-2v6H9V9H3V7h18V9z"})
 )
-`.trim());
+`.trim(),
+      );
     });
 
-    it("Case-sensitive SVG", function () {
-      var input =
-        `<svg version="1.1" x="0" y="0" width="360" height="420">
+    it('Case-sensitive SVG', function () {
+      var input = `<svg version="1.1" x="0" y="0" width="360" height="420">
   <path id="guideTextPath" d="M180,312 A132,132 0 0 0 272.34,272.34" fill="none"></path>
   <text font-size="14pt">
     <textPath href="#guideTextPath" startoffset="50%" alignment-baseline="central">GUIDE</textPath>
   </text>
 </svg>`;
       var output = templateBuilder({ source: input });
-      expect(output).to.equal(`
+      expect(output).to.equal(
+        `
 m("svg", {"version":"1.1","x":"0","y":"0","width":"360","height":"420"},
   [
     m("path", {"id":"guideTextPath","d":"M180,312 A132,132 0 0 0 272.34,272.34","fill":"none"}),
@@ -439,12 +491,12 @@ m("svg", {"version":"1.1","x":"0","y":"0","width":"360","height":"420"},
     )
   ]
 )
-`.trim());
+`.trim(),
+      );
     });
 
-    it("Complex svg", function () {
-      var input =
-        `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    it('Complex svg', function () {
+      var input = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -508,7 +560,8 @@ m("svg", {"version":"1.1","x":"0","y":"0","width":"360","height":"420"},
   </g>
 </svg>`;
       var output = templateBuilder({ source: input });
-      expect(output).to.equal(`
+      expect(output).to.equal(
+        `
 m("svg", {"xmlns:dc":"http://purl.org/dc/elements/1.1/","xmlns:cc":"http://creativecommons.org/ns#","xmlns:rdf":"http://www.w3.org/1999/02/22-rdf-syntax-ns#","xmlns:svg":"http://www.w3.org/2000/svg","xmlns":"http://www.w3.org/2000/svg","xmlns:sodipodi":"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd","xmlns:inkscape":"http://www.inkscape.org/namespaces/inkscape","version":"1.1","x":"0px","y":"0px","viewBox":"0 0 40 32","id":"svg2","inkscape:version":"0.91 r13725","sodipodi:docname":"xcloud.svg","width":"40","height":"32"},
   [
     m("metadata", {"id":"metadata12"}, 
@@ -531,13 +584,13 @@ m("svg", {"xmlns:dc":"http://purl.org/dc/elements/1.1/","xmlns:cc":"http://creat
     )
   ]
 )
-`.trim());
+`.trim(),
+      );
     });
   });
 
-  describe("Complete examples", function () {
-
-    it("Bootstrap dialog", function () {
+  describe('Complete examples', function () {
+    it('Bootstrap dialog', function () {
       var input = `<div class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -556,7 +609,8 @@ m("svg", {"xmlns:dc":"http://purl.org/dc/elements/1.1/","xmlns:cc":"http://creat
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->`;
       var output = templateBuilder({ source: input });
-      expect(output).to.equal(`
+      expect(output).to.equal(
+        `
 m("div", {"class":"modal fade","tabindex":"-1","role":"dialog"}, 
   m("div", {"class":"modal-dialog"}, 
     m("div", {"class":"modal-content"},
@@ -595,16 +649,17 @@ m("div", {"class":"modal fade","tabindex":"-1","role":"dialog"},
     )
   )
 )
-`.trim());
+`.trim(),
+      );
     });
   });
 
-  describe("Outpur indent levels", function () {
-
-    it("Indent: 2 spaces", function () {
-      var input = "<span>One</span> <span>Two</span> <span>Three</span>";
-      var output = templateBuilder({ source: input, indent: "2" });
-      expect(output).to.equal(`
+  describe('Outpur indent levels', function () {
+    it('Indent: 2 spaces', function () {
+      var input = '<span>One</span> <span>Two</span> <span>Three</span>';
+      var output = templateBuilder({ source: input, indent: '2' });
+      expect(output).to.equal(
+        `
 [
   m("span", 
     "One"
@@ -615,13 +670,15 @@ m("div", {"class":"modal fade","tabindex":"-1","role":"dialog"},
   m("span", 
     "Three"
   )
-]`.trim());
+]`.trim(),
+      );
     });
 
-    it("Indent: 4 spaces", function () {
-      var input = "<span>One</span> <span>Two</span> <span>Three</span>";
-      var output = templateBuilder({ source: input, indent: "4" });
-      expect(output).to.equal(`
+    it('Indent: 4 spaces', function () {
+      var input = '<span>One</span> <span>Two</span> <span>Three</span>';
+      var output = templateBuilder({ source: input, indent: '4' });
+      expect(output).to.equal(
+        `
 [
     m("span", 
         "One"
@@ -632,13 +689,15 @@ m("div", {"class":"modal fade","tabindex":"-1","role":"dialog"},
     m("span", 
         "Three"
     )
-]`.trim());
+]`.trim(),
+      );
     });
 
-    it("Indent: tab", function () {
-      var input = "<span>One</span> <span>Two</span> <span>Three</span>";
-      var output = templateBuilder({ source: input, indent: "tab" });
-      expect(output).to.equal(`
+    it('Indent: tab', function () {
+      var input = '<span>One</span> <span>Two</span> <span>Three</span>';
+      var output = templateBuilder({ source: input, indent: 'tab' });
+      expect(output).to.equal(
+        `
 [
 	m("span", 
 		"One"
@@ -649,8 +708,8 @@ m("div", {"class":"modal fade","tabindex":"-1","role":"dialog"},
 	m("span", 
 		"Three"
 	)
-]`.trim());
+]`.trim(),
+      );
     });
   });
-
 });
