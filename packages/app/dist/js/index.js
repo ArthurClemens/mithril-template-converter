@@ -1218,7 +1218,7 @@ var singleMithrilNodeTemplate = function singleMithrilNodeTemplate(mithrilNode, 
 
 
 var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTemplate(mithrilNode, children, whitespace, indentChars) {
-  return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n ").concat(whitespace).concat(indentChars, "[").concat(children, "\n ").concat(whitespace).concat(indentChars, "]\n ").concat(whitespace, ")");
+  return "\n".concat(whitespace, "m(").concat(mithrilNode, ",\n").concat(whitespace).concat(indentChars, "[").concat(children, "\n").concat(whitespace).concat(indentChars, "]\n").concat(whitespace, ")");
 };
 /**
  * @param {string} mithrilNode
@@ -1229,7 +1229,7 @@ var mithrilNodeMultipleChildrenTemplate = function mithrilNodeMultipleChildrenTe
 
 
 var mithrilNodeSingleChildTemplate = function mithrilNodeSingleChildTemplate(mithrilNode, children, whitespace) {
-  return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(children, "\n ").concat(whitespace, ")");
+  return "\n".concat(whitespace, "m(").concat(mithrilNode, ", ").concat(children, "\n").concat(whitespace, ")");
 };
 /**
  * @param {string} mithrilNode
